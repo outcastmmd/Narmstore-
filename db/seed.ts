@@ -1,0 +1,341 @@
+// Seed نرم‌استور با داده‌ی واقعی از ایندکس عمومی F-Droid
+// اجرا: npx tsx db/seed.ts   (نیازمند data/index-v2.json)
+import { readFileSync, existsSync } from "node:fs";
+import { scryptSync, randomBytes } from "node:crypto";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { eq } from "drizzle-orm";
+import * as s from "./schema";
+
+const FDROID = "https://f-droid.org/repo";
+const INDEX_PATH = new URL("../data/index-v2.json", import.meta.url).pathname;
+
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL missing");
+if (!existsSync(INDEX_PATH)) throw new Error("data/index-v2.json not found — download it first");
+
+const client = postgres(process.env.DATABASE_URL);
+const db = drizzle(client, { schema: s });
+
+// ─── دسته‌بندی‌ها ────────────────────────────────────────────────
+// [slug, nameFa, icon, parentSlug]
+const CATEGORIES: [string, string, string, string | null][] = [
+  ["tools", "ابزارهای کاربردی", "🛠️", null],
+  ["internet", "اینترنت و شبکه", "🌐", null],
+  ["communication", "ارتباطات", "💬", null],
+  ["multimedia", "چندرسانه‌ای", "🎬", null],
+  ["productivity", "بهره‌وری و آموزش", "📚", null],
+  ["security", "امنیت و حریم خصوصی", "🔒", null],
+  ["personalization", "شخصی‌سازی", "🎨", null],
+  ["system", "سیستم و ابزارهای پیشرفته", "⚙️", null],
+  ["maps", "نقشه و مسیریابی", "🗺️", null],
+  ["file-manager", "مدیریت فایل", "📁", "tools"],
+  ["media-player", "پخش‌کننده صوت و ویدیو", "▶️", "tools"],
+  ["notes", "یادداشت‌برداری", "📝", "tools"],
+  ["pdf", "ابزارهای PDF", "📄", "tools"],
+  ["transfer", "انتقال فایل", "📤", "tools"],
+  ["recorder", "ضبط صدا", "🎙️", "tools"],
+  ["browser", "مرورگر وب", "🧭", "internet"],
+  ["vpn", "VPN و پروکسی", "🛡️", "internet"],
+  ["network", "ابزارهای شبکه", "📡", "internet"],
+  ["store", "فروشگاه نرم‌افزار", "🏪", "internet"],
+  ["messenger", "پیام‌رسان‌ها", "✉️", "communication"],
+  ["sms", "پیامک", "💭", "communication"],
+  ["email", "ایمیل", "📧", "communication"],
+  ["podcast", "پادکست", "🎧", "multimedia"],
+  ["gallery", "گالری و دوربین", "📷", "multimedia"],
+  ["online-media", "پخش آنلاین", "📺", "multimedia"],
+  ["tasks", "مدیریت وظایف", "✅", "productivity"],
+  ["ebook", "کتاب‌خوان", "📖", "productivity"],
+  ["habit", "ردیاب عادت", "🔁", "productivity"],
+  ["flashcard", "فلش‌کارت آموزشی", "🗂️", "productivity"],
+  ["radio", "رادیو", "📻", "productivity"],
+  ["2fa", "احراز هویت دوعاملی", "🔑", "security"],
+  ["encryption", "رمزنگاری", "🔐", "security"],
+  ["firewall", "فایروال و حریم خصوصی", "🧱", "security"],
+  ["adblock", "مسدودکننده تبلیغات", "🚫", "security"],
+  ["password", "مدیریت رمز عبور", "🗝️", "security"],
+  ["launcher", "لانچر", "🚀", "personalization"],
+  ["keyboard", "صفحه‌کلید", "⌨️", "personalization"],
+  ["terminal", "ترمینال", "💻", "system"],
+  ["sync", "همگام‌سازی و پشتیبان‌گیری", "🔄", "system"],
+];
+
+// ─── اپ‌های منتخب: [packageName, nameFa, categories[], featured?, editorChoice?] ──
+const APPS: [string, string, string[], boolean?, boolean?][] = [
+  ["org.videolan.vlc", "وی‌ال‌سی", ["media-player"], true, true],
+  ["org.fdroid.fdroid", "اف‌دروید", ["store"], true, false],
+  ["com.termux", "ترموکس", ["terminal"], true, true],
+  ["org.schabi.newpipe", "نیوپایپ", ["online-media"], true, true],
+  ["org.mozilla.fennec_fdroid", "فنک", ["browser"], true, false],
+  ["net.osmand.plus", "ازماند", ["maps"], true, false],
+  ["de.danoeh.antennapod", "آنتناپاد", ["podcast"], true, true],
+  ["com.beemdevelopment.aegis", "ایجس", ["2fa"], true, false],
+  ["org.torproject.torbrowser", "مرورگر تور", ["browser", "firewall"], false, false],
+  ["com.aurora.store", "آرورا استور", ["store"], false, false],
+  ["com.github.catfriend1.syncthingandroid", "سینک‌تینگ", ["sync", "transfer"], false, true],
+  ["org.adaway", "اداوِی", ["adblock"], false, false],
+  ["eu.faircode.netguard", "نت‌گارد", ["firewall"], false, false],
+  ["org.isoron.uhabits", "لوپ", ["habit"], false, false],
+  ["org.wikipedia", "ویکی‌پدیا", ["productivity"], false, false],
+  ["org.k9mail", "تاندربرد", ["email"], false, false],
+  ["im.vector.app", "المنت", ["messenger"], false, false],
+  ["org.primftpd", "پرمیتیو FTPd", ["network", "transfer"], false, false],
+  ["net.sourceforge.opencamera", "اوپن کمرا", ["gallery"], false, false],
+  ["org.dslul.openboard", "اوپن‌بورد", ["keyboard"], false, false],
+  ["org.sufficientlysecure.keychain", "اوپن‌کی‌چین", ["encryption"], false, false],
+  ["com.github.androidpasswordstore.androidpasswordstore", "پس‌ورد استور", ["password"], false, false],
+  ["org.shadowice.flocke.andotp", "andOTP", ["2fa"], false, false],
+  ["net.gsantner.markor", "مارکور", ["notes"], false, true],
+  ["org.tasks", "تسکس", ["tasks"], false, false],
+  ["org.billthefarmer.diary", "دایری", ["notes"], false, false],
+  ["com.ichi2.anki", "انکی‌دروید", ["flashcard"], false, false],
+  ["com.artifex.mupdf.viewer.app", "MuPDF", ["pdf", "ebook"], false, false],
+  ["com.nextcloud.client", "نکست‌کلاد", ["sync"], false, false],
+  ["org.kde.kdeconnect_tp", "کی‌دی‌ای کانکت", ["transfer"], false, false],
+  ["fr.neamar.kiss", "کیس لانچر", ["launcher"], false, false],
+  ["com.sduduzog.slimlauncher", "اسلیم لانچر", ["launcher"], false, false],
+  ["org.fossify.gallery", "گالری فاسیفای", ["gallery"], false, false],
+  ["org.fossify.filemanager", "فایل‌منیجر فاسیفای", ["file-manager"], false, false],
+  ["com.amaze.filemanager", "امیز", ["file-manager"], false, false],
+  ["me.zhanghai.android.files", "متریال فایلز", ["file-manager"], false, false],
+  ["org.torproject.android", "اربوت", ["vpn", "firewall"], false, false],
+  ["com.b44t.messenger", "دلتا چت", ["messenger"], false, false],
+  ["eu.siacs.conversations", "کانورسیشنز", ["messenger"], false, false],
+  ["org.y20k.transistor", "ترانزیستور", ["radio"], false, false],
+  ["org.gateshipone.odyssey", "اودیسه", ["media-player"], false, false],
+  ["de.k3b.android.androFotoFinder", "ای‌فوتوفایندر", ["gallery"], false, false],
+  ["com.github.axet.audiorecorder", "ضبط صوت", ["recorder"], false, false],
+  ["org.koitharu.kotatsu", "کوتاتسو", ["ebook"], false, false],
+];
+
+async function urlOk(url: string): Promise<boolean> {
+  try {
+    const r = await fetch(url, { method: "HEAD", redirect: "follow" });
+    return r.ok;
+  } catch { return false; }
+}
+
+function cleanText(t: string, max = 4000): string {
+  return t.replace(/\r/g, "").replace(/\n{3,}/g, "\n\n").trim().slice(0, max);
+}
+
+// مقدار لوکال‌یافته با fallback: اول en-US بعد هر لوکیال موجود
+function loc(obj: any): any {
+  if (!obj || typeof obj !== "object") return undefined;
+  return obj["en-US"] ?? obj["en"] ?? Object.values(obj)[0];
+}
+
+function hashPassword(pw: string): string {
+  const salt = randomBytes(16).toString("hex");
+  const hash = scryptSync(pw, salt, 64).toString("hex");
+  return `scrypt:${salt}:${hash}`;
+}
+
+async function main() {
+  console.log("reading index...");
+  const idx = JSON.parse(readFileSync(INDEX_PATH, "utf8"));
+  const pkgs = idx.packages as Record<string, any>;
+  console.log(`index has ${Object.keys(pkgs).length} packages`);
+
+  // ── نقش‌ها ──
+  const roleDefs: [string, string, string[]][] = [
+    ["admin", "مدیر کل", ["*"]],
+    ["content_manager", "مدیر محتوا", ["apps.write", "categories.write", "content.write", "news.write"]],
+    ["file_reviewer", "بازبین فایل", ["versions.verify", "reports.review"]],
+    ["user", "کاربر عادی", []],
+  ];
+  const roleIds: Record<string, string> = {};
+  for (const [name, nameFa, perms] of roleDefs) {
+    const existing = await db.select().from(s.roles).where(eq(s.roles.name, name));
+    if (existing.length) { roleIds[name] = existing[0].id; continue; }
+    const [r] = await db.insert(s.roles).values({ name, nameFa, permissions: perms }).returning();
+    roleIds[name] = r.id;
+  }
+
+  // ── کاربر مدیر ──
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@narmstore.local";
+  const adminPw = process.env.ADMIN_PASSWORD;
+  const existingAdmin = await db.select().from(s.users).where(eq(s.users.email, adminEmail));
+  if (!existingAdmin.length) {
+    if (!adminPw) {
+      console.log("⚠ ADMIN_PASSWORD set نشده — کاربر مدیر ساخته نشد. بعداً با اسکریپت admin بسازید.");
+    } else {
+      await db.insert(s.users).values({
+        email: adminEmail, name: "مدیر نرم‌استور",
+        passwordHash: hashPassword(adminPw), roleId: roleIds["admin"],
+      });
+      console.log(`✓ admin user created: ${adminEmail}`);
+    }
+  } else console.log("admin user exists, skipping");
+
+  // ── دسته‌بندی‌ها ──
+  const catIds: Record<string, string> = {};
+  for (const [slug, nameFa, icon] of CATEGORIES) {
+    const ex = await db.select().from(s.categories).where(eq(s.categories.slug, slug));
+    if (ex.length) { catIds[slug] = ex[0].id; continue; }
+    const [c] = await db.insert(s.categories).values({ slug, nameFa, icon, sortOrder: 0 }).returning();
+    catIds[slug] = c.id;
+  }
+  // والدها
+  for (const [slug, , , parent] of CATEGORIES) {
+    if (parent) await db.update(s.categories).set({ parentId: catIds[parent] }).where(eq(s.categories.slug, slug));
+  }
+  console.log(`✓ ${CATEGORIES.length} categories`);
+
+  // ── مخزن F-Droid ──
+  const repoEx = await db.select().from(s.repositories).where(eq(s.repositories.url, "https://f-droid.org/repo"));
+  let repoId: string;
+  if (repoEx.length) repoId = repoEx[0].id;
+  else {
+    const [r] = await db.insert(s.repositories).values({
+      name: "مخزن رسمی F-Droid", url: "https://f-droid.org/repo", type: "fdroid",
+      lastSyncStatus: "success",
+    }).returning();
+    repoId = r.id;
+  }
+
+  // ── اپ‌ها ──
+  let added = 0, updated = 0, skipped = 0;
+  for (const [pkg, nameFa, catSlugs, featured, editorChoice] of APPS) {
+    const p = pkgs[pkg];
+    const md = p?.metadata;
+    const name = loc(md?.name);
+    const iconName = loc(md?.icon)?.name;
+    if (!p || !md || !name || !iconName) { console.log(`✗ skip ${pkg}: incomplete metadata`); skipped++; continue; }
+
+    const iconUrl = FDROID + iconName;
+    if (!(await urlOk(iconUrl))) { console.log(`✗ skip ${pkg}: icon 404`); skipped++; continue; }
+
+    const summary = loc(md.summary) || "";
+    const description = loc(md.description) || summary;
+    const slug = pkg.replace(/\./g, "-");
+
+    // توسعه‌دهنده
+    let developerId: string | null = null;
+    const author = loc(md.authorName) || loc(md.author);
+    if (author) {
+      const ex = await db.select().from(s.developers).where(eq(s.developers.name, author));
+      if (ex.length) developerId = ex[0].id;
+      else {
+        const [d] = await db.insert(s.developers).values({
+          name: author, website: md.webSite || null,
+        }).returning();
+        developerId = d.id;
+      }
+    }
+
+    const existing = await db.select().from(s.apps).where(eq(s.apps.packageName, pkg));
+    let appId: string;
+    const appData = {
+      slug, packageName: pkg, nameFa, nameEn: name,
+      iconUrl, shortDesc: cleanText(summary, 300) || null,
+      description: cleanText(description),
+      developerId, license: md.license || null, isOpenSource: true,
+      featured: !!featured, editorChoice: !!editorChoice, isPublished: true,
+      sourceType: "fdroid", sourceUrl: `https://f-droid.org/packages/${pkg}/`,
+      externalId: pkg,
+      updatedAt: new Date(),
+    };
+    if (existing.length) {
+      appId = existing[0].id;
+      await db.update(s.apps).set(appData).where(eq(s.apps.id, appId));
+      updated++;
+    } else {
+      const [a] = await db.insert(s.apps).values(appData).returning();
+      appId = a.id;
+      added++;
+    }
+
+    // دسته‌بندی‌ها
+    await db.delete(s.appCategories).where(eq(s.appCategories.appId, appId));
+    for (const cs of catSlugs) {
+      if (catIds[cs]) await db.insert(s.appCategories).values({ appId, categoryId: catIds[cs] }).onConflictDoNothing();
+    }
+
+    // اسکرین‌شات‌ها (حداکثر ۴)
+    await db.delete(s.appScreenshots).where(eq(s.appScreenshots.appId, appId));
+    const shots = loc(md.screenshots?.phone)?.slice(0, 4) || [];
+    for (let i = 0; i < shots.length; i++) {
+      await db.insert(s.appScreenshots).values({ appId, url: FDROID + shots[i].name, sortOrder: i });
+    }
+
+    // نسخه‌ها (۳ نسخه‌ی آخر — کلیدها هش هستند، مرتب‌سازی با versionCode)
+    const allVers = Object.values(p.versions || {}) as any[];
+    allVers.sort((a, b) => (b?.manifest?.versionCode || 0) - (a?.manifest?.versionCode || 0));
+    const latest = allVers.slice(0, 3);
+    for (let i = 0; i < latest.length; i++) {
+      const v = latest[i];
+      if (!v) continue;
+      const f = v.file, m = v.manifest;
+      if (!f?.name || !m?.versionName) continue;
+      const ex = await db.select().from(s.appVersions)
+        .where(eq(s.appVersions.appId, appId));
+      const sameVer = ex.find((x) => x.versionCode === m.versionCode);
+      let verId: string;
+      const verData = {
+        versionName: String(m.versionName), versionCode: Number(m.versionCode),
+        fileUrl: FDROID + f.name, fileSize: f.size ?? null,
+        sha256: f.sha256 || null,
+        minSdk: m.usesSdk?.minSdkVersion ?? null,
+        fileType: "apk", changelog: null,
+        status: "active", isCurrent: i === 0,
+        source: `F-Droid repo (${new Date(v.added).toISOString().slice(0, 10)})`,
+        verifiedAt: new Date(), publishedAt: new Date(v.added),
+      };
+      if (sameVer) {
+        verId = sameVer.id;
+        await db.update(s.appVersions).set(verData).where(eq(s.appVersions.id, verId));
+      } else {
+        const [nv] = await db.insert(s.appVersions).values({ appId, ...verData }).returning();
+        verId = nv.id;
+      }
+      // مجوزها
+      await db.delete(s.appPermissions).where(eq(s.appPermissions.versionId, verId));
+      const perms: string[] = (m.usesPermission || []).map((x: any) => x.name).filter(Boolean).slice(0, 60);
+      for (const pm of perms) {
+        await db.insert(s.appPermissions).values({ versionId: verId, permission: pm });
+      }
+    }
+    console.log(`✓ ${nameFa} (${pkg})`);
+  }
+
+  await db.insert(s.repositorySyncLogs).values({
+    repositoryId: repoId, status: "success", finishedAt: new Date(),
+    message: "Seed اولیه از ایندکس F-Droid",
+    appsAdded: added, appsUpdated: updated,
+  });
+  await db.update(s.repositories).set({ lastSyncAt: new Date(), lastSyncStatus: "success" })
+    .where(eq(s.repositories.id, repoId));
+
+  // ── صفحات ثابت ──
+  const pages: [string, string, string][] = [
+    ["about", "درباره نرم‌استور",
+      "نرم‌استور یک فروشگاه نرم‌افزار فارسی برای اندروید است. هدف ما معرفی و ارائه‌ی امن نرم‌افزارهای کاربردی، به‌ویژه نرم‌افزارهای آزاد و متن‌باز است.\n\nتمام فایل‌های ارائه‌شده در نرم‌استور از منابع رسمی و معتبر دریافت می‌شوند و پیش از انتشار، هش SHA-256 و اصالت آن‌ها بررسی می‌شود."],
+    ["install-guide", "راهنمای نصب",
+      "۱. فایل APK را دانلود کنید.\n۲. در تنظیمات اندروید، اجازه‌ی «نصب از منابع ناشناس» را برای مرورگر یا فایل‌منیجر فعال کنید.\n۳. فایل دانلودشده را باز کنید و «نصب» را بزنید.\n\n⚠️ فایل را فقط از همین صفحه و با تطابق هش SHA-256 نصب کنید."],
+    ["terms", "قوانین استفاده",
+      "استفاده از نرم‌استور به‌معنای پذیرش این قوانین است:\n\n- تمام نرم‌افزارها متعلق به توسعه‌دهندگان خودشان هستند و تحت مجوزهای اعلام‌شده عرضه می‌شوند.\n- نرم‌استور مسئولیتی در قبال استفاده‌ی نادرست از نرم‌افزارها ندارد.\n- گزارش لینک خراب یا محتوای مشکل‌دار به بهبود سرویس کمک می‌کند."],
+    ["privacy", "حریم خصوصی",
+      "نرم‌استور برای آمار دانلود، فقط هش یک‌طرفه‌ی آدرس IP را به‌صورت ناشناس ذخیره می‌کند و آدرس IP خام هیچ‌وقت ذخیره نمی‌شود.\n\nاطلاعات حساب کاربری (در صورت ثبت‌نام) فقط برای ارائه‌ی خدمات استفاده می‌شود و به شخص ثالث فروخته یا واگذار نمی‌شود."],
+  ];
+  for (const [slug, title, body] of pages) {
+    const ex = await db.select().from(s.contentPages).where(eq(s.contentPages.slug, slug));
+    if (!ex.length) await db.insert(s.contentPages).values({ slug, title, body });
+  }
+
+  // ── تنظیمات سایت ──
+  const settings: [string, string][] = [
+    ["site_name", "نرم‌استور"],
+    ["site_tagline", "فروشگاه فارسی نرم‌افزار اندروید"],
+    ["download_dedup_hours", "24"],
+  ];
+  for (const [key, value] of settings) {
+    const ex = await db.select().from(s.siteSettings).where(eq(s.siteSettings.key, key));
+    if (!ex.length) await db.insert(s.siteSettings).values({ key, value });
+  }
+
+  console.log(`\n✓ done: added=${added} updated=${updated} skipped=${skipped}`);
+  await client.end();
+}
+
+main().catch((e) => { console.error(e); process.exit(1); });
