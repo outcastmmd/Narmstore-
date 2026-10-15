@@ -1,0 +1,57 @@
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import AppCard from "@/components/AppCard";
+
+export default function FavoritesPage() {
+  const [items, setItems] = useState<any[]>([]);
+  const [state, setState] = useState<"loading" | "denied" | "done">("loading");
+
+  useEffect(() => {
+    fetch("/api/favorites").then((r) => {
+      if (r.status === 401) { setState("denied"); return null; }
+      return r.json();
+    }).then((j) => {
+      if (j) { setItems(j.favorites || []); setState("done"); }
+    }).catch(() => setState("done"));
+  }, []);
+
+  if (state === "loading") {
+    return <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {[1, 2, 3, 4].map((i) => <div key={i} className="h-32 bg-surface border border-border rounded-2xl animate-pulse" />)}
+    </div>;
+  }
+
+  if (state === "denied") {
+    return (
+      <div className="bg-surface border border-border rounded-3xl p-10 text-center max-w-md mx-auto">
+        <p className="text-4xl mb-3">🔐</p>
+        <p className="font-extrabold mb-1">وارد نشده‌اید</p>
+        <p className="text-sm text-muted mb-4">برای دیدن علاقه‌مندی‌ها وارد حساب شوید.</p>
+        <Link href="/login" className="inline-block bg-primary text-primary-fg font-bold px-6 py-2.5 rounded-xl">ورود</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="animate-fade-up">
+      <h1 className="text-2xl font-extrabold mb-6">❤️ علاقه‌مندی‌های من</h1>
+      {items.length ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {items.map((a: any) => (
+            <AppCard key={a.appId} app={{
+              id: a.appId, slug: a.slug, nameFa: a.nameFa, nameEn: a.nameEn,
+              iconUrl: a.iconUrl, shortDesc: a.shortDesc, versionName: null, downloadCount: 0,
+            }} />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-surface border border-border rounded-3xl p-10 text-center">
+          <p className="text-4xl mb-3">🤍</p>
+          <p className="font-bold mb-1">هنوز چیزی ذخیره نکرده‌اید</p>
+          <p className="text-sm text-muted">روی قلب هر برنامه بزنید تا اینجا ذخیره شود.</p>
+        </div>
+      )}
+    </div>
+  );
+}
