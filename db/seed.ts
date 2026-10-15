@@ -13,7 +13,9 @@ const INDEX_PATH = new URL("../data/index-v2.json", import.meta.url).pathname;
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL missing");
 if (!existsSync(INDEX_PATH)) throw new Error("data/index-v2.json not found — download it first");
 
-const client = postgres(process.env.DATABASE_URL);
+const _dbUrl = process.env.DATABASE_URL!;
+const _ssl = /localhost|127\.0\.0\.1/.test(_dbUrl) ? false : "require";
+const client = postgres(_dbUrl, { ssl: _ssl });
 const db = drizzle(client, { schema: s });
 
 // ─── دسته‌بندی‌ها ────────────────────────────────────────────────

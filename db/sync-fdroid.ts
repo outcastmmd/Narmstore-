@@ -13,7 +13,9 @@ const MAX_AGE_MS = 24 * 3600 * 1000;
 
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL missing");
 
-const client = postgres(process.env.DATABASE_URL);
+const _dbUrl = process.env.DATABASE_URL!;
+const _ssl = /localhost|127\.0\.0\.1/.test(_dbUrl) ? false : "require";
+const client = postgres(_dbUrl, { ssl: _ssl });
 const db = drizzle(client, { schema: s });
 
 function loc(obj: any): any {

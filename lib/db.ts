@@ -5,7 +5,10 @@ import * as schema from "@/db/schema";
 const globalForDb = globalThis as unknown as { __db?: ReturnType<typeof drizzle> };
 
 function createDb() {
-  const client = postgres(process.env.DATABASE_URL!, { max: 10 });
+  const url = process.env.DATABASE_URL!;
+  // Render و دیتابیس‌های ابری SSL اجباری می‌خواهند؛ لوکال نه
+  const ssl = /localhost|127\.0\.0\.1/.test(url) ? false : "require";
+  const client = postgres(url, { max: 10, ssl });
   return drizzle(client, { schema });
 }
 
