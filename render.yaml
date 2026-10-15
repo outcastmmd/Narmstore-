@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: narmstore
+    runtime: node
+    plan: free
+    buildCommand: node scripts/gen-icons.mjs && npm install && npx drizzle-kit migrate && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: narmstore-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+
+databases:
+  - name: narmstore-db
+    plan: free
+    databaseName: narmstore
+    user: narmstore

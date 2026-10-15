@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 /data/index-v2.json
 /public/icons/*.png
+package-lock.json
