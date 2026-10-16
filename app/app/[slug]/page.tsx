@@ -130,7 +130,6 @@ export default async function AppPage({ params }: Props) {
               )}
               <span className="ms-auto flex items-center gap-2">
                 <FollowButton appId={app.id} />
-                <CompareButton slug={app.slug} nameFa={app.nameFa} />
                 <FavoriteButton appId={app.id} appName={app.slug} />
               </span>
             </div>
@@ -383,6 +382,11 @@ export default async function AppPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      {/* مقایسه: آخر صفحه */}
+      <div className="mt-8 flex justify-center">
+        <CompareButton slug={app.slug} nameFa={app.nameFa} />
+      </div>
     </div>
   );
 }
