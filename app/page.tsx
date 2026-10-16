@@ -77,10 +77,10 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
             <Link key={a.id} href={appHref(a.slug, platform)}
               className="flex-none w-32 sm:w-[150px] snap-start flex flex-col gap-2 group">
               {a.iconUrl ? (
-                <PxImg src={px(a.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${a.nameFa}`} width={150} height={150}
-                  className="w-32 h-32 sm:w-[150px] sm:h-[150px] rounded-[30px] object-cover bg-surface-2" />
+                <PxImg src={px(a.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${a.nameFa}`} width={130} height={130}
+                  className="w-28 h-28 sm:w-[130px] sm:h-[130px] rounded-[28px] object-cover bg-surface-2" />
               ) : (
-                <span className="w-32 h-32 sm:w-[150px] sm:h-[150px] rounded-[30px] bg-surface-2 grid place-items-center text-5xl font-bold text-muted" dir="ltr">
+                <span className="w-28 h-28 sm:w-[130px] sm:h-[130px] rounded-[28px] bg-surface-2 grid place-items-center text-5xl font-bold text-muted" dir="ltr">
                   {a.nameEn.charAt(0)}
                 </span>
               )}
