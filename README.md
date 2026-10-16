@@ -1,179 +1,30 @@
 <div align="center">
 
-# نـرم‌استـور | NarmStore
-
-**فروشگاه فارسی نرم‌افزار اندروید — معرفی، بررسی و دانلود امن**
-**A Persian Android app store — discover, review & safely download apps**
-
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
-[![Drizzle ORM](https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=flat-square)](https://orm.drizzle.team/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![PWA](https://img.shields.io/badge/PWA-ready-0d7a5f?style=flat-square)](https://web.dev/progressive-web-apps/)
-[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-
-[🇬🇧 English](#-english) • [🇮🇷 فارسی](#-فارسی)
-
-</div>
-
----
-
-## 🇬🇧 English
-
-### Overview
-
-**NarmStore** is a Persian (Farsi) RTL web app store for Android software — a place to discover, review, and safely download Android apps with direct links and file authenticity verification. It ships as an installable **PWA**, works offline for visited pages, and syncs new app versions automatically from the official F-Droid repository.
-
-### ✨ Features
-
-| Area | What it does |
-|---|---|
-| 🏠 **Storefront** | Persian RTL interface, dark/light theme, mobile-first responsive design |
-| 🔍 **Search** | Full-text Persian search with normalization (ي/ی, ك/ک, half-spaces) |
-| 🗂️ **Categories** | Multi-level categories, sorting, pagination |
-| 📱 **App pages** | Versions, file size, min SDK, package name, license, SHA-256, permissions, screenshots, changelog, similar apps |
-| ⬇️ **Real downloads** | `GET /api/download/[id]` logs a privacy-friendly event (24h dedup by daily-hashed IP — no raw IPs stored), then 302-redirects to the real APK |
-| 👥 **User accounts** | Sign up / log in, favorites (❤️), star ratings & reviews with admin moderation |
-| ⭐ **Reviews** | One review per user per app, pending → approved flow, average rating display |
-| 🔄 **Auto-sync** | Daily job pulls the F-Droid index and queues new versions as `pending` — nothing publishes without admin approval |
-| 📲 **PWA** | Installable on Android, offline cache (stale-while-revalidate), install prompt banner |
-| 🛠️ **Admin panel** | Dashboard, app CRUD, version lifecycle (`pending → active / disabled / rejected`), categories, reports, review moderation, audit log |
-| 🔐 **Security** | scrypt password hashing, HMAC-signed httpOnly sessions, rate limiting, Zod validation everywhere |
-| 🌐 **SEO** | Metadata, canonical URLs, Open Graph, dynamic sitemap, robots.txt |
-
-### 🧱 Tech Stack
-
-- **Framework:** Next.js 16 (App Router) + TypeScript
-- **Styling:** Tailwind CSS 4, Vazirmatn font, RTL-first
-- **Database:** PostgreSQL 16 + Drizzle ORM (21 tables)
-- **Validation:** Zod
-- **Auth:** scrypt + HMAC-signed sessions (no JWT library needed)
-- **Data source:** Official F-Droid `index-v2.json` (real data only — no fake download counts or links)
-
-### 🚀 Deploy on Render (free)
-
-This repo ships with a `render.yaml` Blueprint — web service + PostgreSQL in one click:
-
-1. Sign up at [render.com](https://render.com) with GitHub
-2. **New → Blueprint**, select this repo, **Apply**
-3. The build runs: icon generation → `npm install` → `drizzle-kit migrate` → `next build`
-4. `DATABASE_URL` and `SESSION_SECRET` are wired automatically; `SITE_URL` falls back to `RENDER_EXTERNAL_URL`
-
-> To seed real app data, restore a dump of the `narmstore` database into the Render Postgres instance.
-
-### 💻 Local Development
-
-```bash
-# 1. Database
-sudo apt install postgresql-16
-sudo -u postgres psql -c "CREATE USER narmstore PASSWORD 'narmstore_dev';"
-sudo -u postgres psql -c "CREATE DATABASE narmstore OWNER narmstore;"
-
-# 2. Install & configure
-npm install
-cp .env.example .env   # set DATABASE_URL and SESSION_SECRET
-
-# 3. Migrate & seed
-npx drizzle-kit migrate
-npx tsx --env-file=.env db/seed.ts
-
-# 4. Run
-npm run dev   # http://localhost:3000
+```
+███╗   ██╗ █████╗ ██████╗ ███╗   ███╗
+████╗  ██║██╔══██╗██╔══██╗████╗ ████║
+██╔██╗ ██║███████║██████╔╝██╔████╔██║
+██║╚██╗██║██╔══██║██╔══██╗██║╚██╔╝██║
+██║ ╚████║██║  ██║██║  ██║██║ ╚═╝ ██║
+╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝
 ```
 
-Admin login (dev only — change immediately): `admin@narmstore.local` / `ChangeMe123!`
+# نـرم‌استـور
 
-### 🔄 Manual F-Droid Sync
+**فروشگاه فارسی نرم‌افزار — اندروید، ویندوز، لینوکس**
+**A Persian software store for Android, Windows & Linux**
 
-```bash
-npx tsx --env-file=.env db/sync-fdroid.ts
-```
+✦ ✦ ✦
 
-Downloads a fresh F-Droid index (if older than 24h), inserts new versions as `pending`, updates changed metadata, and writes a row to `repository_sync_logs`.
+> *"نرم‌افزار خوب، به زبان خودت."*
+> *"Good software, in your own language."*
 
-### 🗄️ Database Schema (21 tables)
+✦ ✦ ✦
 
-`apps`, `app_versions`, `app_permissions`, `app_screenshots`, `categories`, `app_categories`, `users`, `roles`, `sessions`, `favorites`, `reviews`, `download_events`, `reports`, `audit_logs`, `repositories`, `repository_sync_logs`, … — see [`db/schema.ts`](db/schema.ts) and [`db/migrations/`](db/migrations/).
-
-### 📁 Project Structure
-
-```
-app/                # Next.js App Router (storefront, /admin, /api)
-components/         # UI components (PWA, Reviews, FavoriteButton, …)
-db/                 # Drizzle schema, migrations, seed, F-Droid sync
-lib/                # auth, db client, Persian helpers, store queries
-public/icons/       # PWA icons (generated at build by scripts/gen-icons.mjs)
-scripts/            # build-time asset generators
-render.yaml         # Render Blueprint (web + Postgres)
-```
-
-### 🗺️ Roadmap
-
-- [ ] Direct APK upload / object storage
-- [ ] Automated malware scanning
-- [ ] Push notifications for app updates
-- [ ] Public developer submission portal
-
----
-
-## 🇮🇷 فارسی
-
-<div dir="rtl" align="right">
-
-### معرفی
-
-**نرم‌استور** یک فروشگاه اینترنتی فارسی برای نرم‌افزارهای اندروید است؛ جایی برای معرفی، بررسی و دانلود امن برنامه‌ها با لینک مستقیم و تأیید اصالت فایل. به‌صورت **PWA** روی گوشی نصب می‌شود، صفحات بازدیدشده را آفلاین نگه می‌دارد و نسخه‌های جدید را به‌صورت خودکار از مخزن رسمی F-Droid دریافت می‌کند.
-
-### ✨ امکانات
-
-| بخش | توضیح |
-|---|---|
-| 🏠 **ویترین** | رابط کاملاً فارسی و راست‌چین، تم روشن/تاریک، طراحی موبایل‌اول |
-| 🔍 **جست‌وجو** | جست‌وجوی فارسی با نرمال‌سازی (ي/ی، ك/ک، نیم‌فاصله) |
-| 🗂️ **دسته‌بندی** | دسته‌بندی چندسطحی با مرتب‌سازی و صفحه‌بندی |
-| 📱 **صفحه برنامه** | نسخه‌ها، حجم، حداقل اندروید، نام بسته، مجوز، SHA-256، دسترسی‌ها، اسکرین‌شات، تغییرات نسخه، برنامه‌های مشابه |
-| ⬇️ **دانلود واقعی** | ثبت رویداد دانلود با حفظ حریم خصوصی (جلوگیری از شمارش تکراری در ۲۴ ساعت با هش روزانه IP — بدون ذخیره IP خام) و هدایت به APK واقعی |
-| 👥 **حساب کاربری** | ثبت‌نام/ورود، علاقه‌مندی‌ها (❤️)، امتیاز و نظر با تأیید مدیر |
-| ⭐ **نظرات** | هر کاربر یک نظر برای هر برنامه، چرخه «در انتظار → تأییدشده»، نمایش میانگین امتیاز |
-| 🔄 **همگام‌سازی خودکار** | جاب روزانه ایندکس F-Droid را می‌خواند و نسخه‌های جدید را «در انتظار بررسی» ثبت می‌کند — هیچ‌چیز بدون تأیید مدیر منتشر نمی‌شود |
-| 📲 **PWA** | نصب روی اندروید، کش آفلاین، بنر پیشنهاد نصب |
-| 🛠️ **پنل مدیریت** | داشبورد، مدیریت برنامه‌ها و نسخه‌ها (`pending → active / disabled / rejected`)، دسته‌بندی‌ها، گزارش‌ها، مدیریت نظرات، لاگ حسابرسی |
-| 🔐 **امنیت** | هش رمز با scrypt، نشست امضاشده با HMAC، محدودسازی درخواست، اعتبارسنجی Zod |
-| 🌐 **سئو** | متادیتا، canonical، Open Graph، نقشه سایت پویا، robots.txt |
-
-### 🧱 تکنولوژی‌ها
-
-- **فریم‌ورک:** Next.js 16 + TypeScript
-- **رابط کاربری:** Tailwind CSS 4، فونت وزیرمتن، راست‌چین
-- **دیتابیس:** PostgreSQL 16 + Drizzle ORM (۲۱ جدول)
-- **اعتبارسنجی:** Zod
-- **احراز هویت:** scrypt + نشست امضاشده HMAC
-- **منبع داده:** ایندکس رسمی F-Droid — فقط داده واقعی، بدون آمار جعلی
-
-### 🚀 استقرار روی Render (رایگان)
-
-فایل `render.yaml` همه‌چیز را یکجا می‌سازد (وب‌سرویس + PostgreSQL):
-
-۱. در render.com با GitHub ثبت‌نام کنید
-۲. **New → Blueprint** و این ریپو را انتخاب کنید
-۳. بیلد خودکار اجرا می‌شود: ساخت آیکون‌ها ← نصب پکیج‌ها ← اجرای مایگریشن ← بیلد Next.js
-
-### 💻 اجرای محلی
-
-```bash
-npm install
-cp .env.example .env   # مقادیر DATABASE_URL و SESSION_SECRET را تنظیم کنید
-npx drizzle-kit migrate
-npx tsx --env-file=.env db/seed.ts
-npm run dev   # http://localhost:3000
-```
-
-ورود مدیر (فقط توسعه — فوراً عوض کنید): `admin@narmstore.local` / `ChangeMe123!`
-
-### 📄 مجوز
-
-MIT — آزاد برای استفاده شخصی و تجاری.
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![PWA](https://img.shields.io/badge/PWA-ready-0d7a5f?style=for-the-badge)](https://web.dev/progressive-web-apps/)
 
 </div>
 
@@ -181,6 +32,221 @@ MIT — آزاد برای استفاده شخصی و تجاری.
 
 <div align="center">
 
-ساخته‌شده با ❤️ برای جامعه فارسی‌زبان اندروید
+## 📊 در یک نگاه · At a glance
+
+| | |
+|---|---|
+| **1083+** | برنامه‌های منتشرشده · published apps |
+| **3** | پلتفرم: اندروید، ویندوز، لینوکس · platforms |
+| **16** | کالکشن دست‌چین · curated collections |
+| **0** | آمار جعلی · fake stats |
+
+</div>
+
+---
+
+## چرا نرم‌استور؟ · Why NarmStore?
+
+<div dir="rtl">
+
+بیشتر فروشگاه‌های نرم‌افزار یا انگلیسی‌اند، یا پر از تبلیغ و ردیاب، یا برای کاربر ایرانی اصلاً باز نمی‌شوند.
+نرم‌استور از یک ایده‌ی ساده شروع شد: **یک فروشگاه تمیز و فارسی که بشود به آن اعتماد کرد.**
+
+سه اصل که از روز اول سر جایشان مانده‌اند:
+
+1. **فقط داده‌ی واقعی.** بدون شمارش دانلود جعلی، بدون لینک الکی. هر چیزی که می‌بینی، از منبع رسمی آمده — F-Droid برای اندروید، Flathub و Winget برای دسکتاپ.
+2. **اعتماد، اول.** هش SHA-256 هر فایل نمایش داده می‌شود، لینک منبع اصلی همیشه هست، و هر کاربر می‌تواند مشکل هر برنامه را گزارش کند.
+3. **فارسیِ واقعی.** نه ترجمه‌ی ماشینیِ کلمه‌به‌کلمه؛ اسم‌ها و توضیح‌ها را آدم نوشته، با همان لحنی که خودت با دوستت حرف می‌زنی.
+
+</div>
+
+Most app stores are either English-only, full of ads and trackers, or simply unreachable from Iran.
+NarmStore started from a simple idea: **a clean, Persian store you can actually trust.**
+
+Three principles that haven't moved since day one:
+
+1. **Real data only.** No fake download counts, no dead links. Everything comes from official sources — F-Droid for Android, Flathub and Winget for desktop.
+2. **Trust first.** Every file's SHA-256 hash is shown, the original source link is always there, and any user can report a problem on any app's page.
+3. **Real Persian.** Not word-by-word machine translation; names and descriptions are written by a human, in the tone you'd use with a friend.
+
+---
+
+## ✨ امکانات · Features
+
+<details open>
+<summary><b>🏠 ویترین فروشگاه · Storefront</b></summary>
+<br>
+
+- رابط کاملاً فارسی و راست‌چین، تم روشن/تاریک، طراحی موبایل‌اول
+- سوییچر شناور پلتفرم: 🤖 اندروید · 🪟 ویندوز · 🐧 لینوکس — جداسازی کامل محتوا در همه‌ی بخش‌ها
+- هیروی «پیشنهاد این هفته»، نوار آمار زنده، بج «جدید» برای برنامه‌های تازه
+- پرطرفدارها به‌صورت لیست فشرده با بج لایسنس (متن‌باز/اشتراکی) و دکمه‌ی دریافت
+- Persian RTL interface, dark/light theme, mobile-first
+- Floating platform switcher with full content isolation per platform
+
+</details>
+
+<details>
+<summary><b>📱 صفحه‌ی برنامه · App page</b></summary>
+<br>
+
+- نسخه‌ها، حجم، حداقل اندروید، نام بسته، مجوز، **هش SHA-256 با دکمه‌ی کپی**
+- دسترسی‌ها (permissions)، اسکرین‌شات‌ها، تغییرات نسخه، برنامه‌های مشابه
+- کارت لینک گیت‌هاب با آیکون و تعداد استار — بالای دکمه‌ی دانلود
+- بنر «نسخه‌ی جدید موجوده» اگر قبلاً نسخه‌ی قدیمی‌تر را دانلود کرده باشی
+- دکمه‌ی **«گزارش مشکل»** در خود صفحه‌ی برنامه
+- دکمه‌ی دانلود شناور در موبایل (فقط وقتی دکمه‌ی اصلی دیده نمی‌شود)
+- Versions, file size, SHA-256 with copy button, permissions, screenshots, changelog, similar apps, GitHub card, in-page report button, smart sticky download on mobile
+
+</details>
+
+<details>
+<summary><b>🔍 جست‌وجو و کشف · Search & discovery</b></summary>
+<br>
+
+- جست‌وجوی فارسی/انگلیسی با نرمال‌سازی (ي/ی، ك/ک، نیم‌فاصله)
+- دسته‌بندی چندسطحی، ۱۶ کالکشن دست‌چین، مقایسه‌ی سه‌تایی برنامه‌ها
+- برچسب‌های هوشمند، امتیاز سریع، پیشنهاد «شاید بپسندی»
+- Full-text bilingual search with Persian normalization, multi-level categories, 16 curated collections, 3-way compare
+
+</details>
+
+<details>
+<summary><b>👥 حساب کاربری · Accounts</b></summary>
+<br>
+
+- ثبت‌نام/ورود، علاقه‌مندی‌ها، **دنبال‌کردن برنامه‌ها**، امتیاز و نظر با تأیید مدیر
+- اعلان انتشار نسخه‌ی جدید برای علاقه‌مندی‌ها و دنبال‌شده‌ها
+- صفحه‌ی «به‌روزرسانی‌ها»: بررسی نسخه‌ی جدید برای برنامه‌های دانلودشده‌ات
+- Favorites, follows, ratings & moderated reviews, new-version notifications, updates page
+
+</details>
+
+<details>
+<summary><b>🔄 اتوماسیون · Automation</b></summary>
+<br>
+
+- همگام‌سازی روزانه‌ی F-Droid: نسخه‌های جدید «در انتظار بررسی» ثبت می‌شوند — هیچ‌چیز بدون تأیید مدیر منتشر نمی‌شود
+- بکاپ خودکار روزانه‌ی دیتابیس (۷ نسخه‌ی آخر نگه داشته می‌شود)
+- پایش گزارش‌های کاربران هر ۶ ساعت
+- Daily F-Droid sync (new versions queued as pending, never auto-published), automatic daily DB backups, report watch
+
+</details>
+
+<details>
+<summary><b>🔐 امنیت و حریم خصوصی · Security & privacy</b></summary>
+<br>
+
+- هش رمز با scrypt، نشست امضاشده با HMAC (httpOnly)، محدودسازی نرخ درخواست، اعتبارسنجی Zod همه‌جا
+- شمارش دانلود با حفظ حریم خصوصی: dedup در ۲۴ ساعت با هش روزانه‌ی IP — **بدون ذخیره‌ی IP خام**
+- پروکسی تصویر داخلی برای آیکون‌ها (F-Droid از ایران در دسترس نیست)
+- scrypt hashing, HMAC-signed sessions, rate limiting, Zod validation, privacy-friendly download counting (no raw IPs), internal image proxy
+
+</details>
+
+---
+
+## 🧱 تکنولوژی‌ها · Tech stack
+
+<div align="center">
+
+| لایه · Layer | انتخاب · Choice |
+|---|---|
+| Framework | **Next.js 16** (App Router) + TypeScript |
+| Styling | **Tailwind CSS 4** · فونت‌های Vazirmatn و Lalezar · آیکون‌های Lucide |
+| Database | **PostgreSQL 16** + Drizzle ORM |
+| Validation | Zod |
+| Auth | scrypt + نشست امضاشده‌ی HMAC |
+| Installable | **PWA** — کش آفلاین، بنر نصب |
+| Data | F-Droid `index-v2.json` · Flathub · Winget |
+
+</div>
+
+---
+
+## 🚀 اجرا · Getting started
+
+### استقرار روی Render (رایگان) · Deploy on Render (free)
+
+فایل `render.yaml` همه‌چیز را یکجا می‌سازد — وب‌سرویس + PostgreSQL:
+
+1. در [render.com](https://render.com) با GitHub ثبت‌نام کن
+2. **New → Blueprint**، این ریپو را انتخاب کن، **Apply**
+3. بیلد خودکار: ساخت آیکون‌ها ← `npm install` ← `drizzle-kit migrate` ← `next build`
+4. `DATABASE_URL` و `SESSION_SECRET` خودکار وصل می‌شوند
+
+> ⚠️ نکته: دیتابیس رایگان Render حدود ۹۰ روز بعد حذف می‌شود — بکاپ روزانه (`scripts/backup-cloud-db.mjs`) را فعال نگه دار.
+
+### اجرای محلی · Local development
+
+```bash
+# 1. دیتابیس
+sudo apt install postgresql-16
+sudo -u postgres psql -c "CREATE USER narmstore PASSWORD 'narmstore_dev';"
+sudo -u postgres psql -c "CREATE DATABASE narmstore OWNER narmstore;"
+
+# 2. نصب و تنظیم
+npm install
+cp .env.example .env   # DATABASE_URL و SESSION_SECRET را تنظیم کن
+
+# 3. مایگریشن و سید
+npx drizzle-kit migrate
+npx tsx --env-file=.env db/seed.ts
+
+# 4. اجرا
+npm run dev   # http://localhost:3000
+```
+
+ورود مدیر (فقط توسعه — فوراً عوض کن): `admin@narmstore.local` / `ChangeMe123!`
+
+### اسکریپت‌های مفید · Handy scripts
+
+```bash
+npx tsx --env-file=.env db/sync-fdroid.ts   # همگام‌سازی دستی F-Droid
+node scripts/backup-cloud-db.mjs            # بکاپ دیتابیس ابری (JSON)
+node scripts/restore-cloud-db.mjs           # بازیابی از بکاپ
+node scripts/pg-tunnel.mjs                  # تونل امن به دیتابیس ابری
+```
+
+---
+
+## 📁 ساختار پروژه · Project structure
+
+```
+app/                # Next.js App Router — ویترین، /admin، /api
+components/         # کامپوننت‌های UI (PWA، نظرات، دکمه‌ها، …)
+db/                 # اسکیمای Drizzle، مایگریشن‌ها، سید، همگام‌سازی F-Droid
+lib/                # احراز هویت، کلاینت دیتابیس، هلپرهای فارسی
+public/             # آیکون‌های PWA و service worker
+scripts/            # ابزارهای بیلد و نگهداری
+render.yaml         # بلوپرینت Render (وب + Postgres)
+```
+
+---
+
+## 🗺️ نقشه‌ی راه · Roadmap
+
+- [ ] آپلود مستقیم APK / فضای ذخیره‌سازی ابری
+- [ ] اسکن خودکار بدافزار
+- [ ] پوش‌نوتیفیکیشن برای به‌روزرسانی برنامه‌ها
+- [ ] پورتال ثبت برنامه توسط توسعه‌دهندگان
+
+---
+
+## 📄 مجوز · License
+
+MIT — آزاد برای استفاده‌ی شخصی و تجاری.
+
+---
+
+<div align="center">
+
+✦
+
+ساخته‌شده با دقت و بدون عجله، برای جامعه‌ی فارسی‌زبان
+<br>
+*Built carefully and without rushing, for the Persian-speaking community.*
+
+**[narmstore.onrender.com](https://narmstore.onrender.com)**
 
 </div>
