@@ -5,8 +5,6 @@ import * as s from "@/db/schema";
 import { eq, or } from "drizzle-orm";
 import tools from "@/data/linux-specialized-batch1.json";
 
-export const dynamic = "force-dynamic";
-
 // ایمپورت موقت بچ اول لینوکس — بعد از اجرا حذف می‌شود.
 // کلید تصادفی یک‌بارمصرف؛ عملیات idempotent است (رکورد تکراری نادیده گرفته می‌شود).
 const KEY = "b1-9f3e7a2c4d8b1e6a5f0c3d9e7b2a4f1";
