@@ -31,7 +31,7 @@ export default function SignupPage() {
     <div className="min-h-[60vh] flex items-center justify-center">
       <form onSubmit={submit} className="w-full max-w-sm bg-surface border border-border rounded-3xl p-8 space-y-5">
         <div className="text-center">
-          <span className="inline-flex w-12 h-12 rounded-2xl bg-primary text-primary-fg items-center justify-center text-2xl font-bold mb-3">ن</span>
+          <img src="/icons/icon-192.png" alt="لوگوی نرم‌استور" width={48} height={48} className="inline-flex w-12 h-12 rounded-2xl object-cover mb-3" />
           <h1 className="text-xl font-extrabold">ساخت حساب کاربری</h1>
           <p className="text-xs text-muted mt-1">علاقه‌مندی‌ها و نظرات شما ذخیره می‌شود</p>
         </div>

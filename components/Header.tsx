@@ -11,7 +11,7 @@ export default function Header() {
       <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="نرم‌استور - صفحه اصلی">
-            <span className="w-9 h-9 rounded-xl bg-primary text-primary-fg flex items-center justify-center text-xl font-bold">ن</span>
+            <img src="/icons/icon-192.png" alt="لوگوی نرم‌استور" width={36} height={36} className="w-9 h-9 rounded-xl object-cover" />
             <span className="font-bold text-lg hidden sm:inline">نرم‌استور</span>
           </Link>
           <div className="hidden md:block flex-1 max-w-md">
