@@ -24,9 +24,6 @@ export default function Header() {
             <Link href="/latest" className="px-3 py-2 rounded-lg hover:bg-surface-2 transition">تازه‌ها</Link>
           </nav>
           <div className="ms-auto md:ms-0 flex items-center gap-2">
-            <Link href="/updates" className="w-10 h-10 rounded-xl hover:bg-surface-2 flex items-center justify-center text-xl transition" title="به‌روزرسانی‌ها" aria-label="به‌روزرسانی‌ها">
-              🔄
-            </Link>
             <NotifBell />
             <ThemeToggle />
             <UserMenu />

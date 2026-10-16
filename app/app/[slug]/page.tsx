@@ -3,6 +3,10 @@ import PxImg from "@/components/PxImg";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getAppBySlug } from "@/lib/store";
+import { getSessionUser } from "@/lib/auth";
+import { db } from "@/lib/db";
+import * as s from "@/db/schema";
+import { eq, and, desc } from "drizzle-orm";
 import { toFaDigits, formatBytes, formatDate, timeAgo } from "@/lib/fa";
 import AppCard from "@/components/AppCard";
 import DownloadButton from "@/components/DownloadButton";
@@ -50,6 +54,26 @@ export default async function AppPage({ params }: Props) {
   const app = await getAppBySlug(slug);
   if (!app) notFound();
   const v = app.current;
+
+  // بررسی آپدیت: آیا کاربر لاگین‌کرده این برنامه را دانلود کرده و نسخه جدید آمده؟
+  let hasUpdate = false;
+  let downloadedVersion: string | null = null;
+  try {
+    const user = await getSessionUser();
+    if (user && v && app.platform === "android") {
+      const dls = await db.select({ versionId: s.downloadEvents.versionId })
+        .from(s.downloadEvents)
+        .where(and(eq(s.downloadEvents.userId, user.id), eq(s.downloadEvents.appId, app.id)))
+        .orderBy(desc(s.downloadEvents.createdAt)).limit(1);
+      if (dls.length && dls[0].versionId && dls[0].versionId !== v.id) {
+        hasUpdate = true;
+        const dv = await db.select({ versionName: s.appVersions.versionName })
+          .from(s.appVersions).where(eq(s.appVersions.id, dls[0].versionId!)).limit(1);
+        downloadedVersion = dv[0]?.versionName ?? null;
+      }
+    }
+  } catch {}
+
   const tags = computeTags({
     permissions: app.permissions.map((p: any) => p.permission),
     isOpenSource: app.isOpenSource,
@@ -104,6 +128,23 @@ export default async function AppPage({ params }: Props) {
             )}
           </div>
         </div>
+
+        {/* بنر آپدیت — اگر نسخه جدید آمده */}
+        {hasUpdate && v && (
+          <div className="mt-4 bg-primary-soft border border-primary/30 rounded-2xl p-4 flex items-center gap-3" role="status">
+            <span className="text-2xl" aria-hidden="true">🔄</span>
+            <div className="flex-1">
+              <p className="font-extrabold text-sm">نسخه‌ی جدید موجوده!</p>
+              <p className="text-xs text-muted mt-0.5">
+                {downloadedVersion ? (
+                  <>از نسخه‌ی <span dir="ltr">{downloadedVersion}</span> به <span dir="ltr">{v.versionName}</span> به‌روزرسانی کن</>
+                ) : (
+                  <>نسخه‌ی <span dir="ltr">{v.versionName}</span> منتشر شده</>
+                )}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* دانلود */}
         <div className="mt-6 pt-6 border-t border-border">
