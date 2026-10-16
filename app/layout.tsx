@@ -14,7 +14,7 @@ const vazir = Vazirmatn({
 
 export const metadata: Metadata = {
   title: { default: "نرم‌استور | فروشگاه فارسی نرم‌افزار اندروید", template: "%s | نرم‌استور" },
-  description: "نرم‌استور — معرفی، بررسی و دانلود امن نرم‌افزارهای اندروید با لینک مستقیم و تأیید اصالت فایل",
+  description: "نرم‌استور — فروشگاه فارسی نرم‌افزار برای اندروید، ویندوز و لینوکس؛ معرفی و دانلود امن با لینک مستقیم",
   metadataBase: new URL(siteUrl()),
   openGraph: { locale: "fa_IR", type: "website", siteName: "نرم‌استور" },
   robots: { index: true, follow: true },

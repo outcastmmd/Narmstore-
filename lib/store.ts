@@ -257,7 +257,7 @@ export async function searchApps(query: string, filters: SearchFilters = {}, lim
 
   const orderBy = filters.sort === "newest" ? desc(s.apps.createdAt)
     : filters.sort === "name" ? s.apps.nameFa
-    : filters.sort === "popular" ? desc(dlCount)
+    : filters.sort === "popular" ? desc(sql`COALESCE(${s.apps.githubStars}, 0) + ${dlCount} * 10`)
     : desc(s.apps.updatedAt);
 
   const [items, total] = await Promise.all([
