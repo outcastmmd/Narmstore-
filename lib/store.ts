@@ -21,15 +21,57 @@ const cardCols = {
 
 const pub = eq(s.apps.isPublished, true);
 
+// نگاشت هر دسته به ریشه‌اش + گرفتن همه نوادگان یک دسته (شامل خودش)
+async function getCategoryTree() {
+  const cats = await db.select({
+    id: s.categories.id, parentId: s.categories.parentId,
+  }).from(s.categories).where(eq(s.categories.isActive, true));
+  const byId = new Map(cats.map((c) => [c.id, c.parentId]));
+  const children = new Map<string, string[]>();
+  for (const c of cats) {
+    if (c.parentId) {
+      if (!children.has(c.parentId)) children.set(c.parentId, []);
+      children.get(c.parentId)!.push(c.id);
+    }
+  }
+  const rootOf = (id: string): string => {
+    let cur: string | null = id, seen = 0;
+    while (cur && byId.get(cur) && seen++ < 20) cur = byId.get(cur)!;
+    return cur ?? id;
+  };
+  const descendantsOf = (rootId: string): string[] => {
+    const ids = [rootId], stack = [rootId];
+    while (stack.length) {
+      const cur = stack.pop()!;
+      for (const ch of children.get(cur) || []) { ids.push(ch); stack.push(ch); }
+    }
+    return ids;
+  };
+  return { rootOf, descendantsOf };
+}
+
 export async function getRootCategories() {
   await dyn();
   const rows = await db.select({
     id: s.categories.id, slug: s.categories.slug, nameFa: s.categories.nameFa, icon: s.categories.icon,
-    appCount: sql<number>`(select count(*) from ${s.appCategories} join ${s.apps} on ${s.apps.id} = ${s.appCategories.appId} where ${s.appCategories.categoryId} = ${s.categories.id} and ${s.apps.isPublished} = true)`.as("app_count"),
   }).from(s.categories)
     .where(and(eq(s.categories.isActive, true), sql`${s.categories.parentId} is null`))
     .orderBy(s.categories.sortOrder, s.categories.nameFa);
-  return rows;
+
+  // شمارش برنامه‌ها شامل زیردسته‌ها
+  const { rootOf } = await getCategoryTree();
+  const links = await db.select({
+    categoryId: s.appCategories.categoryId, appId: s.appCategories.appId,
+  }).from(s.appCategories)
+    .innerJoin(s.apps, eq(s.apps.id, s.appCategories.appId))
+    .where(eq(s.apps.isPublished, true));
+  const countByRoot = new Map<string, Set<string>>();
+  for (const l of links) {
+    const root = rootOf(l.categoryId);
+    if (!countByRoot.has(root)) countByRoot.set(root, new Set());
+    countByRoot.get(root)!.add(l.appId);
+  }
+  return rows.map((r) => ({ ...r, appCount: countByRoot.get(r.id)?.size ?? 0 }));
 }
 
 export async function getFeaturedApps(limit = 8) {
@@ -183,15 +225,20 @@ export async function getCategoryApps(slug: string, limit = 40, offset = 0, sort
   await dyn();
   const cat = await getCategoryBySlug(slug);
   if (!cat) return null;
+  const { descendantsOf } = await getCategoryTree();
+  const catIds = descendantsOf(cat.id);
   const orderBy = sort === "popular" ? desc(dlCount) : sort === "name" ? s.apps.nameFa : desc(s.apps.updatedAt);
+  const cond = and(pub, inArray(s.appCategories.categoryId, catIds));
+  // ممکن است یک برنامه در دو زیردسته باشد — با groupBy تکراری‌ها حذف می‌شوند
   const [items, total] = await Promise.all([
     db.select(cardCols).from(s.apps)
       .innerJoin(s.appCategories, eq(s.appCategories.appId, s.apps.id))
-      .where(and(pub, eq(s.appCategories.categoryId, cat.id)))
+      .where(cond)
+      .groupBy(s.apps.id)
       .orderBy(orderBy).limit(limit).offset(offset),
-    db.select({ c: sql<number>`count(*)` }).from(s.apps)
+    db.select({ c: sql<number>`count(distinct ${s.apps.id})` }).from(s.apps)
       .innerJoin(s.appCategories, eq(s.appCategories.appId, s.apps.id))
-      .where(and(pub, eq(s.appCategories.categoryId, cat.id))),
+      .where(cond),
   ]);
   return { category: cat, items, total: Number(total[0]?.c ?? 0) };
 }
