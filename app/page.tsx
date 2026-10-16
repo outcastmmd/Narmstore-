@@ -11,14 +11,15 @@ import {
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
+import PlatformToggle from "@/components/PlatformToggle";
+import type { Platform } from "@/lib/store";
 
+type Props = { searchParams: Promise<{ cat?: string; platform?: string }> };
 
-type Props = { searchParams: Promise<{ cat?: string }> };
-
-async function HomeSlide() {
+async function HomeSlide({ platform }: { platform?: Platform }) {
   const [featured, popular, latest, editors, oss, collections] = await Promise.all([
-    getFeaturedApps(4), getPopularApps(8),
-    getLatestApps(8), getEditorChoice(8), getOpenSourceApps(8), getCollections(),
+    getFeaturedApps(4, platform), getPopularApps(8, platform),
+    getLatestApps(8, platform), getEditorChoice(8, platform), getOpenSourceApps(8, platform), getCollections(),
   ]);
   const hero = featured[0];
 
@@ -145,15 +146,19 @@ async function CategorySlide({ slug }: { slug: string }) {
 }
 
 export default async function Home({ searchParams }: Props) {
-  const { cat } = await searchParams;
+  const { cat, platform } = await searchParams;
   const cats = await getRootCategories();
+  const plat = (platform === "windows" || platform === "linux") ? platform : undefined;
 
   return (
     <div>
       <Suspense>
+        <PlatformToggle />
+      </Suspense>
+      <Suspense>
         <CategoryPills cats={cats} />
       </Suspense>
-      {cat ? <CategorySlide slug={cat} /> : <HomeSlide />}
+      {cat ? <CategorySlide slug={cat} /> : <HomeSlide platform={plat} />}
     </div>
   );
 }

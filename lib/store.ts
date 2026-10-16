@@ -21,6 +21,15 @@ const cardCols = {
 
 const pub = eq(s.apps.isPublished, true);
 
+// فیلتر پلتفرم (android | windows | linux)
+export type Platform = "android" | "windows" | "linux";
+export const PLATFORMS: { slug: Platform; label: string; icon: string }[] = [
+  { slug: "android", label: "اندروید", icon: "🤖" },
+  { slug: "windows", label: "ویندوز", icon: "🪟" },
+  { slug: "linux", label: "لینوکس", icon: "🐧" },
+];
+const plat = (p?: Platform) => (p ? eq(s.apps.platform, p) : undefined);
+
 // نگاشت هر دسته به ریشه‌اش + گرفتن همه نوادگان یک دسته (شامل خودش)
 async function getCategoryTree() {
   const cats = await db.select({
@@ -103,38 +112,38 @@ export async function getRootCategories() {
   return rows.map((r) => ({ ...r, appCount: countByRoot.get(r.id)?.size ?? 0 }));
 }
 
-export async function getFeaturedApps(limit = 8) {
+export async function getFeaturedApps(limit = 8, platform?: Platform) {
   await dyn();
   return db.select(cardCols).from(s.apps)
-    .where(and(pub, eq(s.apps.featured, true)))
+    .where(and(pub, eq(s.apps.featured, true), plat(platform)))
     .orderBy(desc(s.apps.updatedAt)).limit(limit);
 }
 
-export async function getEditorChoice(limit = 8) {
+export async function getEditorChoice(limit = 8, platform?: Platform) {
   await dyn();
   return db.select(cardCols).from(s.apps)
-    .where(and(pub, eq(s.apps.editorChoice, true)))
+    .where(and(pub, eq(s.apps.editorChoice, true), plat(platform)))
     .orderBy(desc(s.apps.updatedAt)).limit(limit);
 }
 
-export async function getPopularApps(limit = 8) {
+export async function getPopularApps(limit = 8, platform?: Platform) {
   await dyn();
   return db.select(cardCols).from(s.apps)
-    .where(pub)
+    .where(and(pub, plat(platform)))
     .orderBy(desc(dlCount), desc(s.apps.updatedAt)).limit(limit);
 }
 
-export async function getLatestApps(limit = 8) {
+export async function getLatestApps(limit = 8, platform?: Platform) {
   await dyn();
   return db.select(cardCols).from(s.apps)
-    .where(pub)
+    .where(and(pub, plat(platform)))
     .orderBy(desc(s.apps.updatedAt)).limit(limit);
 }
 
-export async function getOpenSourceApps(limit = 8) {
+export async function getOpenSourceApps(limit = 8, platform?: Platform) {
   await dyn();
   return db.select(cardCols).from(s.apps)
-    .where(and(pub, eq(s.apps.isOpenSource, true)))
+    .where(and(pub, eq(s.apps.isOpenSource, true), plat(platform)))
     .orderBy(desc(dlCount)).limit(limit);
 }
 

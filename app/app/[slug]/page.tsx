@@ -9,7 +9,9 @@ import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import CompareButton from "@/components/CompareButton";
 import Reviews from "@/components/Reviews";
+import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
+import { computeTags } from "@/lib/tags";
 import { px } from "@/lib/img";
 import { siteUrl } from "@/lib/site-url";
 
@@ -47,6 +49,11 @@ export default async function AppPage({ params }: Props) {
   const app = await getAppBySlug(slug);
   if (!app) notFound();
   const v = app.current;
+  const tags = computeTags({
+    permissions: app.permissions.map((p: any) => p.permission),
+    isOpenSource: app.isOpenSource,
+    fileSize: v?.fileSize ?? null,
+  });
 
   return (
     <div className="animate-fade-up">
@@ -79,6 +86,16 @@ export default async function AppPage({ params }: Props) {
               {v && <span>🕐 به‌روزرسانی: {timeAgo(v.publishedAt || v.createdAt)}</span>}
             </div>
             {(app.shortDescFa || app.shortDesc) && <p className="mt-3 text-sm leading-7">{app.shortDescFa || app.shortDesc}</p>}
+            {/* برچسب‌های هوشمند */}
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3" aria-label="برچسب‌ها">
+                {tags.map((t) => (
+                  <span key={t.slug} className="text-xs font-bold bg-primary-soft text-primary rounded-full px-3 py-1.5">
+                    {t.icon} {t.label}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -205,6 +222,7 @@ export default async function AppPage({ params }: Props) {
         </div>
       </div>
 
+      <QuickRating appId={app.id} />
       <Reviews appId={app.id} />
 
       {/* شاید بپسندی */}
