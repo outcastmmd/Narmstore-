@@ -3,11 +3,11 @@ services:
     name: narmstore
     runtime: node
     plan: free
-    buildCommand: node scripts/gen-icons.mjs && npm cache clean --force && npm install && npx drizzle-kit migrate && npm run build
+    buildCommand: node scripts/gen-icons.mjs && npm install && npx drizzle-kit migrate && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_VERSION
-        value: "20"
+        value: "22"
       - key: DATABASE_URL
         fromDatabase:
           name: narmstore-db
