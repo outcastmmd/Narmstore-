@@ -6,7 +6,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dir = join(root, "public", "icons");
 mkdirSync(dir, { recursive: true });
 const files = {
-  ...JSON.parse(readFileSync(join(root, "scripts", "icons-data-1.json"), "utf8")),
+  ...JSON.parse(readFileSync(join(root, "scripts", "icons-data-512.json"), "utf8")),
+  ...JSON.parse(readFileSync(join(root, "scripts", "icons-data-maskable.json"), "utf8")),
   ...JSON.parse(readFileSync(join(root, "scripts", "icons-data-2.json"), "utf8")),
 };
 for (const [n, b] of Object.entries(files)) writeFileSync(join(dir, n), Buffer.from(b, "base64"));
