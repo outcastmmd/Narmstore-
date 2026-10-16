@@ -114,6 +114,110 @@ const APPS: [string, string, string[], boolean?, boolean?][] = [
   ["de.k3b.android.androFotoFinder", "ای‌فوتوفایندر", ["gallery"], false, false],
   ["com.github.axet.audiorecorder", "ضبط صوت", ["recorder"], false, false],
   ["org.koitharu.kotatsu", "کوتاتسو", ["ebook"], false, false],
+  // ─── موج دوم: گسترش کاتالوگ (۱۴۰۵/۰۷/۲۴) ───
+  ["acr.browser.lightning", "لایتنینگ", ["browser"]],
+  ["com.duckduckgo.mobile.android", "داک‌داک‌گو", ["browser"]],
+  ["com.stoutner.privacybrowser.standard", "پرایوسی بروزر", ["browser"]],
+  ["org.jitsi.meet", "جیتسی میت", ["messenger"]],
+  ["org.linphone", "لین‌فون", ["messenger"]],
+  ["org.briarproject.briar.android", "برایار", ["messenger"], true, false],
+  ["com.keylesspalace.tusky", "تاسکی", ["messenger"]],
+  ["com.cheogram.android", "چئوگرام", ["messenger"]],
+  ["eu.faircode.email", "فیر ایمیل", ["email"], true, false],
+  ["de.tutao.tutanota", "توتا", ["email"]],
+  ["org.fossify.messages", "پیام‌ها فاسیفای", ["sms"]],
+  ["com.github.tmo1.sms_ie", "بکاپ پیامک", ["sms"]],
+  ["com.github.yeriomin.smsscheduler", "زمان‌بند پیامک", ["sms"]],
+  ["is.xyz.mpv", "ام‌پی‌وی", ["media-player"]],
+  ["org.oxycblt.auxio", "آکسیو", ["media-player"]],
+  ["org.fossify.musicplayer", "موزیک فاسیفای", ["media-player"]],
+  ["org.xbmc.kore", "کوری", ["media-player"]],
+  ["code.name.monkey.retromusic", "رترو موزیک", ["media-player"]],
+  ["com.hardcodecoder.pulsemusic", "پالس موزیک", ["media-player"]],
+  ["com.atul.musicplayer", "موزیک‌پلیر", ["media-player"]],
+  ["com.martinmimigames.littlemusicplayer", "لیتل موزیک", ["media-player"]],
+  ["com.metromusic", "مترو موزیک", ["media-player"]],
+  ["com.craftworks.music", "کرافت موزیک", ["media-player"]],
+  ["com.aaronroberts.naturesmusic", "موزیک طبیعت", ["media-player"]],
+  ["com.bobek.metronome", "مترونوم", ["media-player"]],
+  ["org.billthefarmer.tuner", "تیونر", ["media-player"]],
+  ["com.github.libretube", "لیبرتیوب", ["online-media"], true, false],
+  ["free.rm.skytube.oss", "اسکای‌تیوب", ["online-media"]],
+  ["com.zionhuang.music", "وی‌میوزیک", ["online-media"]],
+  ["org.jellyfin.mobile", "جلی‌فین", ["online-media"]],
+  ["org.moire.ultrasonic", "اولتراسونیک", ["online-media"]],
+  ["github.daneren2005.dsub", "دی‌ساب", ["online-media"]],
+  ["com.maxrave.simpmusic", "سیمپ‌میوزیک", ["online-media"]],
+  ["com.armanmaurya.internetradio", "اینترنت رادیو", ["radio"]],
+  ["de.radiozeit.freiesradio.fdroid", "فرایز رادیو", ["radio"]],
+  ["app.podiumpodcasts.podium", "پودیوم", ["podcast"]],
+  ["com.jarsilio.android.scrambledeggsif", "اسکرمبلد اگزیف", ["gallery"]],
+  ["org.fossify.camera", "دوربین فاسیفای", ["gallery"]],
+  ["com.iakmds.librecamera", "لیبرکمرا", ["gallery"]],
+  ["com.darkrockstudios.app.securecamera", "دوربین امن", ["gallery"]],
+  ["com.dozingcatsoftware.vectorcamera", "وکتور کمرا", ["gallery"]],
+  ["com.bookstash.app", "بوک‌استش", ["ebook"]],
+  ["com.luchowl.flybook", "فلای‌بوک", ["ebook"]],
+  ["org.secuso.privacyfriendlynotes", "یادداشت امن", ["notes"]],
+  ["org.fossify.notes", "یادداشت فاسیفای", ["notes"]],
+  ["it.niedermann.owncloud.notes", "نوتس نکست‌کلاد", ["notes"]],
+  ["de.tnmgl.ntodotxt", "ان‌تودو", ["tasks"]],
+  ["io.github.friesi23.mhabit", "ام‌هبیت", ["habit"]],
+  ["com.dessalines.habitmaker", "هبیت‌میکر", ["habit"]],
+  ["com.willbsp.habits", "هبیتس", ["habit"]],
+  ["ws.xsoh.etar", "اتار", ["productivity"]],
+  ["org.fossify.calendar", "تقویم فاسیفای", ["productivity"]],
+  ["proton.android.authenticator.fdroid", "پروتون اتنتیکیتور", ["2fa"]],
+  ["com.kunzisoft.keepass.libre", "کی‌پس لیبر", ["password"]],
+  ["org.sorz.lab.tinykeepass", "تاینی کی‌پس", ["password"]],
+  ["com.celzero.bravedns", "ری‌تینک‌دی‌ان‌اس", ["firewall", "adblock"]],
+  ["com.doubleangels.nextdnsmanagement", "نکست‌دی‌ان‌اس", ["adblock"]],
+  ["de.srlabs.snoopsnitch", "اسنوپ‌اسنیچ", ["firewall"]],
+  ["dev.ukanth.ufirewall", "ای‌اف‌وال", ["firewall"]],
+  ["com.acutis.firewall", "فایروال", ["firewall"]],
+  ["de.blinkt.openvpn", "اوپن‌وی‌پی‌ان", ["vpn"]],
+  ["io.nekohasekai.sfa", "اس‌اف‌ای", ["vpn"], true, false],
+  ["co.adityarajput.fileflow", "فایل‌فلو", ["file-manager"]],
+  ["com.martinmimigames.simplefileexplorer", "فایل اکسپلورر ساده", ["file-manager"]],
+  ["org.localsend.localsend_app", "لوکال‌سند", ["transfer"], true, false],
+  ["at.bitfire.davdroid", "داویکس۵", ["sync"]],
+  ["com.machiav3lli.backup", "نئو بکاپ", ["sync"]],
+  ["org.connectbot", "کانکت‌بات", ["terminal"]],
+  ["com.tortel.syslog", "سیس‌لاگ", ["system"]],
+  ["app.olauncher", "او‌لانچر", ["launcher"], true, false],
+  ["app.mlauncher", "ام‌لانچر", ["launcher"]],
+  ["app.cclauncher", "سی‌سی لانچر", ["launcher"]],
+  ["app.easy.launcher", "ایزی لانچر", ["launcher"]],
+  ["ademar.textlauncher", "تکست لانچر", ["launcher"]],
+  ["dev.patrickgold.florisboard", "فلوریس‌بورد", ["keyboard"], true, false],
+  ["com.menny.android.anysoftkeyboard", "انی‌سافت‌کیبورد", ["keyboard"]],
+  ["com.dessalines.thumbkey", "تامب‌کی", ["keyboard"]],
+  ["org.fossify.keyboard", "کیبورد فاسیفای", ["keyboard"]],
+  ["clavirom.keyboard", "کلاوی‌روم", ["keyboard"]],
+  ["dev.imranr.obtainium.fdroid", "اوبتنیوم", ["store"], true, false],
+  ["com.machiav3lli.fdroid", "نئو استور", ["store"]],
+  ["de.grobox.liberario", "ترانسپورتر", ["maps"]],
+  ["com.vrem.wifianalyzer", "وای‌فای آنالایزر", ["network"]],
+  ["com.daemon.ssh", "اس‌اس‌اچ دیمون", ["network"]],
+  ["org.breezyweather", "بریزی ودر", ["tools"], true, false],
+  ["cz.martykan.forecastie", "فورکاستی", ["tools"]],
+  ["org.fossify.clock", "ساعت فاسیفای", ["tools"]],
+  ["com.best.deskclock", "ساعت رومیزی", ["tools"]],
+  ["com.bnyro.translate", "ترنسلیت یو", ["tools"]],
+  ["com.bobek.compass", "قطب‌نما", ["tools"]],
+  ["com.ferrarid.converterpro", "مبدل واحد", ["tools"]],
+  ["com.atharok.barcodescanner", "باینری آی", ["tools"]],
+  ["com.secuso.privacyFriendlyCodeScanner", "اسکنر کد امن", ["tools"]],
+  ["com.todobom.opennotescanner", "اسکنر نوت", ["tools"]],
+  ["com.github.andremiras.qrscan", "کیوآر اسکن", ["tools"]],
+  ["org.proninyaroslav.libretorrent", "لیبرتورنت", ["tools"]],
+  ["com.ominous.quickweather", "کوییک ودر", ["tools"]],
+  ["app.weatheroverview", "ودر اورویو", ["tools"]],
+  ["org.woheller69.level", "تراز", ["tools"]],
+  ["org.fossify.voicerecorder", "ضبط صوت فاسیفای", ["recorder"]],
+  ["com.dimowner.audiorecorder", "آدیو رکوردر", ["recorder"], true, false],
+  ["com.orpheusdroid.screenrecorder", "اسکرین‌رکوردر", ["recorder"]],
+  ["com.openrecorder.app", "اوپن رکوردر", ["recorder"]],
 ];
 
 async function urlOk(url: string): Promise<boolean> {
@@ -212,7 +316,7 @@ async function main() {
     if (!p || !md || !name || !iconName) { console.log(`✗ skip ${pkg}: incomplete metadata`); skipped++; continue; }
 
     const iconUrl = FDROID + iconName;
-    if (!(await urlOk(iconUrl))) { console.log(`✗ skip ${pkg}: icon 404`); skipped++; continue; }
+    if (!process.env.SKIP_ICON_CHECK && !(await urlOk(iconUrl))) { console.log(`✗ skip ${pkg}: icon 404`); skipped++; continue; }
 
     const summary = loc(md.summary) || "";
     const description = loc(md.description) || summary;
@@ -234,6 +338,8 @@ async function main() {
 
     const existing = await db.select().from(s.apps).where(eq(s.apps.packageName, pkg));
     let appId: string;
+    // حالت سریع: برنامه‌های موجود کاملاً رد می‌شوند
+    if (existing.length && process.env.SKIP_EXISTING) { skipped++; continue; }
     const appData = {
       slug, packageName: pkg, nameFa, nameEn: name,
       iconUrl, shortDesc: cleanText(summary, 300) || null,
@@ -271,14 +377,13 @@ async function main() {
     const allVers = Object.values(p.versions || {}) as any[];
     allVers.sort((a, b) => (b?.manifest?.versionCode || 0) - (a?.manifest?.versionCode || 0));
     const latest = allVers.slice(0, 3);
+    const exVers = await db.select().from(s.appVersions).where(eq(s.appVersions.appId, appId));
     for (let i = 0; i < latest.length; i++) {
       const v = latest[i];
       if (!v) continue;
       const f = v.file, m = v.manifest;
       if (!f?.name || !m?.versionName) continue;
-      const ex = await db.select().from(s.appVersions)
-        .where(eq(s.appVersions.appId, appId));
-      const sameVer = ex.find((x) => x.versionCode === m.versionCode);
+      const sameVer = exVers.find((x) => x.versionCode === m.versionCode);
       let verId: string;
       const verData = {
         versionName: String(m.versionName), versionCode: Number(m.versionCode),
@@ -297,11 +402,11 @@ async function main() {
         const [nv] = await db.insert(s.appVersions).values({ appId, ...verData }).returning();
         verId = nv.id;
       }
-      // مجوزها
+      // مجوزها (دسته‌ای)
       await db.delete(s.appPermissions).where(eq(s.appPermissions.versionId, verId));
       const perms: string[] = (m.usesPermission || []).map((x: any) => x.name).filter(Boolean).slice(0, 60);
-      for (const pm of perms) {
-        await db.insert(s.appPermissions).values({ versionId: verId, permission: pm });
+      if (perms.length) {
+        await db.insert(s.appPermissions).values(perms.map((pm) => ({ versionId: verId, permission: pm })));
       }
     }
     console.log(`✓ ${nameFa} (${pkg})`);
