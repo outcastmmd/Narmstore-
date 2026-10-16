@@ -102,7 +102,7 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
 
       {/* مجموعه‌ها — ردیف‌های متنی ساده */}
       {collections.length > 0 && (
-        <Section title="مجموعه‌ها" href="/collections">
+        <Section title="مجموعه‌ها" href={`/collections${platform === "android" ? "" : `?platform=${platform}`}`}>
           <div className="grid sm:grid-cols-2 gap-x-7">
             {collections.map((c) => (
               <Link key={c.id} href={`/collection/${c.slug}`}
@@ -122,10 +122,10 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
   );
 }
 
-async function CategorySlide({ slug }: { slug: string }) {
+async function CategorySlide({ slug, platform }: { slug: string; platform: Platform }) {
   const cat = await getCategoryBySlug(slug);
   if (!cat) return <p className="text-muted text-center py-10">دسته‌بندی یافت نشد.</p>;
-  const previews = await getChildPreviews(cat.id);
+  const previews = await getChildPreviews(cat.id, 10, platform);
   const total = previews.reduce((s, p) => s + p.total, 0);
 
   return (
@@ -144,13 +144,13 @@ async function CategorySlide({ slug }: { slug: string }) {
           {previews.map(({ category: ch, apps, total: t }) => (
             <section key={ch.id} aria-label={ch.nameFa}>
               <div className="flex items-center justify-between mb-4">
-                <Link href={`/category/${ch.slug}`} className="flex items-center gap-2 group">
+                <Link href={`/category/${ch.slug}${platform === "android" ? "" : `?platform=${platform}`}`} className="flex items-center gap-2 group">
                   <DbIcon icon={ch.icon} className="w-6 h-6 text-primary" />
                   <h2 className="text-lg font-extrabold group-hover:text-primary transition">{ch.nameFa}</h2>
                   <span className="text-xs text-muted">({toFaDigits(t)})</span>
                 </Link>
                 {t > apps.length && (
-                  <Link href={`/category/${ch.slug}`} className="text-sm text-primary font-bold hover:underline shrink-0">
+                  <Link href={`/category/${ch.slug}${platform === "android" ? "" : `?platform=${platform}`}`} className="text-sm text-primary font-bold hover:underline shrink-0">
                     مشاهده همه ←
                   </Link>
                 )}
@@ -184,7 +184,7 @@ export default async function Home({ searchParams }: Props) {
           <CategoryCards cats={cats} />
         </Suspense>
       )}
-      {cat ? <CategorySlide slug={cat} /> : <HomeSlide platform={plat} />}
+      {cat ? <CategorySlide slug={cat} platform={plat} /> : <HomeSlide platform={plat} />}
     </div>
   );
 }

@@ -8,7 +8,7 @@ type Props = { searchParams: Promise<{ platform?: string }> };
 
 export default async function PopularPage({ searchParams }: Props) {
   const { platform } = await searchParams;
-  const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
+  const plat: Platform = (platform === "windows" || platform === "linux") ? platform : "android";
   const apps = await getPopularApps(48, plat);
   return <AppGrid title="محبوب‌ترین‌ها" subtitle="بر اساس تعداد دانلود واقعی ثبت‌شده" apps={apps} />;
 }

@@ -102,7 +102,7 @@ export async function getCollections(platform?: Platform, limit?: number) {
   return out;
 }
 
-export async function getCollectionBySlug(slug: string) {
+export async function getCollectionBySlug(slug: string, platform?: Platform) {
   await dyn();
   const rows = await db.select().from(s.collections)
     .where(and(eq(s.collections.slug, slug), eq(s.collections.isActive, true))).limit(1);
@@ -110,7 +110,7 @@ export async function getCollectionBySlug(slug: string) {
   if (!col) return null;
   const apps = await db.select(cardCols).from(s.collectionApps)
     .innerJoin(s.apps, eq(s.apps.id, s.collectionApps.appId))
-    .where(and(eq(s.collectionApps.collectionId, col.id), eq(s.apps.isPublished, true)))
+    .where(and(eq(s.collectionApps.collectionId, col.id), eq(s.apps.isPublished, true), plat(platform)))
     .orderBy(s.collectionApps.sortOrder);
   return { ...col, apps };
 }
@@ -177,9 +177,10 @@ export async function getOpenSourceApps(limit = 8, platform?: Platform) {
     .orderBy(desc(dlCount)).limit(limit);
 }
 
-export async function getRelatedApps(appId: string, limit = 8) {
+export async function getRelatedApps(appId: string, limit = 8, platform?: Platform) {
   await dyn();
   // برنامه‌های هم‌دسته (به‌جز خودش)، اول آن‌هایی که بیشترین دسته‌ی مشترک را دارند
+  // فقط هم‌پلتفرم: شاید بپسندی نباید برنامه‌ی پلتفرم دیگر نشان دهد
   const myCats = await db.select({ categoryId: s.appCategories.categoryId })
     .from(s.appCategories).where(eq(s.appCategories.appId, appId));
   const catIds = myCats.map((c) => c.categoryId);
@@ -187,7 +188,7 @@ export async function getRelatedApps(appId: string, limit = 8) {
   const rows = await db.select({ ...cardCols, categoryId: s.appCategories.categoryId })
     .from(s.appCategories)
     .innerJoin(s.apps, eq(s.apps.id, s.appCategories.appId))
-    .where(and(inArray(s.appCategories.categoryId, catIds), eq(s.apps.isPublished, true), sql`${s.apps.id} != ${appId}`))
+    .where(and(inArray(s.appCategories.categoryId, catIds), eq(s.apps.isPublished, true), plat(platform), sql`${s.apps.id} != ${appId}`))
     .limit(limit * 4);
   // امتیازدهی: تعداد دسته‌ی مشترک بیشتر = اول‌تر
   const score = new Map<string, { app: any; n: number }>();
@@ -238,8 +239,8 @@ export async function getAppBySlug(slug: string) {
     .where(eq(s.downloadEvents.appId, app.id));
   const downloadCount = Number(dl[0]?.c ?? 0);
 
-  // شاید بپسندی: هم‌دسته‌ای‌ها با امتیاز تعداد دسته‌ی مشترک
-  const related = await getRelatedApps(app.id, 6);
+  // شاید بپسندی: هم‌دسته‌ای‌های هم‌پلتفرم با امتیاز تعداد دسته‌ی مشترک
+  const related = await getRelatedApps(app.id, 6, app.platform as Platform);
 
   return { ...app, versions, categories: cats, screenshots: shots, current, permissions: perms, downloadCount, similar: related };
 }
@@ -249,12 +250,13 @@ export type SearchFilters = {
   openSource?: boolean;
   sort?: "popular" | "newest" | "updated" | "name";
   minSdk?: number;
+  platform?: Platform;
 };
 
 export async function searchApps(query: string, filters: SearchFilters = {}, limit = 40, offset = 0) {
   await dyn();
   const q = normalizeFa(query);
-  const conds = [pub];
+  const conds = [pub, plat(filters.platform)];
 
   if (q) {
     // جست‌وجو در نام فارسی/انگلیسی، نام بسته، توسعه‌دهنده و توضیح — با نرمال‌سازی فارسی
@@ -306,7 +308,7 @@ export async function getCategoryBySlug(slug: string) {
 }
 
 // پیش‌نمایش زیردسته‌ها: هر زیردسته + حداکثر ۱۰ برنامه‌ی برترش (برای صفحه دسته‌ی والد به سبک اپ‌استورها)
-export async function getChildPreviews(parentId: string, perChild = 10) {
+export async function getChildPreviews(parentId: string, perChild = 10, platform?: Platform) {
   await dyn();
   const children = await db.select().from(s.categories)
     .where(and(eq(s.categories.parentId, parentId), eq(s.categories.isActive, true)))
@@ -315,26 +317,26 @@ export async function getChildPreviews(parentId: string, perChild = 10) {
   for (const ch of children) {
     const items = await db.select(cardCols).from(s.apps)
       .innerJoin(s.appCategories, eq(s.appCategories.appId, s.apps.id))
-      .where(and(pub, eq(s.appCategories.categoryId, ch.id)))
+      .where(and(pub, plat(platform), eq(s.appCategories.categoryId, ch.id)))
       .groupBy(s.apps.id)
       .orderBy(desc(s.apps.updatedAt)).limit(perChild);
     if (!items.length) continue;
     const t = await db.select({ c: sql<number>`count(distinct ${s.apps.id})` }).from(s.apps)
       .innerJoin(s.appCategories, eq(s.appCategories.appId, s.apps.id))
-      .where(and(pub, eq(s.appCategories.categoryId, ch.id)));
+      .where(and(pub, plat(platform), eq(s.appCategories.categoryId, ch.id)));
     out.push({ category: ch, apps: items, total: Number(t[0]?.c ?? 0) });
   }
   return out;
 }
 
-export async function getCategoryApps(slug: string, limit = 40, offset = 0, sort: SearchFilters["sort"] = "updated") {
+export async function getCategoryApps(slug: string, limit = 40, offset = 0, sort: SearchFilters["sort"] = "updated", platform?: Platform) {
   await dyn();
   const cat = await getCategoryBySlug(slug);
   if (!cat) return null;
   const { descendantsOf } = await getCategoryTree();
   const catIds = descendantsOf(cat.id);
   const orderBy = sort === "popular" ? desc(dlCount) : sort === "name" ? s.apps.nameFa : desc(s.apps.updatedAt);
-  const cond = and(pub, inArray(s.appCategories.categoryId, catIds));
+  const cond = and(pub, plat(platform), inArray(s.appCategories.categoryId, catIds));
   // ممکن است یک برنامه در دو زیردسته باشد — با groupBy تکراری‌ها حذف می‌شوند
   const [items, total] = await Promise.all([
     db.select(cardCols).from(s.apps)

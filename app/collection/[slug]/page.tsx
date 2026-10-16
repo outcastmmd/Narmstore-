@@ -23,6 +23,8 @@ export default async function CollectionPage({ params }: Props) {
   // تشخیص پلتفرم از روی برنامه‌ها (کالکشن‌های ویندوز/لینوکس)
   const plat = col.apps.length > 0 ? (col.apps[0] as { platform?: string }).platform : undefined;
   const platform = plat === "windows" || plat === "linux" ? plat : "android";
+  // ایزولاسیون پلتفرم: فقط برنامه‌های هم‌پلتفرم کالکشن نمایش داده می‌شوند
+  const apps = col.apps.filter((a: any) => (a.platform ?? "android") === platform);
 
   return (
     <div className="animate-fade-up">
@@ -42,14 +44,14 @@ export default async function CollectionPage({ params }: Props) {
           </span>
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold">{col.nameFa}</h1>
-            <p className="text-sm text-muted mt-1">{toFaDigits(col.apps.length)} برنامه</p>
+            <p className="text-sm text-muted mt-1">{toFaDigits(apps.length)} برنامه</p>
             {col.description && <p className="text-sm text-muted mt-2 leading-7">{col.description}</p>}
           </div>
         </div>
       </section>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-        {col.apps.map((a: any, i: number) => <AppTile key={a.id} app={a} index={i} />)}
+        {apps.map((a: any, i: number) => <AppTile key={a.id} app={a} index={i} />)}
       </div>
     </div>
   );

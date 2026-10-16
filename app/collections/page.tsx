@@ -11,7 +11,7 @@ type Props = { searchParams: Promise<{ platform?: string }> };
 
 export default async function CollectionsPage({ searchParams }: Props) {
   const { platform } = await searchParams;
-  const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
+  const plat: Platform = (platform === "windows" || platform === "linux") ? platform : "android";
   const collections = await getCollections(plat);
 
   return (

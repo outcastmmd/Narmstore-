@@ -8,7 +8,7 @@ type Props = { searchParams: Promise<{ platform?: string }> };
 
 export default async function LatestPage({ searchParams }: Props) {
   const { platform } = await searchParams;
-  const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
+  const plat: Platform = (platform === "windows" || platform === "linux") ? platform : "android";
   const apps = await getLatestApps(48, plat);
   return <AppGrid title="تازه‌ترین نسخه‌ها" subtitle="برنامه‌هایی که اخیراً به‌روزرسانی شده‌اند" apps={apps} />;
 }

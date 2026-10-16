@@ -25,7 +25,9 @@ export default function CategoryCards({ cats }: { cats: Cat[] }) {
   const active = sp.get("cat");
 
   const go = (slug: string) => {
-    const nav = () => startTransition(() => router.push(`/?cat=${slug}`, { scroll: false }));
+    const p = sp.get("platform");
+    const qs = p === "windows" || p === "linux" ? `?platform=${p}&cat=${slug}` : `?cat=${slug}`;
+    const nav = () => startTransition(() => router.push(`/${qs}`, { scroll: false }));
     if (document.startViewTransition) document.startViewTransition(nav);
     else nav();
   };

@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getCategoryApps, getCategoryBySlug, getChildPreviews } from "@/lib/store";
+import { getCategoryApps, getCategoryBySlug, getChildPreviews, type Platform } from "@/lib/store";
 import AppCard from "@/components/AppCard";
 import { toFaDigits } from "@/lib/fa";
 import DbIcon from "@/components/DbIcon";
 import { Inbox } from "lucide-react";
 
 
-type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sort?: string; page?: string }> };
+type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sort?: string; page?: string; platform?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -33,14 +33,18 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const sort = (sp.sort === "popular" || sp.sort === "name") ? sp.sort : "updated";
   const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
   const perPage = 24;
+  // ایزولاسیون پلتفرم: دسته فقط برنامه‌های پلتفرم فعلی را نشان می‌دهد
+  const plat: Platform = (sp.platform === "windows" || sp.platform === "linux") ? sp.platform : "android";
+  const platParam = plat === "android" ? "" : `?platform=${plat}`;
+  const platQs = plat === "android" ? "" : `&platform=${plat}`;
 
   const cat = await getCategoryBySlug(slug);
   if (!cat) notFound();
 
   // دسته‌ی والد: نمایش ریل افقی هر زیردسته (به سبک اپ‌استورها)
-  const previews = cat.children.length ? await getChildPreviews(cat.id) : [];
+  const previews = cat.children.length ? await getChildPreviews(cat.id, 10, plat) : [];
 
-  const data = !previews.length ? await getCategoryApps(slug, perPage, (page - 1) * perPage, sort) : null;
+  const data = !previews.length ? await getCategoryApps(slug, perPage, (page - 1) * perPage, sort, plat) : null;
   const items = data?.items ?? [];
   const total = data?.total ?? previews.reduce((s, p) => s + p.total, 0);
   const pages = Math.ceil(total / perPage);
@@ -67,13 +71,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           {previews.map(({ category: ch, apps, total: t }) => (
             <section key={ch.id} aria-label={ch.nameFa}>
               <div className="flex items-center justify-between mb-4">
-                <Link href={`/category/${ch.slug}`} className="flex items-center gap-2 group">
+                <Link href={`/category/${ch.slug}${platParam}`} className="flex items-center gap-2 group">
                   <DbIcon icon={ch.icon} className="w-5 h-5 text-primary" />
                   <h2 className="text-lg font-extrabold group-hover:text-primary transition">{ch.nameFa}</h2>
                   <span className="text-xs text-muted">({toFaDigits(t)})</span>
                 </Link>
                 {t > apps.length && (
-                  <Link href={`/category/${ch.slug}`} className="text-sm text-primary font-bold hover:underline shrink-0">
+                  <Link href={`/category/${ch.slug}${platParam}`} className="text-sm text-primary font-bold hover:underline shrink-0">
                     مشاهده همه ←
                   </Link>
                 )}
@@ -93,7 +97,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <>
           <div className="flex gap-2 mb-6" role="group" aria-label="مرتب‌سازی">
             {SORTS.map(([key, label]) => (
-              <Link key={key} href={`/category/${slug}?sort=${key}`}
+              <Link key={key} href={`/category/${slug}?sort=${key}${platQs}`}
                 className={`text-sm px-4 py-2 rounded-xl border transition ${sort === key
                   ? "bg-primary text-primary-fg border-primary font-bold"
                   : "bg-surface border-border hover:border-primary/50"}`}>
@@ -117,7 +121,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           {pages > 1 && (
             <nav className="flex justify-center gap-2 mt-8" aria-label="صفحه‌بندی">
               {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
-                <Link key={p} href={`/category/${slug}?sort=${sort}&page=${p}`}
+                <Link key={p} href={`/category/${slug}?sort=${sort}&page=${p}${platQs}`}
                   aria-current={p === page ? "page" : undefined}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm border transition ${p === page
                     ? "bg-primary text-primary-fg border-primary font-bold"

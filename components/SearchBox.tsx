@@ -1,16 +1,27 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, Suspense } from "react";
 import { Search } from "lucide-react";
 
-export default function SearchBox({ compact = false }: { compact?: boolean }) {
+function SearchBoxInner({ compact = false }: { compact?: boolean }) {
   const [q, setQ] = useState("");
   const router = useRouter();
+  const sp = useSearchParams();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const query = q.trim();
-    if (query) router.push(`/search?q=${encodeURIComponent(query)}`);
+    if (!query) return;
+    // حفظ پلتفرم فعلی در جست‌وجو تا نتایج فقط از همان پلتفرم باشند
+    const p = sp.get("platform");
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem("narm-platform");
+    } catch {}
+    const plat = p === "windows" || p === "linux" ? p
+      : stored === "windows" || stored === "linux" ? stored : null;
+    const qs = plat ? `&platform=${plat}` : "";
+    router.push(`/search?q=${encodeURIComponent(query)}${qs}`);
   };
 
   return (
@@ -31,5 +42,13 @@ export default function SearchBox({ compact = false }: { compact?: boolean }) {
         <Search className="w-4 h-4" aria-hidden="true" />
       </button>
     </form>
+  );
+}
+
+export default function SearchBox({ compact = false }: { compact?: boolean }) {
+  return (
+    <Suspense fallback={null}>
+      <SearchBoxInner compact={compact} />
+    </Suspense>
   );
 }
