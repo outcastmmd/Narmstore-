@@ -17,6 +17,7 @@ const cardCols = {
   id: s.apps.id, slug: s.apps.slug, nameFa: s.apps.nameFa, nameEn: s.apps.nameEn,
   iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc, shortDescFa: s.apps.shortDescFa,
   versionName: curVersion, downloadCount: dlCount, githubStars: s.apps.githubStars,
+  platform: s.apps.platform,
 };
 
 const pub = eq(s.apps.isPublished, true);
@@ -176,7 +177,7 @@ export async function getRelatedApps(appId: string, limit = 8) {
 export async function getAppBySlug(slug: string) {
   await dyn();
   const rows = await db.select({
-    id: s.apps.id, slug: s.apps.slug, packageName: s.apps.packageName,
+    id: s.apps.id, slug: s.apps.slug, packageName: s.apps.packageName, platform: s.apps.platform,
     nameFa: s.apps.nameFa, nameEn: s.apps.nameEn,
     iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc, shortDescFa: s.apps.shortDescFa, description: s.apps.description, descriptionFa: s.apps.descriptionFa,
     license: s.apps.license, isOpenSource: s.apps.isOpenSource,

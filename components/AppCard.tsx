@@ -14,6 +14,7 @@ export type CardApp = {
   versionName: string | null;
   downloadCount: number;
   githubStars: number | null;
+  platform?: string | null;
 };
 
 function Initial({ name }: { name: string }) {
@@ -48,7 +49,7 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
         <p className="text-xs text-muted truncate mt-0.5" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
         {(app.shortDescFa || app.shortDesc) && <p className="text-xs text-muted line-clamp-2 mt-1.5 leading-5">{app.shortDescFa || app.shortDesc}</p>}
         <div className="flex items-center gap-3 mt-2 text-xs text-muted">
-          {app.versionName && (
+          {app.platform !== "windows" && app.platform !== "linux" && app.versionName && (
             <span className="bg-surface-2 rounded-md px-2 py-0.5" dir="ltr">v{app.versionName}</span>
           )}
           {app.githubStars ? (

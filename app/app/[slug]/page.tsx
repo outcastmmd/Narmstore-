@@ -105,13 +105,38 @@ export default async function AppPage({ params }: Props) {
 
         {/* دانلود */}
         <div className="mt-6 pt-6 border-t border-border">
-          {v ? (
-            <DownloadButton versionId={v.id} versionName={v.versionName} fileSize={v.fileSize} />
+          {app.platform === "android" ? (
+            v ? (
+              <DownloadButton versionId={v.id} versionName={v.versionName} fileSize={v.fileSize} />
+            ) : (
+              <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
+                <p className="font-bold mb-1">لینک دانلود در دسترس نیست</p>
+                <p className="text-sm text-muted">در حال حاضر نسخه‌ی فعالی برای این برنامه ثبت نشده است.</p>
+              </div>
+            )
           ) : (
-            <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
-              <p className="font-bold mb-1">لینک دانلود در دسترس نیست</p>
-              <p className="text-sm text-muted">در حال حاضر نسخه‌ی فعالی برای این برنامه ثبت نشده است.</p>
-            </div>
+            /* ویندوز/لینوکس: فقط دانلود واقعی، وگرنه لینک گیت‌هاب */
+            v && v.fileType !== "external" && v.fileUrl ? (
+              <DownloadButton versionId={v.id} versionName={v.versionName} fileSize={v.fileSize} />
+            ) : (
+              <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
+                <p className="font-bold mb-2">💻 نسخه‌ی دسکتاپ</p>
+                <p className="text-sm text-muted mb-4">برای دانلود به صفحه‌ی رسمی پروژه مراجعه کن</p>
+                <div className="flex gap-2 justify-center">
+                  {app.githubRepo ? (
+                    <a href={`https://github.com/${app.githubRepo}`} target="_blank" rel="noopener"
+                      className="inline-flex items-center gap-2 bg-[#24292f] text-white font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
+                      <span>⭐</span> گیت‌هاب پروژه
+                    </a>
+                  ) : app.sourceUrl ? (
+                    <a href={app.sourceUrl} target="_blank" rel="noopener"
+                      className="inline-flex items-center gap-2 bg-primary text-primary-fg font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
+                      🌐 سایت رسمی
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            )
           )}
         </div>
       </div>
@@ -137,8 +162,8 @@ export default async function AppPage({ params }: Props) {
             </section>
           )}
 
-          {/* نسخه‌های قبلی */}
-          {app.versions.length > 1 && (            <section className="bg-surface border border-border rounded-3xl p-6" aria-label="نسخه‌های قبلی">
+          {/* نسخه‌های قبلی — فقط اندروید */}
+          {app.platform === "android" && app.versions.length > 1 && (            <section className="bg-surface border border-border rounded-3xl p-6" aria-label="نسخه‌های قبلی">
               <h2 className="font-extrabold mb-4">نسخه‌های قبلی</h2>
               <ul className="space-y-2">
                 {app.versions.slice(1).map((ver) => (
@@ -160,9 +185,16 @@ export default async function AppPage({ params }: Props) {
           <section className="bg-surface border border-border rounded-3xl p-6" aria-label="اطلاعات فنی">
             <h2 className="font-extrabold mb-2">اطلاعات فنی</h2>
             <dl>
-              <InfoRow k="نسخه" v={v ? <span dir="ltr">{v.versionName}</span> : "—"} ltr />
-              <InfoRow k="حجم فایل" v={formatBytes(v?.fileSize)} />
-              <InfoRow k="حداقل اندروید" v={v?.minSdk ? toFaDigits(v.minSdk) + "+" : "نامشخص"} />
+              {app.platform === "android" && (
+                <>
+                  <InfoRow k="نسخه" v={v ? <span dir="ltr">{v.versionName}</span> : "—"} ltr />
+                  <InfoRow k="حجم فایل" v={formatBytes(v?.fileSize)} />
+                  <InfoRow k="حداقل اندروید" v={v?.minSdk ? toFaDigits(v.minSdk) + "+" : "نامشخص"} />
+                </>
+              )}
+              {app.platform !== "android" && (
+                <InfoRow k="پلتفرم" v={app.platform === "windows" ? "🪟 ویندوز" : "🐧 لینوکس"} />
+              )}
               <InfoRow k="نام بسته" v={app.packageName} ltr />
               <InfoRow k="مجوز" v={app.license || "نامشخص"} ltr />
               <InfoRow k="توسعه‌دهنده" v={app.developerName || "نامشخص"} />
