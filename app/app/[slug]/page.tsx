@@ -209,7 +209,7 @@ export default async function AppPage({ params }: Props) {
         <section className="mt-10" aria-label="نرم‌افزارهای مشابه">
           <h2 className="text-xl font-extrabold mb-4">نرم‌افزارهای مشابه</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {app.similar.map((a) => <AppCard key={a.id} app={a} />)}
+            {app.similar.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
           </div>
         </section>
       )}

@@ -24,11 +24,12 @@ function Initial({ name }: { name: string }) {
   );
 }
 
-export default function AppCard({ app }: { app: CardApp }) {
+export default function AppCard({ app, index = 0 }: { app: CardApp; index?: number }) {
   return (
     <Link
       href={`/app/${app.slug}`}
-      className="animate-fade-up group bg-surface border border-border rounded-2xl p-4 flex gap-3 hover:shadow-lg hover:border-primary/40 hover:-translate-y-0.5 transition-all"
+      style={{ animationDelay: `${Math.min(index, 12) * 35}ms` }}
+      className="animate-card-in card-hover group bg-surface border border-border rounded-2xl p-4 flex gap-3"
     >
       {app.iconUrl ? (
         <Image

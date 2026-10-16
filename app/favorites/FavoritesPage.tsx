@@ -38,8 +38,8 @@ export default function FavoritesPage() {
       <h1 className="text-2xl font-extrabold mb-6">❤️ علاقه‌مندی‌های من</h1>
       {items.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {items.map((a: any) => (
-            <AppCard key={a.appId} app={{
+          {items.map((a: any, i: number) => (
+            <AppCard key={a.appId} index={i} app={{
               id: a.appId, slug: a.slug, nameFa: a.nameFa, nameEn: a.nameEn,
               iconUrl: a.iconUrl, shortDesc: a.shortDesc, shortDescFa: a.shortDescFa, versionName: null, downloadCount: 0,
             }} />

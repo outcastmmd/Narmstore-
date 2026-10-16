@@ -74,10 +74,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   </Link>
                 )}
               </div>
-              <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x">
-                {apps.map((a: any) => (
+              <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x scrollbar-none">
+                {apps.map((a: any, i: number) => (
                   <div key={a.id} className="w-64 sm:w-72 shrink-0 snap-start">
-                    <AppCard app={a} />
+                    <AppCard app={a} index={i} />
                   </div>
                 ))}
               </div>
@@ -100,7 +100,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
           {items.length ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {items.map((a) => <AppCard key={a.id} app={a} />)}
+              {items.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
             </div>
           ) : (
             <div className="bg-surface border border-border rounded-3xl p-10 text-center">

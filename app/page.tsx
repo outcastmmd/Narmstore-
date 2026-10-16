@@ -48,14 +48,14 @@ async function HomeSlide() {
       {/* محبوب‌ترین‌ها */}
       <Section title="محبوب‌ترین نرم‌افزارها" href="/popular" empty="هنوز آماری ثبت نشده است.">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {popular.map((a) => <AppCard key={a.id} app={a} />)}
+          {popular.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
         </div>
       </Section>
 
       {/* تازه‌ترین نسخه‌ها */}
       <Section title="تازه‌ترین نسخه‌ها" href="/latest">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {latest.map((a) => <AppCard key={a.id} app={a} />)}
+          {latest.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
         </div>
       </Section>
 
@@ -63,7 +63,7 @@ async function HomeSlide() {
       {editors.length > 0 && (
         <Section title="منتخب سردبیر">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {editors.map((a) => <AppCard key={a.id} app={a} />)}
+            {editors.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
           </div>
         </Section>
       )}
@@ -71,7 +71,7 @@ async function HomeSlide() {
       {/* متن‌باز */}
       <Section title="نرم‌افزارهای متن‌باز" href="/open-source">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {oss.map((a) => <AppCard key={a.id} app={a} />)}
+          {oss.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
         </div>
       </Section>
     </>
@@ -109,10 +109,10 @@ async function CategorySlide({ slug }: { slug: string }) {
                   </Link>
                 )}
               </div>
-              <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x">
-                {apps.map((a: any) => (
+              <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x scrollbar-none">
+                {apps.map((a: any, i: number) => (
                   <div key={a.id} className="w-64 sm:w-72 shrink-0 snap-start">
-                    <AppCard app={a} />
+                    <AppCard app={a} index={i} />
                   </div>
                 ))}
               </div>

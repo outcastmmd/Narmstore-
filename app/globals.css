@@ -68,6 +68,49 @@ body {
 }
 .animate-fade-up { animation: fade-up 0.35s ease both; }
 
+/* ورود پلکانی کارت‌ها */
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.animate-card-in { animation: card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* اسکلت لودینگ */
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 0.75rem;
+}
+
+/* ترنزیشن نرم بین ویوها (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease;
+}
+
+/* مخفی کردن اسکرول‌بار افقی اسلایدرها */
+.scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* افکت لمس نرم */
+.pressable { transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.pressable:active { transform: scale(0.97); }
+
+/* هاور نرم کارت */
+.card-hover { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.2s ease; }
+.card-hover:hover { transform: translateY(-3px); box-shadow: 0 8px 24px -8px rgb(0 0 0 / 0.15); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

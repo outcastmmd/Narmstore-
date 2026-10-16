@@ -53,7 +53,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
       {q && (items.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {items.map((a) => <AppCard key={a.id} app={a} />)}
+          {items.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
         </div>
       ) : (
         <div className="bg-surface border border-border rounded-3xl p-10 text-center">
