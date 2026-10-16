@@ -190,16 +190,17 @@ export default async function AppPage({ params }: Props) {
               <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
                 <p className="font-bold mb-2 inline-flex items-center gap-2"><Monitor className="w-5 h-5" aria-hidden="true" /> نسخه‌ی دسکتاپ</p>
                 <p className="text-sm text-muted mb-4">برای دانلود به صفحه‌ی رسمی پروژه مراجعه کن</p>
-                <div className="flex gap-2 justify-center">
+                <div className="flex gap-2 justify-center flex-wrap">
                   {app.githubRepo ? (
-                    <a href={`https://github.com/${app.githubRepo}`} target="_blank" rel="noopener"
+                    <a href={`https://github.com/${app.githubRepo}/releases`} target="_blank" rel="noopener"
                       className="inline-flex items-center gap-2 bg-[#24292f] text-white font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
-                      <Star className="w-4 h-4" aria-hidden="true" /> گیت‌هاب پروژه
+                      <Download className="w-4 h-4" aria-hidden="true" /> دانلود از GitHub
                     </a>
-                  ) : app.sourceUrl ? (
+                  ) : null}
+                  {app.sourceUrl ? (
                     <a href={app.sourceUrl} target="_blank" rel="noopener"
                       className="inline-flex items-center gap-2 bg-primary text-primary-fg font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
-                      <Globe className="w-4 h-4" aria-hidden="true" /> سایت رسمی
+                      <Globe className="w-4 h-4" aria-hidden="true" /> صفحه رسمی پروژه
                     </a>
                   ) : null}
                 </div>
