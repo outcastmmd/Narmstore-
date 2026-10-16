@@ -170,7 +170,7 @@ async function CategorySlide({ slug }: { slug: string }) {
 
 export default async function Home({ searchParams }: Props) {
   const { cat, platform } = await searchParams;
-  const plat = (platform === "windows" || platform === "linux") ? platform : undefined;
+  const plat: Platform = (platform === "windows" || platform === "linux") ? platform : "android";
   const cats = await getRootCategories(plat);
 
   return (
