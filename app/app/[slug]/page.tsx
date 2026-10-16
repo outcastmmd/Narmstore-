@@ -26,7 +26,7 @@ import Alternatives from "@/components/Alternatives";
 import { findAlternatives } from "@/data/alternatives";
 import {
   User, Star, Download, Clock, RefreshCw, Monitor, Globe,
-  AppWindow, Terminal, BadgeCheck, TriangleAlert, Lightbulb,
+  AppWindow, Terminal, BadgeCheck, TriangleAlert, Lightbulb, ExternalLink,
 } from "lucide-react";
 import { siteUrl } from "@/lib/site-url";
 
@@ -191,6 +191,21 @@ export default async function AppPage({ params }: Props) {
               {app.githubStars ? (
                 <span className="ms-auto text-sm font-bold inline-flex items-center gap-1"><Star className="w-4 h-4" aria-hidden="true" /> {toFaDigits(app.githubStars)}</span>
               ) : null}
+            </a>
+          </div>
+        )}
+
+        {/* صفحه‌ی رسمی پروژه */}
+        {app.sourceUrl && app.sourceType !== "fdroid" && (
+          <div className="mt-6">
+            <a href={app.sourceUrl} target="_blank" rel="noopener"
+              className="flex items-center justify-center gap-3 bg-primary/10 border border-primary/30 rounded-2xl p-4 hover:border-primary/60 hover:bg-primary/15 transition">
+              <Globe className="w-7 h-7 text-primary" aria-hidden="true" />
+              <div className="text-start">
+                <p className="font-bold text-sm">صفحه‌ی رسمی پروژه</p>
+                <p className="text-xs text-muted">مشاهده‌ی وب‌سایت رسمی و دانلود مستقیم</p>
+              </div>
+              <ExternalLink className="w-5 h-5 text-primary ms-auto" aria-hidden="true" />
             </a>
           </div>
         )}
