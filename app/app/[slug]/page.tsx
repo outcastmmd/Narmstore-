@@ -146,7 +146,6 @@ export default async function AppPage({ params }: Props) {
               )}
               {v && <span className="inline-flex items-center gap-1"><Clock className="w-4 h-4" aria-hidden="true" /> به‌روزرسانی: {timeAgo(v.publishedAt || v.createdAt)}</span>}
             </div>
-            {(app.shortDescFa || app.shortDesc) && <p className="mt-3 text-sm leading-7">{app.shortDescFa || app.shortDesc}</p>}
             {/* برچسب‌های هوشمند */}
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3" aria-label="برچسب‌ها">
