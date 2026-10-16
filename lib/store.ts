@@ -15,7 +15,7 @@ const curVersion = sql<string | null>`(select ${s.appVersions.versionName} from 
 
 const cardCols = {
   id: s.apps.id, slug: s.apps.slug, nameFa: s.apps.nameFa, nameEn: s.apps.nameEn,
-  iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc,
+  iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc, shortDescFa: s.apps.shortDescFa,
   versionName: curVersion, downloadCount: dlCount,
 };
 
@@ -114,7 +114,7 @@ export async function getAppBySlug(slug: string) {
   const rows = await db.select({
     id: s.apps.id, slug: s.apps.slug, packageName: s.apps.packageName,
     nameFa: s.apps.nameFa, nameEn: s.apps.nameEn,
-    iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc, description: s.apps.description,
+    iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc, shortDescFa: s.apps.shortDescFa, description: s.apps.description, descriptionFa: s.apps.descriptionFa,
     license: s.apps.license, isOpenSource: s.apps.isOpenSource,
     sourceType: s.apps.sourceType, sourceUrl: s.apps.sourceUrl,
     minSdk: s.apps.minSdk, createdAt: s.apps.createdAt, updatedAt: s.apps.updatedAt,

@@ -10,6 +10,7 @@ export type CardApp = {
   nameEn: string;
   iconUrl: string | null;
   shortDesc: string | null;
+  shortDescFa: string | null;
   versionName: string | null;
   downloadCount: number;
 };
@@ -44,7 +45,7 @@ export default function AppCard({ app }: { app: CardApp }) {
       <div className="min-w-0 flex-1">
         <h3 className="font-bold truncate group-hover:text-primary transition-colors">{app.nameFa}</h3>
         <p className="text-xs text-muted truncate mt-0.5" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
-        {app.shortDesc && <p className="text-xs text-muted line-clamp-2 mt-1.5 leading-5">{app.shortDesc}</p>}
+        {(app.shortDescFa || app.shortDesc) && <p className="text-xs text-muted line-clamp-2 mt-1.5 leading-5">{app.shortDescFa || app.shortDesc}</p>}
         <div className="flex items-center gap-3 mt-2 text-xs text-muted">
           {app.versionName && (
             <span className="bg-surface-2 rounded-md px-2 py-0.5" dir="ltr">v{app.versionName}</span>

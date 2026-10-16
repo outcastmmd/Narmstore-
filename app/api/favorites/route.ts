@@ -17,7 +17,7 @@ export async function GET() {
   const rows = await db.select({
     appId: s.favorites.appId,
     slug: s.apps.slug, nameFa: s.apps.nameFa, nameEn: s.apps.nameEn,
-    iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc,
+    iconUrl: s.apps.iconUrl, shortDesc: s.apps.shortDesc, shortDescFa: s.apps.shortDescFa,
   }).from(s.favorites)
     .innerJoin(s.apps, eq(s.favorites.appId, s.apps.id))
     .where(and(eq(s.favorites.userId, u.id), eq(s.apps.isPublished, true)))

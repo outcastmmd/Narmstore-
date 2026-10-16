@@ -70,6 +70,8 @@ export const apps = pgTable("apps", {
   iconUrl: text("icon_url"),
   shortDesc: text("short_desc"),
   description: text("description"),
+  shortDescFa: text("short_desc_fa"),
+  descriptionFa: text("description_fa"),
   developerId: text("developer_id").references(() => developers.id, { onDelete: "set null" }),
   license: varchar("license", { length: 128 }),
   isOpenSource: boolean("is_open_source").notNull().default(false),
@@ -248,6 +250,27 @@ export const siteSettings = pgTable("site_settings", {
   value: text("value").notNull(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+// ─── اعلان‌ها ────────────────────────────────────────────────────
+
+export const notifications = pgTable("notifications", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  appId: text("app_id").references(() => apps.id, { onDelete: "cascade" }),
+  versionId: text("version_id").references(() => appVersions.id, { onDelete: "set null" }),
+  type: varchar("type", { length: 32 }).notNull().default("version"),
+  title: varchar("title", { length: 200 }).notNull(),
+  message: text("message"),
+  isRead: boolean("is_read").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (t) => [
+  index("notif_user_idx").on(t.userId, t.createdAt),
+  index("notif_unread_idx").on(t.userId, t.isRead),
+]);
+
+// ─── ترجمه فارسی توضیحات ─────────────────────────────────────────
+// shortDescFa / descriptionFa: ترجمه فارسی توضیح کوتاه و کامل برنامه
+// اگر خالی باشد، نسخه انگلیسی نمایش داده می‌شود
 
 // ─── نوع‌های کمکی ────────────────────────────────────────────────
 

@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const app = await getAppBySlug(slug);
   if (!app) return { title: "یافت نشد" };
-  const desc = app.shortDesc || `دانلود ${app.nameFa} برای اندروید با لینک مستقیم`;
+  const desc = app.shortDescFa || app.shortDesc || `دانلود ${app.nameFa} برای اندروید با لینک مستقیم`;
   return {
     title: `دانلود ${app.nameFa}`,
     description: desc,
@@ -73,7 +73,7 @@ export default async function AppPage({ params }: Props) {
               <span>⬇️ {toFaDigits(app.downloadCount)} دانلود</span>
               {v && <span>🕐 به‌روزرسانی: {timeAgo(v.publishedAt || v.createdAt)}</span>}
             </div>
-            {app.shortDesc && <p className="mt-3 text-sm leading-7">{app.shortDesc}</p>}
+            {(app.shortDescFa || app.shortDesc) && <p className="mt-3 text-sm leading-7">{app.shortDescFa || app.shortDesc}</p>}
           </div>
         </div>
 
@@ -106,10 +106,10 @@ export default async function AppPage({ params }: Props) {
           )}
 
           {/* معرفی */}
-          {app.description && (
+          {(app.descriptionFa || app.description) && (
             <section className="bg-surface border border-border rounded-3xl p-6" aria-label="معرفی کامل">
               <h2 className="font-extrabold mb-4">معرفی</h2>
-              <p className="text-sm leading-8 whitespace-pre-line text-fg/90">{app.description}</p>
+              <p className="text-sm leading-8 whitespace-pre-line text-fg/90">{app.descriptionFa || app.description}</p>
             </section>
           )}
 

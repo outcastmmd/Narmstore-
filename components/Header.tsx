@@ -2,6 +2,7 @@ import Link from "next/link";
 import SearchBox from "./SearchBox";
 import ThemeToggle from "./ThemeToggle";
 import UserMenu from "./UserMenu";
+import NotifBell from "./NotifBell";
 
 export default function Header() {
   return (
@@ -22,6 +23,7 @@ export default function Header() {
             <Link href="/latest" className="px-3 py-2 rounded-lg hover:bg-surface-2 transition">تازه‌ها</Link>
           </nav>
           <div className="ms-auto md:ms-0 flex items-center gap-2">
+            <NotifBell />
             <ThemeToggle />
             <UserMenu />
           </div>

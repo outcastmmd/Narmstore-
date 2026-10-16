@@ -30,7 +30,7 @@ export default async function Home() {
             <div className="flex-1">
               <p className="text-xs font-bold text-primary mb-1">✨ پیشنهاد نرم‌استور</p>
               <h1 className="text-2xl sm:text-3xl font-extrabold mb-2">{hero.nameFa}</h1>
-              <p className="text-muted text-sm leading-7 line-clamp-2 max-w-2xl">{hero.shortDesc}</p>
+              <p className="text-muted text-sm leading-7 line-clamp-2 max-w-2xl">{hero.shortDescFa || hero.shortDesc}</p>
               <Link href={`/app/${hero.slug}`}
                 className="inline-block mt-4 bg-primary text-primary-fg font-bold px-6 py-2.5 rounded-xl hover:opacity-90 transition">
                 مشاهده و دانلود

@@ -41,7 +41,7 @@ export default function FavoritesPage() {
           {items.map((a: any) => (
             <AppCard key={a.appId} app={{
               id: a.appId, slug: a.slug, nameFa: a.nameFa, nameEn: a.nameEn,
-              iconUrl: a.iconUrl, shortDesc: a.shortDesc, versionName: null, downloadCount: 0,
+              iconUrl: a.iconUrl, shortDesc: a.shortDesc, shortDescFa: a.shortDescFa, versionName: null, downloadCount: 0,
             }} />
           ))}
         </div>

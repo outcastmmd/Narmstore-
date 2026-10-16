@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import * as s from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/admin-guard";
+import { notifyVersionPublished } from "@/lib/notify";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -45,6 +46,10 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
     userId: auth.user.id, action: `version.${parsed.data.status || "update"}`,
     entity: "version", entityId: id,
   });
+  // اعلان به علاقه‌مندان برنامه هنگام انتشار نسخه
+  if (parsed.data.status === "active") {
+    notifyVersionPublished(ver.appId, id).catch(() => {});
+  }
   return NextResponse.json({ ok: true });
 }
 
