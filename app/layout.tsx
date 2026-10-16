@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Vazirmatn } from "next/font/google";
+import { Vazirmatn, Lalezar } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -9,6 +9,13 @@ import { siteUrl } from "@/lib/site-url";
 const vazir = Vazirmatn({
   variable: "--font-vazir",
   subsets: ["arabic", "latin"],
+  display: "swap",
+});
+
+const lalezar = Lalezar({
+  variable: "--font-lalezar",
+  subsets: ["arabic", "latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -42,7 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
-      <body className={`${vazir.variable} min-h-full flex flex-col`}>
+      <body className={`${vazir.variable} ${lalezar.variable} min-h-full flex flex-col`}>
         <SWRegister />
         <Header />
         <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">{children}</main>

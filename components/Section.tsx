@@ -13,14 +13,11 @@ export default function Section({
 }) {
   return (
     <section className="mb-10" aria-label={title}>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-extrabold flex items-center gap-2">
-          <span className="w-1.5 h-6 bg-primary rounded-full inline-block" aria-hidden="true" />
-          {title}
-        </h2>
+      <div className="flex items-baseline justify-between mb-3.5">
+        <h2 className="font-head text-2xl leading-8">{title}</h2>
         {href && (
           <Link href={href} className="text-sm text-primary hover:underline font-medium">
-            مشاهده همه ←
+            مشاهده همه
           </Link>
         )}
       </div>

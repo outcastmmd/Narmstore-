@@ -1,6 +1,8 @@
 import Link from "next/link";
 import PxImg from "@/components/PxImg";
 import { Suspense } from "react";
+import PopularRow from "@/components/PopularRow";
+import NewBadge from "@/components/NewBadge";
 import AppCard from "@/components/AppCard";
 import Section from "@/components/Section";
 import CategoryPills from "@/components/CategoryPills";
@@ -8,8 +10,7 @@ import CategoryCards from "@/components/CategoryCards";
 import DbIcon from "@/components/DbIcon";
 import {
   getRootCategories, getFeaturedApps, getPopularApps,
-  getLatestApps, getEditorChoice, getOpenSourceApps,
-  getCategoryBySlug, getChildPreviews, getCollections,
+  getLatestApps, getCategoryBySlug, getChildPreviews, getCollections, getHomeStats,
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
@@ -17,85 +18,100 @@ import type { Platform } from "@/lib/store";
 
 type Props = { searchParams: Promise<{ cat?: string; platform?: string }> };
 
+function appHref(slug: string, platform?: Platform) {
+  return platform && platform !== "android" ? `/app/${slug}?platform=${platform}` : `/app/${slug}`;
+}
+
 async function HomeSlide({ platform }: { platform?: Platform }) {
-  const [featured, popular, latest, editors, oss, collections] = await Promise.all([
+  const [featured, popular, latest, collections, stats] = await Promise.all([
     getFeaturedApps(4, platform), getPopularApps(8, platform),
-    getLatestApps(8, platform), getEditorChoice(8, platform), getOpenSourceApps(8, platform), getCollections(platform),
+    getLatestApps(8, platform), getCollections(platform), getHomeStats(platform),
   ]);
   const hero = featured[0];
 
   return (
     <>
-      {/* برنامه‌ی شاخص */}
+      {/* برنامه‌ی شاخص — مثل رفرنس: کارت بزرگ با رنگ تأکید */}
       {hero && (
-        <section className="mb-12 rounded-[2rem] overflow-hidden border border-border bg-surface" aria-label="برنامه‌ی شاخص">
-          <div className="p-6 sm:p-12 flex flex-col sm:flex-row items-start sm:items-center gap-8 bg-gradient-to-l from-primary-soft/70 via-primary-soft/25 to-transparent">
-            {hero.iconUrl && (
-              <PxImg src={px(hero.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${hero.nameFa}`} width={128} height={128}
-                className="w-24 h-24 sm:w-32 sm:h-32 rounded-[1.75rem] bg-surface-2 object-cover shadow-xl ring-1 ring-border" />
+        <Link href={appHref(hero.slug, platform)} aria-label={hero.nameFa}
+          className="block mb-6 rounded-[20px] bg-primary text-primary-fg p-6 sm:p-7">
+          <div className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 items-center">
+            {hero.iconUrl ? (
+              <PxImg src={px(hero.iconUrl) || "/icons/icon-192.png"} alt="" width={84} height={84}
+                className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] object-cover row-span-3 bg-primary-fg" />
+            ) : (
+              <span className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] row-span-3 grid place-items-center text-4xl font-bold bg-primary-fg text-primary" dir="ltr">
+                {hero.nameEn.charAt(0)}
+              </span>
             )}
-            <div className="flex-1">
-              <p className="text-xs font-bold text-primary mb-2 tracking-wide">انتخاب ما</p>
-              <h1 className="text-3xl sm:text-4xl font-extrabold mb-3">{hero.nameFa}</h1>
-              <p className="text-muted text-sm sm:text-base leading-8 line-clamp-2 max-w-2xl">{hero.shortDescFa || hero.shortDesc}</p>
-              <Link href={platform && platform !== "android" ? `/app/${hero.slug}?platform=${platform}` : `/app/${hero.slug}`}
-                className="inline-block mt-5 bg-primary text-primary-fg font-bold px-8 py-3 rounded-2xl hover:opacity-90 transition">
-                مشاهده و دانلود
-              </Link>
-            </div>
+            <small className="text-[13px] opacity-80">پیشنهاد این هفته</small>
+            <span className="font-head text-4xl leading-tight">{hero.nameFa}</span>
+            <p className="opacity-90 text-[15px] leading-7 line-clamp-2 max-w-[46ch]">{hero.shortDescFa || hero.shortDesc}</p>
+            <span className="justify-self-start mt-2 bg-primary-fg text-primary rounded-full px-6 py-2 font-bold text-sm">
+              دریافت
+            </span>
           </div>
-        </section>
+        </Link>
       )}
 
-      {/* کالکشن‌ها */}
-      {collections.length > 0 && (
-        <Section title="کالکشن‌ها" href="/collections">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {collections.map((c, ci) => (
-              <Link key={c.id} href={`/collection/${c.slug}`}
-                style={{ animationDelay: `${ci * 60}ms` }}
-                className="animate-card-in card-hover bg-surface border border-border rounded-3xl p-5 flex flex-col gap-2 min-h-32">
-                <span className="w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-                  <DbIcon icon={c.icon} className="w-6 h-6" />
+      {/* نوار آمار زنده — ظریف، زیر هیرو */}
+      <div className="mb-10 flex items-center justify-center gap-4 sm:gap-6 text-[13px] text-muted" role="status" aria-label="آمار فروشگاه">
+        <span><b className="text-fg font-bold">{toFaDigits(stats.apps)}</b> برنامه</span>
+        <span className="w-px h-4 bg-border" aria-hidden="true" />
+        <span><b className="text-fg font-bold">{toFaDigits(stats.downloads)}</b> دانلود</span>
+        <span className="w-px h-4 bg-border" aria-hidden="true" />
+        <span><b className="text-fg font-bold">{toFaDigits(stats.categories)}</b> دسته‌بندی</span>
+      </div>
+
+      {/* تازه‌ها — اسکرولر افقی */}
+      <Section title="تازه‌ها" href={platform ? `/latest?platform=${platform}` : "/latest"}>
+        <div className="flex gap-3.5 overflow-x-auto pb-3 snap-x scrollbar-none">
+          {latest.map((a) => (
+            <Link key={a.id} href={appHref(a.slug, platform)}
+              className="flex-none w-32 sm:w-[150px] snap-start flex flex-col gap-2 group">
+              {a.iconUrl ? (
+                <PxImg src={px(a.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${a.nameFa}`} width={150} height={150}
+                  className="w-32 h-32 sm:w-[150px] sm:h-[150px] rounded-[30px] object-cover bg-surface-2" />
+              ) : (
+                <span className="w-32 h-32 sm:w-[150px] sm:h-[150px] rounded-[30px] bg-surface-2 grid place-items-center text-5xl font-bold text-muted" dir="ltr">
+                  {a.nameEn.charAt(0)}
                 </span>
-                <span className="font-extrabold">{c.nameFa}</span>
-                <span className="text-xs text-muted line-clamp-2 leading-5">{c.description}</span>
-                <span className="text-xs text-primary font-bold mt-auto">{toFaDigits(c.appCount)} برنامه ←</span>
+              )}
+              <b className="font-bold leading-6 group-hover:text-primary transition truncate flex items-center gap-1.5">
+                <span className="truncate">{a.nameFa}</span>
+                <NewBadge createdAt={a.createdAt} className="shrink-0" />
+              </b>
+              <span className="text-muted text-[13px] leading-6 line-clamp-2">{a.shortDescFa || a.shortDesc}</span>
+            </Link>
+          ))}
+        </div>
+      </Section>
+
+      {/* پرطرفدارها — لیست فشرده */}
+      <Section title="پرطرفدارها" href={platform ? `/popular?platform=${platform}` : "/popular"} empty="هنوز آماری ثبت نشده است.">
+        <div className="border-t border-border">
+          {popular.map((a) => <PopularRow key={a.id} app={a} platform={platform} />)}
+        </div>
+      </Section>
+
+      {/* مجموعه‌ها — ردیف‌های متنی ساده */}
+      {collections.length > 0 && (
+        <Section title="مجموعه‌ها" href="/collections">
+          <div className="grid sm:grid-cols-2 gap-x-7">
+            {collections.map((c) => (
+              <Link key={c.id} href={`/collection/${c.slug}`}
+                className="flex items-center justify-between gap-3 py-3.5 border-b border-border group">
+                <div className="min-w-0">
+                  <strong className="font-bold group-hover:text-primary transition">{c.nameFa}</strong>
+                  <br />
+                  <span className="text-muted text-[13px] line-clamp-1">{c.description}</span>
+                </div>
+                <span className="text-muted text-[13px] shrink-0">{toFaDigits(c.appCount)} برنامه</span>
               </Link>
             ))}
           </div>
         </Section>
       )}
-
-      {/* محبوب‌ترین‌ها */}
-      <Section title="محبوب‌ترین نرم‌افزارها" href="/popular" empty="هنوز آماری ثبت نشده است.">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {popular.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
-        </div>
-      </Section>
-
-      {/* تازه‌ترین نسخه‌ها */}
-      <Section title="تازه‌ترین نسخه‌ها" href="/latest">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {latest.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
-        </div>
-      </Section>
-
-      {/* منتخب سردبیر */}
-      {editors.length > 0 && (
-        <Section title="منتخب سردبیر">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {editors.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
-          </div>
-        </Section>
-      )}
-
-      {/* متن‌باز */}
-      <Section title="نرم‌افزارهای متن‌باز" href="/open-source">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {oss.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
-        </div>
-      </Section>
     </>
   );
 }

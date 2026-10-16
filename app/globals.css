@@ -57,6 +57,7 @@
   --color-accent: var(--accent);
   --color-danger: var(--danger);
   --font-sans: var(--font-vazir), system-ui, sans-serif;
+  --font-head: var(--font-lalezar), var(--font-vazir), system-ui, sans-serif;
 }
 
 html {
