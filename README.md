@@ -75,13 +75,3 @@ npm run dev                 # http://localhost:3000
 ## مجوز · License
 
 MIT
-
----
-
-<div align="center">
-
-ساخته‌شده با دقت و بدون عجله، برای جامعه‌ی فارسی‌زبان
-<br>
-*Built carefully and without rushing, for the Persian-speaking community.*
-
-</div>
