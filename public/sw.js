@@ -1,5 +1,5 @@
 // Service Worker نرم‌استور — کش هوشمند
-const CACHE = "narmstore-v3"; // v3: تم امولد + شمارش دسته‌ها
+const CACHE = "narmstore-v4"; // v4: فیکس نام‌های فارسی
 const STATIC_ASSETS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {
