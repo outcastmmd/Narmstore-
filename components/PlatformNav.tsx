@@ -22,12 +22,14 @@ function PlatformNavInner() {
   }, []);
   const current = urlPlatform || stored || "android";
 
-  const href = (p: Platform) => {
-    // ذخیره انتخاب کاربر
-    if (typeof window !== "undefined") {
+  const savePlatform = (p: Platform) => {
+    try {
       if (p === "android") localStorage.removeItem("narm-platform");
       else localStorage.setItem("narm-platform", p);
-    }
+    } catch {}
+  };
+
+  const href = (p: Platform) => {
     const params = new URLSearchParams(sp.toString());
     if (p === "android") params.delete("platform");
     else params.set("platform", p);
@@ -48,6 +50,7 @@ function PlatformNavInner() {
             <Link
               key={p.slug}
               href={href(p.slug)}
+              onClick={() => savePlatform(p.slug)}
               aria-pressed={active}
               title={p.label}
               className={`pressable flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-extrabold transition-all ${
