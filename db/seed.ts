@@ -14,7 +14,13 @@ if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL missing");
 if (!existsSync(INDEX_PATH)) throw new Error("data/index-v2.json not found — download it first");
 
 const _dbUrl = process.env.DATABASE_URL!;
-const _ssl = /localhost|127\.0\.0\.1/.test(_dbUrl) ? false : "require";
+let _ssl: false | "require" | object;
+if (process.env.DB_SSL === "disable") _ssl = false;
+else if (process.env.DB_SSL_SERVERNAME) {
+  _ssl = { servername: process.env.DB_SSL_SERVERNAME, rejectUnauthorized: true };
+} else if (process.env.DB_SSL === "require" || !/localhost|127\.0\.0\.1/.test(_dbUrl)) {
+  _ssl = "require";
+} else _ssl = false;
 const client = postgres(_dbUrl, { ssl: _ssl });
 const db = drizzle(client, { schema: s });
 
