@@ -30,38 +30,44 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
 
   return (
     <>
-      {/* برنامه‌ی شاخص — تیره و سنجیده: پس‌زمینه‌ی عمیق، تک‌لهجه‌ی صورتی */}
+      {/* برنامه‌ی شاخص — کارت هلویی بنفش-هلویی */}
       {hero && (
         <Link href={appHref(hero.slug, platform)} aria-label={hero.nameFa}
-          className="block mb-8 rounded-3xl p-7 sm:p-9 relative overflow-hidden bg-surface border border-border">
-          <div aria-hidden="true" className="pointer-events-none absolute rounded-full"
-            style={{ width: 320, height: 320, top: -140, left: -100, background: "radial-gradient(circle,rgba(232,121,168,.14),transparent 70%)" }} />
+          className="hero-peach block mb-8 p-7 sm:p-9">
           <div className="relative grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-6 gap-y-2 items-center">
             {hero.iconUrl ? (
               <PxImg src={px(hero.iconUrl) || "/icons/icon-192.png"} alt="" width={84} height={84}
-                className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl object-cover sm:row-span-3 bg-surface-2 mb-2 sm:mb-0 border border-border" />
+                className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl object-cover sm:row-span-3 mb-2 sm:mb-0 shadow-lg" />
             ) : (
-              <span className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl sm:row-span-3 grid place-items-center text-4xl font-bold bg-surface-2 text-muted mb-2 sm:mb-0 border border-border" dir="ltr">
+              <span className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl sm:row-span-3 grid place-items-center text-4xl font-bold mb-2 sm:mb-0 shadow-lg" dir="ltr"
+                style={{ background: "rgb(0 0 0 / 0.1)", color: "var(--peach-ink)" }}>
                 {hero.nameEn.charAt(0)}
               </span>
             )}
-            <span className="text-[12px] font-bold text-primary tracking-wide">پیشنهاد این هفته</span>
-            <span className="font-head text-4xl sm:text-5xl leading-tight text-fg">{hero.nameFa}</span>
-            <p className="text-muted text-[15px] leading-7 line-clamp-2 max-w-[48ch]">{hero.shortDescFa || hero.shortDesc}</p>
-            <span className="justify-self-start mt-3 bg-primary text-primary-fg rounded-full px-7 py-2.5 font-bold text-sm pressable">
+            <span className="kicker">پیشنهاد این هفته</span>
+            <span className="font-head text-4xl sm:text-5xl leading-tight">{hero.nameFa}</span>
+            <p className="text-[15px] leading-7 line-clamp-2 max-w-[48ch] opacity-85">{hero.shortDescFa || hero.shortDesc}</p>
+            <span className="cta justify-self-start mt-3 pressable">
               دریافت
             </span>
           </div>
         </Link>
       )}
 
-      {/* نوار آمار — تمیز و مینیمال */}
-      <div className="mb-10 flex items-center justify-center gap-5 sm:gap-7 text-[13px] text-muted" role="status" aria-label="آمار فروشگاه">
-        <span><b className="text-fg font-bold">{toFaDigits(stats.apps)}</b> برنامه</span>
-        <span className="w-px h-4 bg-border" aria-hidden="true" />
-        <span><b className="text-fg font-bold">{toFaDigits(stats.downloads)}</b> دانلود</span>
-        <span className="w-px h-4 bg-border" aria-hidden="true" />
-        <span><b className="text-fg font-bold">{toFaDigits(stats.categories)}</b> دسته‌بندی</span>
+      {/* نوار آمار — کارت‌های کوچک با اعداد هلویی */}
+      <div className="mb-10 grid grid-cols-3 gap-3 text-center" role="status" aria-label="آمار فروشگاه">
+        <div className="bg-surface border border-border rounded-2xl py-4">
+          <b className="block text-xl font-extrabold text-primary">{toFaDigits(stats.apps)}</b>
+          <small className="text-xs text-muted">برنامه</small>
+        </div>
+        <div className="bg-surface border border-border rounded-2xl py-4">
+          <b className="block text-xl font-extrabold text-primary">{toFaDigits(stats.downloads)}</b>
+          <small className="text-xs text-muted">دانلود</small>
+        </div>
+        <div className="bg-surface border border-border rounded-2xl py-4">
+          <b className="block text-xl font-extrabold text-primary">{toFaDigits(stats.categories)}</b>
+          <small className="text-xs text-muted">دسته‌بندی</small>
+        </div>
       </div>
 
       {/* تازه‌ها — اسکرولر افقی */}

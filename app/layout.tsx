@@ -34,16 +34,16 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#16131d" },
+    { media: "(prefers-color-scheme: light)", color: "#f4effb" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1428" },
   ],
 };
 
 // فروشگاه دیتامحور است: رندر سمت سرور برای هر درخواست (بدون prerender استاتیک)
 export const instant = false;
 
-// تم پیش‌فرض: تیره‌ی جسورانه
-const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('narm-theme');if(!t){t='dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
+// تم پیش‌فرض: تیره‌ی بنفش-هلویی
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('narm-theme');if(t!=='light'&&t!=='dark'&&t!=='warm'){t='dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
