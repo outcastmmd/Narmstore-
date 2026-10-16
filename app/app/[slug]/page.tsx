@@ -19,6 +19,7 @@ import Gallery from "@/components/Gallery";
 import { computeTags } from "@/lib/tags";
 import { px } from "@/lib/img";
 import DbIcon from "@/components/DbIcon";
+import ReportButton from "@/components/ReportButton";
 import {
   User, Star, Download, Clock, RefreshCw, Monitor, Globe,
   AppWindow, Terminal, BadgeCheck, TriangleAlert, Lightbulb,
@@ -269,7 +270,16 @@ export default async function AppPage({ params }: Props) {
               <InfoRow k="توسعه‌دهنده" v={app.developerName || "نامشخص"} />
               {v?.sha256 && (
                 <InfoRow k="SHA-256" v={
-                  <span className="text-xs font-mono break-all" dir="ltr">{v.sha256.slice(0, 32)}…</span>
+                  <span className="inline-flex items-center gap-2">
+                    <span className="text-xs font-mono break-all" dir="ltr">{v.sha256}</span>
+                    <button
+                      onClick={() => { try { navigator.clipboard.writeText(v.sha256 ?? ""); } catch {} }}
+                      className="shrink-0 text-xs bg-surface-2 hover:bg-border rounded-lg px-2 py-1 transition"
+                      title="کپی هش"
+                    >
+                      کپی
+                    </button>
+                  </span>
                 } />
               )}
               <InfoRow k="منبع" v={app.sourceUrl ? (
@@ -289,6 +299,9 @@ export default async function AppPage({ params }: Props) {
                 <code className="block mt-2 p-3 bg-surface-2 rounded-lg break-all font-mono" dir="ltr">{v.sha256}</code>
               </details>
             )}
+            <div className="mt-4 pt-4 border-t border-border">
+              <ReportButton appId={app.id} appName={app.nameFa} />
+            </div>
           </section>
 
           {/* دسته‌بندی‌ها */}
