@@ -20,3 +20,5 @@ databases:
     plan: free
     databaseName: narmstore
     user: narmstore
+
+# trigger redeploy
