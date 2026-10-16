@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import PxImg from "@/components/PxImg";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
 
@@ -32,12 +32,11 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
       className="animate-card-in card-hover group bg-surface border border-border rounded-2xl p-4 flex gap-3"
     >
       {app.iconUrl ? (
-        <Image
+        <PxImg
           src={px(app.iconUrl) || app.iconUrl}
           alt={`آیکون ${app.nameFa}`}
           width={56}
           height={56}
-          loading="lazy"
           className="w-14 h-14 rounded-2xl object-cover shrink-0 bg-surface-2"
         />
       ) : (

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import PxImg from "@/components/PxImg";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getAppBySlug } from "@/lib/store";
@@ -52,7 +52,7 @@ export default async function AppPage({ params }: Props) {
       <div className="bg-surface border border-border rounded-3xl p-6 mb-6">
         <div className="flex flex-col sm:flex-row gap-5">
           {app.iconUrl ? (
-            <Image src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={112} height={112}
+            <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={112} height={112}
               className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover bg-surface-2 shadow" />
           ) : (
             <span className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-primary-soft text-primary flex items-center justify-center text-4xl font-bold">
@@ -98,8 +98,8 @@ export default async function AppPage({ params }: Props) {
               <h2 className="font-extrabold mb-4">تصاویر محیط برنامه</h2>
               <div className="flex gap-3 overflow-x-auto pb-2">
                 {app.screenshots.map((sh) => (
-                  <Image key={sh.id} src={px(sh.url) || sh.url} alt={`تصویر ${app.nameFa}`} width={180} height={320}
-                    loading="lazy" className="h-64 w-auto rounded-xl border border-border object-cover shrink-0" />
+                  <PxImg key={sh.id} src={px(sh.url) || sh.url} alt={`تصویر ${app.nameFa}`} width={180} height={320}
+                    className="h-64 w-auto rounded-xl border border-border object-cover shrink-0" />
                 ))}
               </div>
             </section>
