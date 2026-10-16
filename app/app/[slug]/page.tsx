@@ -6,7 +6,7 @@ import { getAppBySlug } from "@/lib/store";
 import { getSessionUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import * as s from "@/db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, sql } from "drizzle-orm";
 import { toFaDigits, formatBytes, formatDate, timeAgo } from "@/lib/fa";
 import AppCard from "@/components/AppCard";
 import DownloadButton from "@/components/DownloadButton";
@@ -20,6 +20,8 @@ import { computeTags } from "@/lib/tags";
 import { px } from "@/lib/img";
 import DbIcon from "@/components/DbIcon";
 import ReportButton from "@/components/ReportButton";
+import Alternatives from "@/components/Alternatives";
+import { findAlternatives } from "@/data/alternatives";
 import {
   User, Star, Download, Clock, RefreshCw, Monitor, Globe,
   AppWindow, Terminal, BadgeCheck, TriangleAlert, Lightbulb,
@@ -85,6 +87,27 @@ export default async function AppPage({ params }: Props) {
     isOpenSource: app.isOpenSource,
     fileSize: v?.fileSize ?? null,
   });
+
+  // جایگزین‌های آزاد: اگر برای این برنامه نگاشت داریم، اپ‌های جایگزین را از DB پیدا کن
+  let altEntry = findAlternatives(app.nameEn);
+  let altApps: { nameEn: string; why: string; slug: string; nameFa: string; iconUrl: string | null }[] = [];
+  if (altEntry) {
+    try {
+      const names = altEntry.alternatives.map((a) => a.nameEn);
+      const rows = await db.select({
+        nameEn: s.apps.nameEn, slug: s.apps.slug, nameFa: s.apps.nameFa, iconUrl: s.apps.iconUrl,
+      })
+        .from(s.apps)
+        .where(and(s.apps.isPublished, sql`lower(${s.apps.nameEn}) = ANY(${names.map((n) => n.toLowerCase())})`));
+      const byName = new Map(rows.map((r) => [r.nameEn.toLowerCase(), r]));
+      altApps = altEntry.alternatives
+        .map((a) => {
+          const hit = byName.get(a.nameEn.toLowerCase());
+          return hit ? { ...a, slug: hit.slug, nameFa: hit.nameFa, iconUrl: hit.iconUrl } : null;
+        })
+        .filter((x): x is NonNullable<typeof x> => x !== null);
+    } catch {}
+  }
 
   return (
     <div className="animate-fade-up">
@@ -304,6 +327,11 @@ export default async function AppPage({ params }: Props) {
               <ReportButton appId={app.id} appName={app.nameFa} />
             </div>
           </section>
+
+          {/* جایگزین‌های آزاد */}
+          {altEntry && altApps.length > 0 && (
+            <Alternatives entry={altEntry} apps={altApps} />
+          )}
 
           {/* دسته‌بندی‌ها */}
           {app.categories.length > 0 && (
