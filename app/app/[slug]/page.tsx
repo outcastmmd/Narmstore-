@@ -214,7 +214,7 @@ export default async function AppPage({ params }: Props) {
                 <p className="text-sm text-muted mb-4">برای دانلود به صفحه‌ی رسمی پروژه مراجعه کن</p>
                 <div className="flex gap-2 justify-center flex-wrap">
                   {app.githubRepo ? (
-                    <a href={`https://github.com/${app.githubRepo}/releases`} target="_blank" rel="noopener"
+                    <a href={`https://github.com/${app.githubRepo}`} target="_blank" rel="noopener"
                       className="inline-flex items-center gap-2 bg-[#24292f] text-white font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
                       <Download className="w-4 h-4" aria-hidden="true" /> دانلود از GitHub
                     </a>
