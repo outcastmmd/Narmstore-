@@ -13,6 +13,7 @@ import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import CompareButton from "@/components/CompareButton";
+import CopyHashButton from "@/components/CopyHashButton";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
@@ -295,13 +296,7 @@ export default async function AppPage({ params }: Props) {
                 <InfoRow k="SHA-256" v={
                   <span className="inline-flex items-center gap-2">
                     <span className="text-xs font-mono break-all" dir="ltr">{v.sha256}</span>
-                    <button
-                      onClick={() => { try { navigator.clipboard.writeText(v.sha256 ?? ""); } catch {} }}
-                      className="shrink-0 text-xs bg-surface-2 hover:bg-border rounded-lg px-2 py-1 transition"
-                      title="کپی هش"
-                    >
-                      کپی
-                    </button>
+                    <CopyHashButton hash={v.sha256} />
                   </span>
                 } />
               )}
