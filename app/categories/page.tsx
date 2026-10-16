@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { getAllCategories } from "@/lib/store";
-
+import { getAllCategories, getCategoryCounts } from "@/lib/store";
 
 export const metadata = { title: "دسته‌بندی‌ها" };
 
 export default async function CategoriesPage() {
-  const cats = await getAllCategories();
+  const [cats, counts] = await Promise.all([getAllCategories(), getCategoryCounts()]);
   const roots = cats.filter((c) => !c.parentId);
   const childrenOf = (id: string) => cats.filter((c) => c.parentId === id);
 
@@ -20,14 +19,18 @@ export default async function CategoriesPage() {
               <Link href={`/category/${r.slug}`} className="flex items-center gap-3 mb-4 group">
                 <span className="text-3xl" aria-hidden="true">{r.icon || "📦"}</span>
                 <h2 className="text-lg font-extrabold group-hover:text-primary transition">{r.nameFa}</h2>
+                <span className="text-xs font-bold bg-primary-soft text-primary rounded-full px-2.5 py-1">
+                  {(counts.get(r.id) ?? 0).toLocaleString("fa-IR")} برنامه
+                </span>
                 <span className="text-primary text-sm">←</span>
               </Link>
               {kids.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {kids.map((k) => (
                     <Link key={k.id} href={`/category/${k.slug}`}
-                      className="text-sm bg-surface-2 hover:bg-primary-soft hover:text-primary border border-border rounded-full px-4 py-2 transition">
+                      className="text-sm bg-surface-2 hover:bg-primary-soft hover:text-primary border border-border rounded-full px-4 py-2 transition flex items-center gap-1.5">
                       {k.icon} {k.nameFa}
+                      <span className="text-xs text-muted font-bold">{(counts.get(k.id) ?? 0).toLocaleString("fa-IR")}</span>
                     </Link>
                   ))}
                 </div>

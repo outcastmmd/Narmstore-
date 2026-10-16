@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useTransition } from "react";
 
-type Cat = { id: string; slug: string; nameFa: string; icon?: string | null };
+type Cat = { id: string; slug: string; nameFa: string; icon?: string | null; appCount?: number };
 
 export default function CategoryPills({ cats }: { cats: Cat[] }) {
   const sp = useSearchParams();
@@ -36,6 +36,11 @@ export default function CategoryPills({ cats }: { cats: Cat[] }) {
           <button key={c.id} onClick={() => go(`/?cat=${c.slug}`)} className={pill(active === c.slug)}
             aria-current={active === c.slug ? "page" : undefined}>
             <span aria-hidden="true">{c.icon || "📦"}</span> {c.nameFa}
+            {typeof c.appCount === "number" && (
+              <span className={`text-xs font-bold rounded-full px-2 py-0.5 ${active === c.slug ? "bg-white/25" : "bg-surface-2 text-muted"}`}>
+                {c.appCount.toLocaleString("fa-IR")}
+              </span>
+            )}
           </button>
         ))}
       </div>

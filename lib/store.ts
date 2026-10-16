@@ -294,6 +294,30 @@ export async function getCategoryApps(slug: string, limit = 40, offset = 0, sort
   return { category: cat, items, total: Number(total[0]?.c ?? 0) };
 }
 
+export async function getCategoryCounts() {
+  await dyn();
+  // تعداد برنامه‌ها برای هر دسته (فقط خودش) و برای ریشه‌ها (شامل زیردسته‌ها)
+  const { descendantsOf, rootOf } = await getCategoryTree();
+  const links = await db.select({
+    categoryId: s.appCategories.categoryId, appId: s.appCategories.appId,
+  }).from(s.appCategories)
+    .innerJoin(s.apps, eq(s.apps.id, s.appCategories.appId))
+    .where(eq(s.apps.isPublished, true));
+  const direct = new Map<string, Set<string>>();
+  const byRoot = new Map<string, Set<string>>();
+  for (const l of links) {
+    if (!direct.has(l.categoryId)) direct.set(l.categoryId, new Set());
+    direct.get(l.categoryId)!.add(l.appId);
+    const root = rootOf(l.categoryId);
+    if (!byRoot.has(root)) byRoot.set(root, new Set());
+    byRoot.get(root)!.add(l.appId);
+  }
+  const all = new Map<string, number>();
+  for (const [k, v] of direct) all.set(k, v.size);
+  for (const [k, v] of byRoot) all.set(k, v.size);
+  return all;
+}
+
 export async function getAllCategories() {
   await dyn();
   return db.select().from(s.categories)

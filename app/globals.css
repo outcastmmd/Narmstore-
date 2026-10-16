@@ -29,6 +29,21 @@
   --danger: #f97316;
 }
 
+/* تم امولد — مشکی خالص برای صرفه‌جویی باتری */
+[data-theme="amoled"] {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --surface-2: #141414;
+  --fg: #f0f2f5;
+  --muted: #9aa5b1;
+  --border: #1f1f1f;
+  --primary: #2dd4a7;
+  --primary-soft: #0d2b23;
+  --primary-fg: #06281f;
+  --accent: #f59e0b;
+  --danger: #f97316;
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
