@@ -49,18 +49,14 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
       <div className="min-w-0 flex-1 flex flex-col">
         <h3 className="font-bold truncate leading-6 group-hover:text-primary transition-colors">{app.nameFa}</h3>
         <div className="flex items-center gap-3 mt-auto pt-2 text-xs text-muted">
-          {app.githubStars ? (
-            <span className="inline-flex items-center gap-1">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
-              {toFaDigits(app.githubStars)}
-            </span>
-          ) : null}
-          {app.downloadCount > 0 ? (
-            <span className="inline-flex items-center gap-1">
-              <Download className="w-3.5 h-3.5" aria-hidden="true" />
-              {toFaDigits(app.downloadCount)}
-            </span>
-          ) : null}
+          <span className="inline-flex items-center gap-1">
+            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+            {toFaDigits(app.githubStars ?? 0)}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Download className="w-3.5 h-3.5" aria-hidden="true" />
+            {toFaDigits(app.downloadCount ?? 0)}
+          </span>
         </div>
       </div>
     </Link>
