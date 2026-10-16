@@ -27,12 +27,13 @@ function Initial({ name }: { name: string }) {
   );
 }
 
+// کارت برنامه — ارتفاع یکسان: آیکون + نام + استار/دانلود، بدون توضیحات
 export default function AppCard({ app, index = 0 }: { app: CardApp; index?: number }) {
   return (
     <Link
       href={app.platform && app.platform !== "android" ? `/app/${app.slug}?platform=${app.platform}` : `/app/${app.slug}`}
       style={{ animationDelay: `${Math.min(index, 12) * 35}ms` }}
-      className="animate-card-in card-hover group bg-surface border border-border rounded-2xl p-4 flex gap-3"
+      className="animate-card-in card-hover group bg-surface border border-border rounded-2xl p-4 flex gap-3 h-full"
     >
       {app.iconUrl ? (
         <PxImg
@@ -45,19 +46,21 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
       ) : (
         <Initial name={app.nameFa} />
       )}
-      <div className="min-w-0 flex-1">
-        <h3 className="font-bold truncate group-hover:text-primary transition-colors">{app.nameFa}</h3>
-        <p className="text-xs text-muted truncate mt-0.5" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
-        {(app.shortDescFa || app.shortDesc) && <p className="text-xs text-muted line-clamp-2 mt-1.5 leading-5">{app.shortDescFa || app.shortDesc}</p>}
-        <div className="flex items-center gap-3 mt-2 text-xs text-muted">
-          {app.platform !== "windows" && app.platform !== "linux" && app.versionName && (
-            <span className="bg-surface-2 rounded-md px-2 py-0.5" dir="ltr">v{app.versionName}</span>
-          )}
+      <div className="min-w-0 flex-1 flex flex-col">
+        <h3 className="font-bold truncate leading-6 group-hover:text-primary transition-colors">{app.nameFa}</h3>
+        <div className="flex items-center gap-3 mt-auto pt-2 text-xs text-muted">
           {app.githubStars ? (
-            <span className="inline-flex items-center gap-1"><Star className="w-3.5 h-3.5" aria-hidden="true" /> {toFaDigits(app.githubStars)}</span>
-          ) : (
-            <span className="inline-flex items-center gap-1"><Download className="w-3.5 h-3.5" aria-hidden="true" /> {toFaDigits(app.downloadCount)}</span>
-          )}
+            <span className="inline-flex items-center gap-1">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+              {toFaDigits(app.githubStars)}
+            </span>
+          ) : null}
+          {app.downloadCount > 0 ? (
+            <span className="inline-flex items-center gap-1">
+              <Download className="w-3.5 h-3.5" aria-hidden="true" />
+              {toFaDigits(app.downloadCount)}
+            </span>
+          ) : null}
         </div>
       </div>
     </Link>

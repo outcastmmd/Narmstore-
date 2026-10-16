@@ -88,7 +88,6 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
                 <span className="truncate">{a.nameFa}</span>
                 <NewBadge createdAt={a.createdAt} className="shrink-0" />
               </b>
-              <span className="text-muted text-[13px] leading-6 line-clamp-2">{a.shortDescFa || a.shortDesc}</span>
             </Link>
           ))}
         </div>
