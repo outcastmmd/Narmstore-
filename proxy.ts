@@ -14,22 +14,52 @@ function validSession(raw: string | undefined): boolean {
   return Number(exp) > Math.floor(Date.now() / 1000);
 }
 
-// گیت احراز هویت پنل مدیریت — بررسی امضای کوکی قبل از رندر
+function applySecurityHeaders(res: NextResponse): NextResponse {
+  res.headers.set("X-Frame-Options", "DENY");
+  res.headers.set("X-Content-Type-Options", "nosniff");
+  res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
+  res.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  res.headers.set(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob:",
+      "font-src 'self' data:",
+      "connect-src 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; ")
+  );
+  res.headers.delete("X-Powered-By");
+  return res;
+}
+
+// گیت احراز هویت پنل مدیریت + هدرهای امنیتی
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  let res: NextResponse;
   if (pathname === "/admin/login") {
-    // کاربر لاگین‌کرده را به داشبورد بفرست
     if (validSession(request.cookies.get(COOKIE)?.value)) {
-      return NextResponse.redirect(new URL("/admin", request.url));
+      res = NextResponse.redirect(new URL("/admin", request.url));
+    } else {
+      res = NextResponse.next();
     }
-    return NextResponse.next();
+  } else if (pathname.startsWith("/admin")) {
+    if (!validSession(request.cookies.get(COOKIE)?.value)) {
+      res = NextResponse.redirect(new URL("/admin/login", request.url));
+    } else {
+      res = NextResponse.next();
+    }
+  } else {
+    res = NextResponse.next();
   }
-  if (!validSession(request.cookies.get(COOKIE)?.value)) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
-  }
-  return NextResponse.next();
+  return applySecurityHeaders(res);
 }
 
 export const config = {
-  matcher: ["/admin", "/admin/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|icons|sw.js|manifest.webmanifest).*)"],
 };

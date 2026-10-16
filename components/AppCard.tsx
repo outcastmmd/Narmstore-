@@ -13,6 +13,7 @@ export type CardApp = {
   shortDescFa: string | null;
   versionName: string | null;
   downloadCount: number;
+  githubStars: number | null;
 };
 
 function Initial({ name }: { name: string }) {
@@ -50,7 +51,11 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
           {app.versionName && (
             <span className="bg-surface-2 rounded-md px-2 py-0.5" dir="ltr">v{app.versionName}</span>
           )}
-          <span>⬇️ {toFaDigits(app.downloadCount)}</span>
+          {app.githubStars ? (
+            <span>⭐ {toFaDigits(app.githubStars)}</span>
+          ) : (
+            <span>⬇️ {toFaDigits(app.downloadCount)}</span>
+          )}
         </div>
       </div>
     </Link>

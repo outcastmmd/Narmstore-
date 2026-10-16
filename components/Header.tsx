@@ -3,6 +3,7 @@ import SearchBox from "./SearchBox";
 import ThemeToggle from "./ThemeToggle";
 import UserMenu from "./UserMenu";
 import NotifBell from "./NotifBell";
+import PlatformNav from "./PlatformNav";
 
 export default function Header() {
   return (
@@ -33,27 +34,9 @@ export default function Header() {
         </div>
       </header>
 
-      {/* ناوبری پایین موبایل */}
-      <nav
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-surface border-t border-border"
-        aria-label="ناوبری موبایل"
-      >
-        <div className="grid grid-cols-4 text-center text-xs">
-          <Link href="/" className="py-2.5 flex flex-col items-center gap-0.5 hover:text-primary">
-            <span className="text-lg">🏠</span>خانه
-          </Link>
-          <Link href="/categories" className="py-2.5 flex flex-col items-center gap-0.5 hover:text-primary">
-            <span className="text-lg">🗂️</span>دسته‌ها
-          </Link>
-          <Link href="/popular" className="py-2.5 flex flex-col items-center gap-0.5 hover:text-primary">
-            <span className="text-lg">🔥</span>محبوب‌ها
-          </Link>
-          <Link href="/latest" className="py-2.5 flex flex-col items-center gap-0.5 hover:text-primary">
-            <span className="text-lg">✨</span>تازه‌ها
-          </Link>
-        </div>
-      </nav>
-      <div className="md:hidden h-16" aria-hidden="true" />
+      {/* نوبار شناور پلتفرم (موبایل و دسکتاپ) */}
+      <PlatformNav />
+      <div className="h-20" aria-hidden="true" />
     </>
   );
 }

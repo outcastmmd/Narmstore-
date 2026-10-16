@@ -11,7 +11,6 @@ import {
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
-import PlatformToggle from "@/components/PlatformToggle";
 import type { Platform } from "@/lib/store";
 
 type Props = { searchParams: Promise<{ cat?: string; platform?: string }> };
@@ -152,9 +151,6 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <div>
-      <Suspense>
-        <PlatformToggle />
-      </Suspense>
       <Suspense>
         <CategoryPills cats={cats} />
       </Suspense>

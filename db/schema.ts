@@ -79,6 +79,8 @@ export const apps = pgTable("apps", {
   editorChoice: boolean("editor_choice").notNull().default(false),
   isPublished: boolean("is_published").notNull().default(false),
   platform: varchar("platform", { length: 16 }).notNull().default("android"),
+  githubRepo: varchar("github_repo", { length: 255 }),
+  githubStars: integer("github_stars").default(0),
   sourceType: varchar("source_type", { length: 32 }).notNull().default("internal"),
   sourceUrl: text("source_url"),
   externalId: varchar("external_id", { length: 255 }),

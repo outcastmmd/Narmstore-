@@ -82,7 +82,11 @@ export default async function AppPage({ params }: Props) {
             <p className="text-muted text-sm mb-2" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
               {app.developerName && <span>👤 {app.developerName}</span>}
-              <span>⬇️ {toFaDigits(app.downloadCount)} دانلود</span>
+              {app.githubStars ? (
+                <span>⭐ {toFaDigits(app.githubStars)} استار گیت‌هاب</span>
+              ) : (
+                <span>⬇️ {toFaDigits(app.downloadCount)} دانلود</span>
+              )}
               {v && <span>🕐 به‌روزرسانی: {timeAgo(v.publishedAt || v.createdAt)}</span>}
             </div>
             {(app.shortDescFa || app.shortDesc) && <p className="mt-3 text-sm leading-7">{app.shortDescFa || app.shortDesc}</p>}
