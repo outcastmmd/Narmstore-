@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Download, Package, Link2, Check } from "lucide-react";
 import { formatBytes } from "@/lib/fa";
 
@@ -9,7 +9,21 @@ export default function DownloadButton({
   versionId: string; versionName: string; fileSize: number | null;
 }) {
   const [copied, setCopied] = useState(false);
+  const [showSticky, setShowSticky] = useState(false);
+  const mainBtnRef = useRef<HTMLAnchorElement>(null);
   const url = `/api/download/${versionId}`;
+
+  // فقط وقتی دکمه‌ی اصلی دیده نمی‌شه، دکمه‌ی شناور رو نشون بده
+  useEffect(() => {
+    const el = mainBtnRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setShowSticky(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const copy = async () => {
     try {
@@ -21,8 +35,12 @@ export default function DownloadButton({
 
   return (
     <>
-      {/* دکمه ثابت پایین صفحه در موبایل */}
-      <div className="md:hidden fixed bottom-20 inset-x-4 z-40">
+      {/* دکمه شناور پایین صفحه در موبایل — فقط وقتی دکمه‌ی اصلی دیده نمی‌شود */}
+      <div
+        className={`md:hidden fixed bottom-20 inset-x-4 z-40 transition-all duration-300 ${
+          showSticky ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+        }`}
+      >
         <a
           href={url}
           className="flex items-center justify-center gap-2 bg-primary text-primary-fg text-center font-extrabold text-lg py-4 rounded-2xl shadow-xl shadow-primary/30 active:scale-[0.99] transition"
@@ -32,6 +50,7 @@ export default function DownloadButton({
       </div>
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
       <a
+        ref={mainBtnRef}
         href={url}
         className="flex-1 bg-primary text-primary-fg text-center font-extrabold text-lg py-4 rounded-2xl hover:opacity-90 active:scale-[0.99] transition shadow-lg shadow-primary/20 inline-flex items-center justify-center gap-2"
       >
