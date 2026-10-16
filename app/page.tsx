@@ -5,7 +5,6 @@ import PopularRow from "@/components/PopularRow";
 import NewBadge from "@/components/NewBadge";
 import AppCard from "@/components/AppCard";
 import Section from "@/components/Section";
-import CategoryPills from "@/components/CategoryPills";
 import CategoryCards from "@/components/CategoryCards";
 import DbIcon from "@/components/DbIcon";
 import {
@@ -175,9 +174,6 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <div>
-      <Suspense>
-        <CategoryPills cats={cats} />
-      </Suspense>
       {!cat && (
         <Suspense>
           <CategoryCards cats={cats} />
