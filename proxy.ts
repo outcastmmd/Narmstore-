@@ -26,7 +26,7 @@ function applySecurityHeaders(res: NextResponse): NextResponse {
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob:",
+      "img-src 'self' data: blob: https://www.google.com https://www.gstatic.com",
       "font-src 'self' data:",
       "connect-src 'self'",
       "frame-ancestors 'none'",

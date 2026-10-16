@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 
 type Platform = "android" | "windows" | "linux";
@@ -13,9 +13,21 @@ const PLATFORMS: { slug: Platform; label: string; icon: string }[] = [
 
 function PlatformNavInner() {
   const sp = useSearchParams();
-  const current = (sp.get("platform") as Platform) || "android";
+  const urlPlatform = sp.get("platform") as Platform | null;
+  // پلتفرم از URL، وگرنه از localStorage (برای صفحه‌های برنامه و کالکشن)
+  const [stored, setStored] = useState<Platform | null>(null);
+  useEffect(() => {
+    const s = localStorage.getItem("narm-platform") as Platform | null;
+    if (s === "windows" || s === "linux" || s === "android") setStored(s);
+  }, []);
+  const current = urlPlatform || stored || "android";
 
   const href = (p: Platform) => {
+    // ذخیره انتخاب کاربر
+    if (typeof window !== "undefined") {
+      if (p === "android") localStorage.removeItem("narm-platform");
+      else localStorage.setItem("narm-platform", p);
+    }
     const params = new URLSearchParams(sp.toString());
     if (p === "android") params.delete("platform");
     else params.set("platform", p);
