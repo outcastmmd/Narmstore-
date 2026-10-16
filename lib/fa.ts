@@ -61,3 +61,17 @@ export function timeAgo(d: Date | string | null | undefined): string {
 export function slugify(input: string): string {
   return input.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
+
+/** تبدیل SDK اندروید به نام نسخه: 21 -> «اندروید ۵+» */
+const SDK_TO_ANDROID: Record<number, string> = {
+  21: "۵", 22: "۵.۱", 23: "۶", 24: "۷", 25: "۷.۱", 26: "۸", 27: "۸.۱",
+  28: "۹", 29: "۱۰", 30: "۱۱", 31: "۱۲", 32: "۱۲.۱", 33: "۱۳",
+  34: "۱۴", 35: "۱۵",
+};
+export function androidVersion(sdk: number | null | undefined): string {
+  if (sdk == null) return "نامشخص";
+  const v = SDK_TO_ANDROID[sdk];
+  if (v) return `اندروید ${toFaDigits(v)}+`;
+  if (sdk < 21) return `اندروید ${toFaDigits(sdk)}+`;
+  return "نامشخص";
+}

@@ -7,7 +7,7 @@ import { getSessionUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import * as s from "@/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
-import { toFaDigits, formatBytes, formatDate, timeAgo } from "@/lib/fa";
+import { toFaDigits, formatBytes, formatDate, timeAgo, androidVersion } from "@/lib/fa";
 import AppCard from "@/components/AppCard";
 import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -280,7 +280,7 @@ export default async function AppPage({ params }: Props) {
                 <>
                   <InfoRow k="نسخه" v={v ? <span dir="ltr">{v.versionName}</span> : "—"} ltr />
                   <InfoRow k="حجم فایل" v={formatBytes(v?.fileSize)} />
-                  <InfoRow k="حداقل اندروید" v={v?.minSdk ? toFaDigits(v.minSdk) + "+" : "نامشخص"} />
+                  <InfoRow k="حداقل اندروید" v={androidVersion(v?.minSdk)} />
                 </>
               )}
               {app.platform !== "android" && (
