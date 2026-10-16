@@ -73,6 +73,8 @@ export async function getCollections(platform?: Platform) {
       .orderBy(s.collectionApps.sortOrder).limit(8);
     // کالکشن خالی در این پلتفرم نمایش داده نمی‌شود
     if (apps.length > 0) out.push({ ...c, apps, appCount: apps.length });
+    // صفحه اصلی: حداکثر ۶ کالکشن
+    if (out.length >= 6) break;
   }
   return out;
 }
@@ -233,11 +235,13 @@ export async function searchApps(query: string, filters: SearchFilters = {}, lim
 
   if (q) {
     // جست‌وجو در نام فارسی/انگلیسی، نام بسته، توسعه‌دهنده و توضیح — با نرمال‌سازی فارسی
+    const like = `%${q}%`;
     conds.push(sql`(
-      ${s.apps.nameFa} ilike ${"%" + query.trim() + "%"}
-      or ${s.apps.nameEn} ilike ${"%" + query.trim() + "%"}
-      or ${s.apps.packageName} ilike ${"%" + query.trim() + "%"}
-      or ${s.apps.shortDesc} ilike ${"%" + query.trim() + "%"}
+      ${s.apps.nameFa} ilike ${like}
+      or ${s.apps.nameEn} ilike ${like}
+      or ${s.apps.packageName} ilike ${like}
+      or ${s.apps.shortDesc} ilike ${like}
+      or ${s.apps.shortDescFa} ilike ${like}
     )`);
   }
   if (filters.openSource) conds.push(eq(s.apps.isOpenSource, true));
