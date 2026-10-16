@@ -14,6 +14,7 @@ import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import CompareButton from "@/components/CompareButton";
 import CopyHashButton from "@/components/CopyHashButton";
+import VersionsDrawer from "@/components/VersionsDrawer";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
@@ -254,21 +255,9 @@ export default async function AppPage({ params }: Props) {
             </section>
           )}
 
-          {/* نسخه‌های قبلی — فقط اندروید */}
-          {app.platform === "android" && app.versions.length > 1 && (            <section className="bg-surface border border-border rounded-3xl p-6" aria-label="نسخه‌های قبلی">
-              <h2 className="font-extrabold mb-4">نسخه‌های قبلی</h2>
-              <ul className="space-y-2">
-                {app.versions.slice(1).map((ver) => (
-                  <li key={ver.id} className="flex items-center justify-between gap-3 bg-surface-2 rounded-xl px-4 py-3 text-sm">
-                    <span className="font-bold" dir="ltr">v{ver.versionName}</span>
-                    <span className="text-muted text-xs">{formatDate(ver.publishedAt || ver.createdAt)} • {formatBytes(ver.fileSize)}</span>
-                    <Link href={`/api/download/${ver.id}`} className="text-primary font-bold text-xs hover:underline shrink-0">
-                      دانلود
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
+          {/* نسخه‌های قبلی — دراور جمع‌شونده برای همه پلتفرم‌ها */}
+          {app.versions.length > 1 && (
+            <VersionsDrawer versions={app.versions} />
           )}
         </div>
 
