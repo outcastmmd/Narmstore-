@@ -1,7 +1,7 @@
 // نرم‌استور | NarmStore — Drizzle schema (PostgreSQL)
 import {
   pgTable, text, varchar, integer, bigint, boolean, timestamp,
-  primaryKey, index, uniqueIndex, jsonb,
+  primaryKey, index, unique, uniqueIndex, jsonb,
 } from "drizzle-orm/pg-core";
 
 // ─── نقش‌ها و کاربران ─────────────────────────────────────────────
@@ -271,6 +271,29 @@ export const notifications = pgTable("notifications", {
 // ─── ترجمه فارسی توضیحات ─────────────────────────────────────────
 // shortDescFa / descriptionFa: ترجمه فارسی توضیح کوتاه و کامل برنامه
 // اگر خالی باشد، نسخه انگلیسی نمایش داده می‌شود
+
+// ─── کالکشن‌ها ────────────────────────────────────────────────────
+export const collections = pgTable("collections", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  nameFa: varchar("name_fa", { length: 100 }).notNull(),
+  description: text("description"),
+  icon: varchar("icon", { length: 16 }),
+  color: varchar("color", { length: 32 }).default("primary"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const collectionApps = pgTable("collection_apps", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  collectionId: text("collection_id").notNull().references(() => collections.id, { onDelete: "cascade" }),
+  appId: text("app_id").notNull().references(() => apps.id, { onDelete: "cascade" }),
+  sortOrder: integer("sort_order").notNull().default(0),
+}, (t) => [
+  unique("collection_app_uidx").on(t.collectionId, t.appId),
+  index("collection_apps_cidx").on(t.collectionId, t.sortOrder),
+]);
 
 // ─── نوع‌های کمکی ────────────────────────────────────────────────
 

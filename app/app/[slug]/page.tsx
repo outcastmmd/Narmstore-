@@ -8,6 +8,7 @@ import AppCard from "@/components/AppCard";
 import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import Reviews from "@/components/Reviews";
+import Gallery from "@/components/Gallery";
 import { px } from "@/lib/img";
 import { siteUrl } from "@/lib/site-url";
 
@@ -96,12 +97,10 @@ export default async function AppPage({ params }: Props) {
           {app.screenshots.length > 0 && (
             <section className="bg-surface border border-border rounded-3xl p-6" aria-label="تصاویر محیط برنامه">
               <h2 className="font-extrabold mb-4">تصاویر محیط برنامه</h2>
-              <div className="flex gap-3 overflow-x-auto pb-2">
-                {app.screenshots.map((sh) => (
-                  <PxImg key={sh.id} src={px(sh.url) || sh.url} alt={`تصویر ${app.nameFa}`} width={180} height={320}
-                    className="h-64 w-auto rounded-xl border border-border object-cover shrink-0" />
-                ))}
-              </div>
+              <Gallery
+                appName={app.nameFa}
+                shots={app.screenshots.map((sh) => ({ id: sh.id, url: px(sh.url) || sh.url }))}
+              />
             </section>
           )}
 

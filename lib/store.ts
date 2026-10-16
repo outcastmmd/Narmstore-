@@ -50,6 +50,35 @@ async function getCategoryTree() {
   return { rootOf, descendantsOf };
 }
 
+export async function getCollections() {
+  await dyn();
+  const cols = await db.select().from(s.collections)
+    .where(eq(s.collections.isActive, true))
+    .orderBy(s.collections.sortOrder);
+  const out = [];
+  for (const c of cols) {
+    const apps = await db.select(cardCols).from(s.collectionApps)
+      .innerJoin(s.apps, eq(s.apps.id, s.collectionApps.appId))
+      .where(and(eq(s.collectionApps.collectionId, c.id), eq(s.apps.isPublished, true)))
+      .orderBy(s.collectionApps.sortOrder).limit(8);
+    out.push({ ...c, apps, appCount: apps.length });
+  }
+  return out;
+}
+
+export async function getCollectionBySlug(slug: string) {
+  await dyn();
+  const rows = await db.select().from(s.collections)
+    .where(and(eq(s.collections.slug, slug), eq(s.collections.isActive, true))).limit(1);
+  const col = rows[0];
+  if (!col) return null;
+  const apps = await db.select(cardCols).from(s.collectionApps)
+    .innerJoin(s.apps, eq(s.apps.id, s.collectionApps.appId))
+    .where(and(eq(s.collectionApps.collectionId, col.id), eq(s.apps.isPublished, true)))
+    .orderBy(s.collectionApps.sortOrder);
+  return { ...col, apps };
+}
+
 export async function getRootCategories() {
   await dyn();
   const rows = await db.select({

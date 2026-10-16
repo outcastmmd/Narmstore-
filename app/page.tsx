@@ -7,7 +7,7 @@ import CategoryPills from "@/components/CategoryPills";
 import {
   getRootCategories, getFeaturedApps, getPopularApps,
   getLatestApps, getEditorChoice, getOpenSourceApps,
-  getCategoryBySlug, getChildPreviews,
+  getCategoryBySlug, getChildPreviews, getCollections,
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
@@ -16,9 +16,9 @@ import { px } from "@/lib/img";
 type Props = { searchParams: Promise<{ cat?: string }> };
 
 async function HomeSlide() {
-  const [featured, popular, latest, editors, oss] = await Promise.all([
+  const [featured, popular, latest, editors, oss, collections] = await Promise.all([
     getFeaturedApps(4), getPopularApps(8),
-    getLatestApps(8), getEditorChoice(8), getOpenSourceApps(8),
+    getLatestApps(8), getEditorChoice(8), getOpenSourceApps(8), getCollections(),
   ]);
   const hero = featured[0];
 
@@ -43,6 +43,24 @@ async function HomeSlide() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* کالکشن‌های منتخب */}
+      {collections.length > 0 && (
+        <Section title="کالکشن‌های منتخب" href="/collections">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {collections.map((c, ci) => (
+              <Link key={c.id} href={`/collection/${c.slug}`}
+                style={{ animationDelay: `${ci * 60}ms` }}
+                className="animate-card-in card-hover bg-gradient-to-bl from-primary-soft/70 to-surface border border-border rounded-3xl p-5 flex flex-col gap-2 min-h-32">
+                <span className="text-4xl" aria-hidden="true">{c.icon || "✨"}</span>
+                <span className="font-extrabold">{c.nameFa}</span>
+                <span className="text-xs text-muted line-clamp-2 leading-5">{c.description}</span>
+                <span className="text-xs text-primary font-bold mt-auto">{toFaDigits(c.appCount)} برنامه ←</span>
+              </Link>
+            ))}
+          </div>
+        </Section>
       )}
 
       {/* محبوب‌ترین‌ها */}
