@@ -18,10 +18,17 @@ function PlatformNavInner() {
   const [stored, setStored] = useState<Platform | null>(null);
 
   // خواندن پلتفرم از localStorage در هر تغییر مسیر
+  // فقط برای صفحه‌هایی که پلتفرم توی URL نیست (مثل /app و /collection)
+  // توی صفحه اصلی، URL حرف اول رو می‌زنه
   useEffect(() => {
     try {
-      const s = localStorage.getItem("narm-platform") as Platform | null;
-      setStored(s === "windows" || s === "linux" ? s : null);
+      if (pathname === "/") {
+        // صفحه اصلی: فقط URL مهمه، localStorage نادیده گرفته می‌شه
+        setStored(null);
+      } else {
+        const s = localStorage.getItem("narm-platform") as Platform | null;
+        setStored(s === "windows" || s === "linux" ? s : null);
+      }
     } catch {
       setStored(null);
     }

@@ -12,6 +12,10 @@ export default function CategoryPills({ cats }: { cats: Cat[] }) {
   const active = sp.get("cat");
 
   const go = (href: string) => {
+    // پاک کردن پلتفرم ذخیره‌شده وقتی برمی‌گردیم خونه
+    if (href === "/") {
+      try { localStorage.removeItem("narm-platform"); } catch {}
+    }
     // ترنزیشن نرم بین تب‌ها با View Transitions API
     const nav = () => startTransition(() => router.push(href, { scroll: false }));
     if (document.startViewTransition) document.startViewTransition(nav);
