@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SWRegister, InstallButton } from "@/components/PWA";
+import ErrorReporter from "@/components/ErrorReporter";
 import { siteUrl } from "@/lib/site-url";
 
 const vazir = Vazirmatn({
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className={`${vazir.variable} ${lalezar.variable} min-h-full flex flex-col`}>
         <SWRegister />
+        <ErrorReporter />
         <div className="bg-glows" aria-hidden="true"><span className="g1" /><span className="g2" /><span className="g3" /></div>
         <Header />
         <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 relative z-[1]">{children}</main>

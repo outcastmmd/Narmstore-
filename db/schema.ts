@@ -309,3 +309,23 @@ export const collectionApps = pgTable("collection_apps", {
 export type App = typeof apps.$inferSelect;
 export type AppVersion = typeof appVersions.$inferSelect;
 export type Category = typeof categories.$inferSelect;
+
+// ─── لاگ خطاها (مانیتورینگ داخلی؛ مکمل Sentry) ────────────────────
+
+export const errorLogs = pgTable("error_logs", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  // اثر انگشت برای گروه‌بندی خطاهای تکراری
+  fingerprint: varchar("fingerprint", { length: 64 }).notNull(),
+  kind: varchar("kind", { length: 32 }).notNull().default("client"), // client | server | api
+  message: text("message").notNull(),
+  stack: text("stack"),
+  url: text("url"),
+  userAgent: text("user_agent"),
+  count: integer("count").notNull().default(1),
+  status: varchar("status", { length: 32 }).notNull().default("open"), // open | resolved
+  firstSeenAt: timestamp("first_seen_at").notNull().defaultNow(),
+  lastSeenAt: timestamp("last_seen_at").notNull().defaultNow(),
+}, (t) => [
+  index("error_logs_status_idx").on(t.status, t.lastSeenAt),
+  uniqueIndex("error_logs_fingerprint_uidx").on(t.fingerprint),
+]);

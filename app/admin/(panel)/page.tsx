@@ -28,9 +28,22 @@ export default async function AdminDashboard() {
     ["⚠️", "گزارش‌های باز", stats.openReports, "/admin/reports"],
   ] as const;
 
+  const openErrors = await db.select({ id: s.errorLogs.id }).from(s.errorLogs)
+    .where(eq(s.errorLogs.status, "open")).limit(1000);
+
   return (
     <div className="animate-fade-up">
       <h1 className="text-2xl font-extrabold mb-6">داشبورد</h1>
+
+      {openErrors.length > 0 && (
+        <Link href="/admin/errors"
+          className="block mb-6 bg-danger/10 border border-danger/40 rounded-3xl p-5 hover:border-danger transition">
+          <p className="font-extrabold text-danger">
+            🐞 {toFaDigits(openErrors.length)} خطای باز در سایت
+          </p>
+          <p className="text-xs text-muted mt-1">برای مشاهده و بررسی کلیک کنید</p>
+        </Link>
+      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {cards.map(([icon, label, value, href]) => (

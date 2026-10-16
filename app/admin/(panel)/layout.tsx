@@ -8,6 +8,7 @@ const NAV = [
   ["/admin/apps", "📱", "نرم‌افزارها"],
   ["/admin/categories", "🗂️", "دسته‌بندی‌ها"],
   ["/admin/reports", "⚠️", "گزارش‌ها"],
+  ["/admin/errors", "🐞", "خطاهای سایت"],
   ["/admin/reviews", "⭐", "نظرات"],
 ] as const;
 
