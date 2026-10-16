@@ -221,6 +221,28 @@ export async function getCategoryBySlug(slug: string) {
   return { ...cat, children };
 }
 
+// پیش‌نمایش زیردسته‌ها: هر زیردسته + حداکثر ۱۰ برنامه‌ی برترش (برای صفحه دسته‌ی والد به سبک اپ‌استورها)
+export async function getChildPreviews(parentId: string, perChild = 10) {
+  await dyn();
+  const children = await db.select().from(s.categories)
+    .where(and(eq(s.categories.parentId, parentId), eq(s.categories.isActive, true)))
+    .orderBy(s.categories.sortOrder);
+  const out: { category: (typeof children)[number]; apps: object[]; total: number }[] = [];
+  for (const ch of children) {
+    const items = await db.select(cardCols).from(s.apps)
+      .innerJoin(s.appCategories, eq(s.appCategories.appId, s.apps.id))
+      .where(and(pub, eq(s.appCategories.categoryId, ch.id)))
+      .groupBy(s.apps.id)
+      .orderBy(desc(s.apps.updatedAt)).limit(perChild);
+    if (!items.length) continue;
+    const t = await db.select({ c: sql<number>`count(distinct ${s.apps.id})` }).from(s.apps)
+      .innerJoin(s.appCategories, eq(s.appCategories.appId, s.apps.id))
+      .where(and(pub, eq(s.appCategories.categoryId, ch.id)));
+    out.push({ category: ch, apps: items, total: Number(t[0]?.c ?? 0) });
+  }
+  return out;
+}
+
 export async function getCategoryApps(slug: string, limit = 40, offset = 0, sort: SearchFilters["sort"] = "updated") {
   await dyn();
   const cat = await getCategoryBySlug(slug);
