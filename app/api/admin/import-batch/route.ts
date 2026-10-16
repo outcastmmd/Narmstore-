@@ -3,16 +3,22 @@ import { randomUUID } from "node:crypto";
 import { db } from "@/lib/db";
 import * as s from "@/db/schema";
 import { eq, or } from "drizzle-orm";
+import windowsPower from "@/data/windows-power-batch1.json";
+import linuxCreative from "@/data/linux-creative-batch1.json";
+import androidPrivacy from "@/data/android-privacy-batch1.json";
 
 // ایمپورت موقت بچ‌ها — بعد از اجرا حذف می‌شود.
 // GET /api/admin/import-batch?key=...&batch=windows-power|linux-creative|android-privacy
 // عملیات idempotent است (رکورد تکراری نادیده گرفته می‌شود).
 const KEY = "b1-9f3e7a2c4d8b1e6a5f0c3d9e7b2a4f1";
 
-const BATCHES: Record<string, { file: string; platform: string; pkgPrefix: string | null }> = {
-  "windows-power": { file: "windows-power-batch1.json", platform: "windows", pkgPrefix: "windows" },
-  "linux-creative": { file: "linux-creative-batch1.json", platform: "linux", pkgPrefix: "linux" },
-  "android-privacy": { file: "android-privacy-batch1.json", platform: "android", pkgPrefix: null },
+const BATCHES: Record<
+  string,
+  { tools: any[]; platform: string; pkgPrefix: string | null }
+> = {
+  "windows-power": { tools: windowsPower as any[], platform: "windows", pkgPrefix: "windows" },
+  "linux-creative": { tools: linuxCreative as any[], platform: "linux", pkgPrefix: "linux" },
+  "android-privacy": { tools: androidPrivacy as any[], platform: "android", pkgPrefix: null },
 };
 
 function favicon(u: string | null): string | null {
@@ -36,8 +42,7 @@ export async function GET(req: NextRequest) {
 
   const stats = { added: 0, skipped: 0 };
   try {
-    const mod = await import(`@/data/${batch.file}`);
-    const tools = (mod.default || mod) as any[];
+    const tools = batch.tools;
     if (!Array.isArray(tools) || !tools.length) throw new Error("JSON خالی است");
 
     const cats = await db.select().from(s.categories);
@@ -101,7 +106,7 @@ export async function GET(req: NextRequest) {
       .select({ id: s.apps.id })
       .from(s.apps)
       .where(eq(s.apps.platform, batch.platform));
-    return NextResponse.json({ ok: true, batch: batchName, ...stats, total });
+    return NextResponse.json({ ok: true, batch: batchName, ...stats, total: total.length });
   } catch (e: any) {
     return NextResponse.json(
       { ok: false, batch: batchName, ...stats, error: String(e?.message || e).slice(0, 300) },
