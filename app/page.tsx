@@ -35,12 +35,12 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
       {hero && (
         <Link href={appHref(hero.slug, platform)} aria-label={hero.nameFa}
           className="block mb-6 rounded-[20px] bg-primary text-primary-fg p-6 sm:p-7">
-          <div className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 items-center">
             {hero.iconUrl ? (
               <PxImg src={px(hero.iconUrl) || "/icons/icon-192.png"} alt="" width={84} height={84}
-                className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] object-cover row-span-3 bg-primary-fg" />
+                className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] object-cover sm:row-span-3 bg-primary-fg mb-2 sm:mb-0" />
             ) : (
-              <span className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] row-span-3 grid place-items-center text-4xl font-bold bg-primary-fg text-primary" dir="ltr">
+              <span className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] sm:row-span-3 grid place-items-center text-4xl font-bold bg-primary-fg text-primary mb-2 sm:mb-0" dir="ltr">
                 {hero.nameEn.charAt(0)}
               </span>
             )}
