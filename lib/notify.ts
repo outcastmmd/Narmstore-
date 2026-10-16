@@ -10,10 +10,13 @@ export async function notifyVersionPublished(appId: string, versionId: string) {
     .from(s.appVersions).where(eq(s.appVersions.id, versionId)).limit(1).then((r) => r[0]);
   if (!app || !ver) return 0;
 
-  // کاربرانی که این برنامه را دوست دارند، به‌جز کسانی که قبلاً برای همین نسخه اعلان گرفته‌اند
+  // کاربرانی که این برنامه را دوست دارند یا دنبال می‌کنند
   const fans = await db.select({ userId: s.favorites.userId })
     .from(s.favorites).where(eq(s.favorites.appId, appId));
-  if (!fans.length) return 0;
+  const followers = await db.select({ userId: s.follows.userId })
+    .from(s.follows).where(eq(s.follows.appId, appId));
+  const userIds = new Set([...fans.map((f) => f.userId), ...followers.map((f) => f.userId)]);
+  if (!userIds.size) return 0;
 
   const existing = await db.select({ userId: s.notifications.userId })
     .from(s.notifications)
@@ -23,10 +26,10 @@ export async function notifyVersionPublished(appId: string, versionId: string) {
   const title = `نسخه جدید ${app.nameFa}`;
   const message = `نسخه ${ver.versionName} منتشر شد — همین حالا به‌روزرسانی کنید.`;
   let n = 0;
-  for (const f of fans) {
-    if (already.has(f.userId)) continue;
+  for (const userId of userIds) {
+    if (already.has(userId)) continue;
     await db.insert(s.notifications).values({
-      userId: f.userId, appId, versionId, type: "version", title, message,
+      userId, appId, versionId, type: "version", title, message,
     });
     n++;
   }

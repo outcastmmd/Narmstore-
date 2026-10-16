@@ -7,6 +7,7 @@ import { toFaDigits, formatBytes, formatDate, timeAgo } from "@/lib/fa";
 import AppCard from "@/components/AppCard";
 import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
+import FollowButton from "@/components/FollowButton";
 import CompareButton from "@/components/CompareButton";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
@@ -75,6 +76,7 @@ export default async function AppPage({ params }: Props) {
                 <span className="text-xs bg-primary-soft text-primary font-bold px-2.5 py-1 rounded-full">متن‌باز</span>
               )}
               <span className="ms-auto flex items-center gap-2">
+                <FollowButton appId={app.id} />
                 <CompareButton slug={app.slug} nameFa={app.nameFa} />
                 <FavoriteButton appId={app.id} appName={app.slug} />
               </span>

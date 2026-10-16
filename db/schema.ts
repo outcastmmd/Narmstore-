@@ -177,6 +177,12 @@ export const favorites = pgTable("favorites", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 }, (t) => [primaryKey({ columns: [t.userId, t.appId] })]);
 
+export const follows = pgTable("follows", {
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  appId: text("app_id").notNull().references(() => apps.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (t) => [primaryKey({ columns: [t.userId, t.appId] })]);
+
 export const reports = pgTable("reports", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   appId: text("app_id").notNull().references(() => apps.id, { onDelete: "cascade" }),
