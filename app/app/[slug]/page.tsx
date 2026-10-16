@@ -9,6 +9,7 @@ import * as s from "@/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { toFaDigits, formatBytes, formatDate, timeAgo, androidVersion } from "@/lib/fa";
 import AppCard from "@/components/AppCard";
+import PlatformBadge from "@/components/PlatformBadge";
 import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
@@ -126,6 +127,7 @@ export default async function AppPage({ params }: Props) {
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-1">
               <h1 className="text-2xl font-extrabold">{app.nameFa}</h1>
+              <PlatformBadge platform={app.platform} />
               {app.isOpenSource && (
                 <span className="text-xs bg-primary-soft text-primary font-bold px-2.5 py-1 rounded-full">متن‌باز</span>
               )}

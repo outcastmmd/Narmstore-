@@ -15,6 +15,10 @@ const PLATFORMS: { slug: Platform; label: string; Icon: LucideIcon }[] = [
 function PlatformNavInner() {
   const sp = useSearchParams();
   const pathname = usePathname();
+
+  // روی صفحه‌ی جزئیات برنامه، ناو سراسری مخفی می‌شه تا با پلتفرم واقعی
+  // اون برنامه اشتباه گرفته نشه (بج PlatformBadge پلتفرم واقعی رو نشون می‌ده)
+  if (pathname === "/app" || pathname.startsWith("/app/")) return null;
   const urlPlatform = sp.get("platform") as Platform | null;
   const [stored, setStored] = useState<Platform | null>(null);
 
