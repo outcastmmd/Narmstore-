@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { db } from "@/lib/db";
 import * as s from "@/db/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
+import { getSessionUser } from "@/lib/auth";
 
 // GET /api/download/[id] — ثبت رویداد دانلود و ریدایرکت به فایل واقعی
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
@@ -37,11 +38,13 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       )).limit(1);
 
     if (!dup.length) {
+      const sessionUser = await getSessionUser().catch(() => null);
       await db.insert(s.downloadEvents).values({
         appId: ver.appId,
         versionId: ver.id,
         ipHash,
         userAgent: req.headers.get("user-agent")?.slice(0, 500),
+        userId: sessionUser?.id ?? null,
       });
     }
   } catch (e) {

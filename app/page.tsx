@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import AppCard from "@/components/AppCard";
 import Section from "@/components/Section";
 import CategoryPills from "@/components/CategoryPills";
+import CategoryCards from "@/components/CategoryCards";
 import {
   getRootCategories, getFeaturedApps, getPopularApps,
   getLatestApps, getEditorChoice, getOpenSourceApps,
@@ -154,6 +155,11 @@ export default async function Home({ searchParams }: Props) {
       <Suspense>
         <CategoryPills cats={cats} />
       </Suspense>
+      {!cat && (
+        <Suspense>
+          <CategoryCards cats={cats} />
+        </Suspense>
+      )}
       {cat ? <CategorySlide slug={cat} /> : <HomeSlide platform={plat} />}
     </div>
   );
