@@ -138,6 +138,28 @@ export async function getOpenSourceApps(limit = 8) {
     .orderBy(desc(dlCount)).limit(limit);
 }
 
+export async function getRelatedApps(appId: string, limit = 8) {
+  await dyn();
+  // برنامه‌های هم‌دسته (به‌جز خودش)، اول آن‌هایی که بیشترین دسته‌ی مشترک را دارند
+  const myCats = await db.select({ categoryId: s.appCategories.categoryId })
+    .from(s.appCategories).where(eq(s.appCategories.appId, appId));
+  const catIds = myCats.map((c) => c.categoryId);
+  if (!catIds.length) return [];
+  const rows = await db.select({ ...cardCols, categoryId: s.appCategories.categoryId })
+    .from(s.appCategories)
+    .innerJoin(s.apps, eq(s.apps.id, s.appCategories.appId))
+    .where(and(inArray(s.appCategories.categoryId, catIds), eq(s.apps.isPublished, true), sql`${s.apps.id} != ${appId}`))
+    .limit(limit * 4);
+  // امتیازدهی: تعداد دسته‌ی مشترک بیشتر = اول‌تر
+  const score = new Map<string, { app: any; n: number }>();
+  for (const r of rows) {
+    const e = score.get(r.id);
+    if (e) e.n++;
+    else score.set(r.id, { app: r, n: 1 });
+  }
+  return [...score.values()].sort((a, b) => b.n - a.n).slice(0, limit).map((e) => e.app);
+}
+
 export async function getAppBySlug(slug: string) {
   await dyn();
   const rows = await db.select({
@@ -176,19 +198,10 @@ export async function getAppBySlug(slug: string) {
     .where(eq(s.downloadEvents.appId, app.id));
   const downloadCount = Number(dl[0]?.c ?? 0);
 
-  // اپ‌های مشابه: هم‌دسته‌ای‌ها
-  const catIds = (await db.select({ id: s.appCategories.categoryId })
-    .from(s.appCategories).where(eq(s.appCategories.appId, app.id))).map((r) => r.id);
-  let similar: typeof cardCols extends never ? never : Awaited<ReturnType<typeof getPopularApps>> = [];
-  if (catIds.length) {
-    similar = await db.select(cardCols).from(s.apps)
-      .innerJoin(s.appCategories, eq(s.appCategories.appId, s.apps.id))
-      .where(and(pub, inArray(s.appCategories.categoryId, catIds), sql`${s.apps.id} != ${app.id}`))
-      .groupBy(s.apps.id)
-      .orderBy(desc(dlCount)).limit(6) as typeof similar;
-  }
+  // شاید بپسندی: هم‌دسته‌ای‌ها با امتیاز تعداد دسته‌ی مشترک
+  const related = await getRelatedApps(app.id, 6);
 
-  return { ...app, versions, categories: cats, screenshots: shots, current, permissions: perms, downloadCount, similar };
+  return { ...app, versions, categories: cats, screenshots: shots, current, permissions: perms, downloadCount, similar: related };
 }
 
 export type SearchFilters = {

@@ -7,6 +7,7 @@ import { toFaDigits, formatBytes, formatDate, timeAgo } from "@/lib/fa";
 import AppCard from "@/components/AppCard";
 import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
+import CompareButton from "@/components/CompareButton";
 import Reviews from "@/components/Reviews";
 import Gallery from "@/components/Gallery";
 import { px } from "@/lib/img";
@@ -66,7 +67,10 @@ export default async function AppPage({ params }: Props) {
               {app.isOpenSource && (
                 <span className="text-xs bg-primary-soft text-primary font-bold px-2.5 py-1 rounded-full">متن‌باز</span>
               )}
-              <span className="ms-auto"><FavoriteButton appId={app.id} appName={app.slug} /></span>
+              <span className="ms-auto flex items-center gap-2">
+                <CompareButton slug={app.slug} nameFa={app.nameFa} />
+                <FavoriteButton appId={app.id} appName={app.slug} />
+              </span>
             </div>
             <p className="text-muted text-sm mb-2" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
@@ -203,10 +207,10 @@ export default async function AppPage({ params }: Props) {
 
       <Reviews appId={app.id} />
 
-      {/* مشابه‌ها */}
+      {/* شاید بپسندی */}
       {app.similar.length > 0 && (
-        <section className="mt-10" aria-label="نرم‌افزارهای مشابه">
-          <h2 className="text-xl font-extrabold mb-4">نرم‌افزارهای مشابه</h2>
+        <section className="mt-10" aria-label="شاید بپسندی">
+          <h2 className="text-xl font-extrabold mb-4">💡 شاید بپسندی</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {app.similar.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
           </div>
