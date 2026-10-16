@@ -24,7 +24,7 @@ function appHref(slug: string, platform?: Platform) {
 async function HomeSlide({ platform }: { platform?: Platform }) {
   const [featured, popular, latest, collections, stats] = await Promise.all([
     getFeaturedApps(4, platform), getPopularApps(8, platform),
-    getLatestApps(8, platform), getCollections(platform), getHomeStats(platform),
+    getLatestApps(8, platform), getCollections(platform, 6), getHomeStats(platform),
   ]);
   const hero = featured[0];
 

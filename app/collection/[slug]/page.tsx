@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getCollectionBySlug } from "@/lib/store";
-import AppCard from "@/components/AppCard";
+import AppTile from "@/components/AppTile";
 import CollectionPlatformSync from "@/components/CollectionPlatformSync";
 import { toFaDigits } from "@/lib/fa";
 import DbIcon from "@/components/DbIcon";
@@ -48,8 +48,8 @@ export default async function CollectionPage({ params }: Props) {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {col.apps.map((a: any, i: number) => <AppCard key={a.id} app={a} index={i} />)}
+      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+        {col.apps.map((a: any, i: number) => <AppTile key={a.id} app={a} index={i} />)}
       </div>
     </div>
   );

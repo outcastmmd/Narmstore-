@@ -83,21 +83,21 @@ async function getCategoryTree() {
   return { rootOf, descendantsOf };
 }
 
-export async function getCollections(platform?: Platform) {
+export async function getCollections(platform?: Platform, limit?: number) {
   await dyn();
   const cols = await db.select().from(s.collections)
     .where(eq(s.collections.isActive, true))
     .orderBy(s.collections.sortOrder);
   const out = [];
   for (const c of cols) {
-    const apps = await db.select(cardCols).from(s.collectionApps)
+    // شمارش واقعی برنامه‌ها (بدون سقف) — فیلتر پلتفرم‌محور
+    const [{ n }] = await db.select({ n: sql<number>`count(*)` }).from(s.collectionApps)
       .innerJoin(s.apps, eq(s.apps.id, s.collectionApps.appId))
-      .where(and(eq(s.collectionApps.collectionId, c.id), eq(s.apps.isPublished, true), plat(platform)))
-      .orderBy(s.collectionApps.sortOrder).limit(8);
+      .where(and(eq(s.collectionApps.collectionId, c.id), eq(s.apps.isPublished, true), plat(platform)));
+    const appCount = Number(n);
     // کالکشن خالی در این پلتفرم نمایش داده نمی‌شود
-    if (apps.length > 0) out.push({ ...c, apps, appCount: apps.length });
-    // صفحه اصلی: حداکثر ۶ کالکشن
-    if (out.length >= 6) break;
+    if (appCount > 0) out.push({ ...c, apps: [], appCount });
+    if (limit && out.length >= limit) break;
   }
   return out;
 }
