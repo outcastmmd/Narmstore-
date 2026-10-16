@@ -1,7 +1,8 @@
 "use client";
 
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useTransition, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import Link from "next/link";
 
 type Platform = "android" | "windows" | "linux";
 const PLATFORMS: { slug: Platform; label: string; icon: string }[] = [
@@ -12,20 +13,15 @@ const PLATFORMS: { slug: Platform; label: string; icon: string }[] = [
 
 function PlatformNavInner() {
   const sp = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [pending, startTransition] = useTransition();
   const current = (sp.get("platform") as Platform) || "android";
 
-  const go = (p: Platform) => {
+  const href = (p: Platform) => {
     const params = new URLSearchParams(sp.toString());
     if (p === "android") params.delete("platform");
     else params.set("platform", p);
     params.delete("cat");
-    const target = pathname === "/" ? `/?${params.toString()}` : `/?${params.toString()}`;
-    const nav = () => startTransition(() => router.push(target, { scroll: false }));
-    if (document.startViewTransition) document.startViewTransition(nav);
-    else nav();
+    const qs = params.toString();
+    return qs ? `/?${qs}` : "/";
   };
 
   return (
@@ -37,20 +33,20 @@ function PlatformNavInner() {
         {PLATFORMS.map((p) => {
           const active = current === p.slug;
           return (
-            <button
+            <Link
               key={p.slug}
-              onClick={() => go(p.slug)}
+              href={href(p.slug)}
               aria-pressed={active}
               title={p.label}
               className={`pressable flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-extrabold transition-all ${
                 active
                   ? "bg-primary text-primary-fg shadow-md"
                   : "text-muted hover:text-foreground hover:bg-surface-2"
-              } ${pending ? "opacity-60" : ""}`}
+              }`}
             >
               <span className="text-xl leading-none" aria-hidden="true">{p.icon}</span>
               <span className={active ? "" : "hidden sm:inline"}>{p.label}</span>
-            </button>
+            </Link>
           );
         })}
       </div>
