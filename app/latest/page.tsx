@@ -1,9 +1,14 @@
 import { getLatestApps } from "@/lib/store";
 import AppGrid from "@/components/AppGrid";
+import type { Platform } from "@/lib/store";
 
 export const metadata = { title: "تازه‌ترین نسخه‌ها", description: "آخرین نسخه‌های منتشرشده‌ی نرم‌افزارها" };
 
-export default async function LatestPage() {
-  const apps = await getLatestApps(48);
+type Props = { searchParams: Promise<{ platform?: string }> };
+
+export default async function LatestPage({ searchParams }: Props) {
+  const { platform } = await searchParams;
+  const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
+  const apps = await getLatestApps(48, plat);
   return <AppGrid title="✨ تازه‌ترین نسخه‌ها" subtitle="برنامه‌هایی که اخیراً به‌روزرسانی شده‌اند" apps={apps} />;
 }

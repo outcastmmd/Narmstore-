@@ -19,7 +19,7 @@ type Props = { searchParams: Promise<{ cat?: string; platform?: string }> };
 async function HomeSlide({ platform }: { platform?: Platform }) {
   const [featured, popular, latest, editors, oss, collections] = await Promise.all([
     getFeaturedApps(4, platform), getPopularApps(8, platform),
-    getLatestApps(8, platform), getEditorChoice(8, platform), getOpenSourceApps(8, platform), getCollections(),
+    getLatestApps(8, platform), getEditorChoice(8, platform), getOpenSourceApps(8, platform), getCollections(platform),
   ]);
   const hero = featured[0];
 
@@ -147,8 +147,8 @@ async function CategorySlide({ slug }: { slug: string }) {
 
 export default async function Home({ searchParams }: Props) {
   const { cat, platform } = await searchParams;
-  const cats = await getRootCategories();
   const plat = (platform === "windows" || platform === "linux") ? platform : undefined;
+  const cats = await getRootCategories(plat);
 
   return (
     <div>

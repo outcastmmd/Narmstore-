@@ -1,12 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getCollections } from "@/lib/store";
+import type { Platform } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 
 export const metadata: Metadata = { title: "کالکشن‌های منتخب", description: "لیست‌های دست‌چین برنامه‌ها در نرم‌استور" };
 
-export default async function CollectionsPage() {
-  const collections = await getCollections();
+type Props = { searchParams: Promise<{ platform?: string }> };
+
+export default async function CollectionsPage({ searchParams }: Props) {
+  const { platform } = await searchParams;
+  const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
+  const collections = await getCollections(plat);
 
   return (
     <div className="animate-fade-up">

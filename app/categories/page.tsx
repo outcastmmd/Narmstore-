@@ -1,11 +1,17 @@
 import Link from "next/link";
 import { getAllCategories, getCategoryCounts } from "@/lib/store";
+import type { Platform } from "@/lib/store";
 
 export const metadata = { title: "دسته‌بندی‌ها" };
 
-export default async function CategoriesPage() {
-  const [cats, counts] = await Promise.all([getAllCategories(), getCategoryCounts()]);
-  const roots = cats.filter((c) => !c.parentId);
+type Props = { searchParams: Promise<{ platform?: string }> };
+
+export default async function CategoriesPage({ searchParams }: Props) {
+  const { platform } = await searchParams;
+  const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
+  const [cats, counts] = await Promise.all([getAllCategories(), getCategoryCounts(plat)]);
+  // فقط ریشه‌هایی که در این پلتفرم برنامه دارن
+  const roots = cats.filter((c) => !c.parentId && (counts.get(c.id) ?? 0) > 0);
   const childrenOf = (id: string) => cats.filter((c) => c.parentId === id);
 
   return (

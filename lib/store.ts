@@ -59,7 +59,7 @@ async function getCategoryTree() {
   return { rootOf, descendantsOf };
 }
 
-export async function getCollections() {
+export async function getCollections(platform?: Platform) {
   await dyn();
   const cols = await db.select().from(s.collections)
     .where(eq(s.collections.isActive, true))
@@ -68,9 +68,10 @@ export async function getCollections() {
   for (const c of cols) {
     const apps = await db.select(cardCols).from(s.collectionApps)
       .innerJoin(s.apps, eq(s.apps.id, s.collectionApps.appId))
-      .where(and(eq(s.collectionApps.collectionId, c.id), eq(s.apps.isPublished, true)))
+      .where(and(eq(s.collectionApps.collectionId, c.id), eq(s.apps.isPublished, true), plat(platform)))
       .orderBy(s.collectionApps.sortOrder).limit(8);
-    out.push({ ...c, apps, appCount: apps.length });
+    // کالکشن خالی در این پلتفرم نمایش داده نمی‌شود
+    if (apps.length > 0) out.push({ ...c, apps, appCount: apps.length });
   }
   return out;
 }
@@ -88,7 +89,7 @@ export async function getCollectionBySlug(slug: string) {
   return { ...col, apps };
 }
 
-export async function getRootCategories() {
+export async function getRootCategories(platform?: Platform) {
   await dyn();
   const rows = await db.select({
     id: s.categories.id, slug: s.categories.slug, nameFa: s.categories.nameFa, icon: s.categories.icon,
@@ -96,20 +97,23 @@ export async function getRootCategories() {
     .where(and(eq(s.categories.isActive, true), sql`${s.categories.parentId} is null`))
     .orderBy(s.categories.sortOrder, s.categories.nameFa);
 
-  // شمارش برنامه‌ها شامل زیردسته‌ها
+  // شمارش برنامه‌ها شامل زیردسته‌ها — فیلتر پلتفرم
   const { rootOf } = await getCategoryTree();
   const links = await db.select({
     categoryId: s.appCategories.categoryId, appId: s.appCategories.appId,
   }).from(s.appCategories)
     .innerJoin(s.apps, eq(s.apps.id, s.appCategories.appId))
-    .where(eq(s.apps.isPublished, true));
+    .where(and(eq(s.apps.isPublished, true), plat(platform)));
   const countByRoot = new Map<string, Set<string>>();
   for (const l of links) {
     const root = rootOf(l.categoryId);
     if (!countByRoot.has(root)) countByRoot.set(root, new Set());
     countByRoot.get(root)!.add(l.appId);
   }
-  return rows.map((r) => ({ ...r, appCount: countByRoot.get(r.id)?.size ?? 0 }));
+  // فقط دسته‌هایی که در این پلتفرم برنامه دارن
+  return rows
+    .map((r) => ({ ...r, appCount: countByRoot.get(r.id)?.size ?? 0 }))
+    .filter((r) => r.appCount > 0);
 }
 
 export async function getFeaturedApps(limit = 8, platform?: Platform) {
@@ -317,15 +321,15 @@ export async function getCategoryApps(slug: string, limit = 40, offset = 0, sort
   return { category: cat, items, total: Number(total[0]?.c ?? 0) };
 }
 
-export async function getCategoryCounts() {
+export async function getCategoryCounts(platform?: Platform) {
   await dyn();
-  // تعداد برنامه‌ها برای هر دسته (فقط خودش) و برای ریشه‌ها (شامل زیردسته‌ها)
+  // تعداد برنامه‌ها برای هر دسته (فقط خودش) و برای ریشه‌ها (شامل زیردسته‌ها) — فیلتر پلتفرم
   const { descendantsOf, rootOf } = await getCategoryTree();
   const links = await db.select({
     categoryId: s.appCategories.categoryId, appId: s.appCategories.appId,
   }).from(s.appCategories)
     .innerJoin(s.apps, eq(s.apps.id, s.appCategories.appId))
-    .where(eq(s.apps.isPublished, true));
+    .where(and(eq(s.apps.isPublished, true), plat(platform)));
   const direct = new Map<string, Set<string>>();
   const byRoot = new Map<string, Set<string>>();
   for (const l of links) {
