@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { toFaDigits } from "@/lib/fa";
+import { px } from "@/lib/img";
 
 export type CardApp = {
   id: string;
@@ -30,7 +31,7 @@ export default function AppCard({ app }: { app: CardApp }) {
     >
       {app.iconUrl ? (
         <Image
-          src={app.iconUrl}
+          src={px(app.iconUrl) || app.iconUrl}
           alt={`آیکون ${app.nameFa}`}
           width={56}
           height={56}

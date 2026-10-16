@@ -7,6 +7,7 @@ import {
   getLatestApps, getEditorChoice, getOpenSourceApps,
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
+import { px } from "@/lib/img";
 
 
 export default async function Home() {
@@ -23,7 +24,7 @@ export default async function Home() {
         <section className="mb-10 rounded-3xl overflow-hidden border border-border bg-surface" aria-label="نرم‌افزار منتخب">
           <div className="p-6 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center gap-6 bg-gradient-to-l from-primary-soft/60 to-transparent">
             {hero.iconUrl && (
-              <Image src={hero.iconUrl} alt={`آیکون ${hero.nameFa}`} width={96} height={96}
+              <Image src={px(hero.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${hero.nameFa}`} width={96} height={96}
                 className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-surface-2 object-cover shadow-lg" />
             )}
             <div className="flex-1">
