@@ -1,5 +1,5 @@
 // تبدیل آدرس عکس خارجی به پروکسی داخلی — چون f-droid.org و google.com ممکن است برای کاربر قابل دسترس نباشند
-const ALLOWED_PREFIXES = ["https://f-droid.org/", "https://www.google.com/s2/favicons"];
+const ALLOWED_PREFIXES = ["https://f-droid.org/", "https://www.google.com/s2/favicons", "https://dl.flathub.org/"];
 
 function isAllowed(url: string): boolean {
   return ALLOWED_PREFIXES.some((p) => url.startsWith(p));
