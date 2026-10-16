@@ -52,7 +52,7 @@ function InfoRow({ k, v, ltr = false }: { k: string; v: React.ReactNode; ltr?: b
   return (
     <div className="flex justify-between gap-4 py-2.5 border-b border-border last:border-0 text-sm">
       <dt className="text-muted shrink-0">{k}</dt>
-      <dd className="font-medium text-left break-all" dir={ltr ? "ltr" : "rtl"}>{v}</dd>
+      <dd className="font-medium text-left break-all min-w-0" dir={ltr ? "ltr" : "rtl"}>{v}</dd>
     </div>
   );
 }
