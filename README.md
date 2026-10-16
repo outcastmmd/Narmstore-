@@ -12,15 +12,14 @@
 # نـرم‌استـور
 
 **فروشگاه فارسی نرم‌افزار — اندروید، ویندوز، لینوکس**
-**A Persian software store for Android, Windows & Linux**
 
 > *"نرم‌افزار خوب، به زبان خودت."*
-> *"Good software, in your own language."*
+
+یه پروژه‌ی شخصیه که از یه ایده‌ی ساده شروع شد: چرا یه فروشگاه نرم‌افزار فارسی نداشته باشیم که واقعاً به فارسی حرف بزنه؟
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![PWA](https://img.shields.io/badge/PWA-ready-0d7a5f?style=for-the-badge)](https://web.dev/progressive-web-apps/)
 
 **🌐 [narmstore.onrender.com](https://narmstore.onrender.com)**
 
