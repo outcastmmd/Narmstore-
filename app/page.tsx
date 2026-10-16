@@ -1,24 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Suspense } from "react";
 import AppCard from "@/components/AppCard";
 import Section from "@/components/Section";
+import CategoryPills from "@/components/CategoryPills";
 import {
   getRootCategories, getFeaturedApps, getPopularApps,
   getLatestApps, getEditorChoice, getOpenSourceApps,
+  getCategoryBySlug, getChildPreviews,
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
 
 
-export default async function Home() {
-  const [cats, featured, popular, latest, editors, oss] = await Promise.all([
-    getRootCategories(), getFeaturedApps(4), getPopularApps(8),
+type Props = { searchParams: Promise<{ cat?: string }> };
+
+async function HomeSlide() {
+  const [featured, popular, latest, editors, oss] = await Promise.all([
+    getFeaturedApps(4), getPopularApps(8),
     getLatestApps(8), getEditorChoice(8), getOpenSourceApps(8),
   ]);
   const hero = featured[0];
 
   return (
-    <div>
+    <>
       {/* بنر منتخب */}
       {hero && (
         <section className="mb-10 rounded-3xl overflow-hidden border border-border bg-surface" aria-label="نرم‌افزار منتخب">
@@ -39,20 +44,6 @@ export default async function Home() {
           </div>
         </section>
       )}
-
-      {/* دسته‌بندی‌ها */}
-      <Section title="دسته‌بندی‌ها" href="/categories">
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-9 gap-3">
-          {cats.map((c) => (
-            <Link key={c.id} href={`/category/${c.slug}`}
-              className="bg-surface border border-border rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-primary/50 hover:shadow-md transition group">
-              <span className="text-3xl group-hover:scale-110 transition-transform" aria-hidden="true">{c.icon || "📦"}</span>
-              <span className="text-xs font-bold text-center leading-5">{c.nameFa}</span>
-              <span className="text-[11px] text-muted">{toFaDigits(Number(c.appCount))} برنامه</span>
-            </Link>
-          ))}
-        </div>
-      </Section>
 
       {/* محبوب‌ترین‌ها */}
       <Section title="محبوب‌ترین نرم‌افزارها" href="/popular" empty="هنوز آماری ثبت نشده است.">
@@ -83,6 +74,68 @@ export default async function Home() {
           {oss.map((a) => <AppCard key={a.id} app={a} />)}
         </div>
       </Section>
+    </>
+  );
+}
+
+async function CategorySlide({ slug }: { slug: string }) {
+  const cat = await getCategoryBySlug(slug);
+  if (!cat) return <p className="text-muted text-center py-10">دسته‌بندی یافت نشد.</p>;
+  const previews = await getChildPreviews(cat.id);
+  const total = previews.reduce((s, p) => s + p.total, 0);
+
+  return (
+    <div className="animate-fade-up" key={slug}>
+      <div className="flex items-center gap-4 mb-8">
+        <span className="text-5xl" aria-hidden="true">{cat.icon || "📦"}</span>
+        <div>
+          <h1 className="text-2xl font-extrabold">{cat.nameFa}</h1>
+          <p className="text-sm text-muted">{toFaDigits(total)} برنامه</p>
+        </div>
+      </div>
+      {previews.length ? (
+        <div className="space-y-10">
+          {previews.map(({ category: ch, apps, total: t }) => (
+            <section key={ch.id} aria-label={ch.nameFa}>
+              <div className="flex items-center justify-between mb-4">
+                <Link href={`/category/${ch.slug}`} className="flex items-center gap-2 group">
+                  <span className="text-2xl" aria-hidden="true">{ch.icon || "📦"}</span>
+                  <h2 className="text-lg font-extrabold group-hover:text-primary transition">{ch.nameFa}</h2>
+                  <span className="text-xs text-muted">({toFaDigits(t)})</span>
+                </Link>
+                {t > apps.length && (
+                  <Link href={`/category/${ch.slug}`} className="text-sm text-primary font-bold hover:underline shrink-0">
+                    مشاهده همه ←
+                  </Link>
+                )}
+              </div>
+              <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x">
+                {apps.map((a: any) => (
+                  <div key={a.id} className="w-64 sm:w-72 shrink-0 snap-start">
+                    <AppCard app={a} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <p className="text-muted text-center py-10">به‌زودی برنامه‌های جدید اضافه می‌شود.</p>
+      )}
+    </div>
+  );
+}
+
+export default async function Home({ searchParams }: Props) {
+  const { cat } = await searchParams;
+  const cats = await getRootCategories();
+
+  return (
+    <div>
+      <Suspense>
+        <CategoryPills cats={cats} />
+      </Suspense>
+      {cat ? <CategorySlide slug={cat} /> : <HomeSlide />}
     </div>
   );
 }
