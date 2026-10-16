@@ -61,6 +61,26 @@
   --peach-cta-fg: #ffe9c4;
 }
 
+/* امولد — مشکی خالص با نئون فیروزه‌ای و سرخابی */
+[data-theme="amoled"] {
+  --bg: #000000;
+  --surface: #0b0b10;
+  --surface-2: #14141c;
+  --fg: #f2f5ff;
+  --muted: #8e93a8;
+  --border: rgba(255, 255, 255, 0.09);
+  --primary: #2dd4bf;
+  --primary-soft: rgba(45, 212, 191, 0.14);
+  --primary-fg: #002e28;
+  --accent: #e879f9;
+  --danger: #fb7185;
+  --peach-1: #0e2a26;
+  --peach-2: #155e54;
+  --peach-ink: #a7f3d0;
+  --peach-cta: #2dd4bf;
+  --peach-cta-fg: #002e28;
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -136,6 +156,8 @@ body {
 [data-theme="light"] .bg-glows { display: none; }
 [data-theme="warm"] .bg-glows .g1 { background: #8a5a2b; opacity: 0.16; }
 [data-theme="warm"] .bg-glows .g2 { background: #e8b04b; opacity: 0.12; }
+[data-theme="amoled"] .bg-glows .g1 { background: #0d9488; opacity: 0.22; }
+[data-theme="amoled"] .bg-glows .g2 { background: #a21caf; opacity: 0.18; }
 
 /* بوردر گرادیانی ظریف — فقط برای تأکید، نه همه‌جا */
 .grad-border { position: relative; }
@@ -152,11 +174,15 @@ body {
 [data-theme="warm"] .grad-border::before {
   background: linear-gradient(140deg, rgba(232,176,75,.4), transparent 45%, transparent 55%, rgba(217,142,95,.3));
 }
+[data-theme="amoled"] .grad-border::before {
+  background: linear-gradient(140deg, rgba(45,212,191,.45), transparent 45%, transparent 55%, rgba(232,121,249,.35));
+}
 
 /* درخشش متن هیرو — ملایم */
 .hero-glow { text-shadow: 0 0 28px rgba(176,106,46,.3); }
 [data-theme="dark"] .hero-glow { text-shadow: 0 0 28px rgba(245,201,155,.35); }
 [data-theme="warm"] .hero-glow { text-shadow: 0 0 28px rgba(232,176,75,.35); }
+[data-theme="amoled"] .hero-glow { text-shadow: 0 0 32px rgba(45,212,191,.45); }
 
 /* کارت هلویی هیرو — امضای طراحی بنفش-هلویی */
 .hero-peach {
@@ -190,7 +216,7 @@ body {
   font-size: 1.65rem; line-height: 1; color: var(--muted); font-weight: 700;
   min-width: 2rem; text-align: center; flex: none;
 }
-[data-theme="dark"] .rank-num, [data-theme="warm"] .rank-num { color: var(--primary); opacity: 0.85; }
+[data-theme="dark"] .rank-num, [data-theme="warm"] .rank-num, [data-theme="amoled"] .rank-num { color: var(--primary); opacity: 0.85; }
 
 /* مخفی کردن اسکرول‌بار افقی اسلایدرها */
 .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }

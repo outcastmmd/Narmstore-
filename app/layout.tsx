@@ -37,7 +37,7 @@ export const viewport: Viewport = {
 export const instant = false;
 
 // تم پیش‌فرض: تیره‌ی بنفش-هلویی
-const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('narm-theme');if(t!=='light'&&t!=='dark'&&t!=='warm'){t='dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('narm-theme');if(t!=='light'&&t!=='dark'&&t!=='warm'&&t!=='amoled'){t='dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

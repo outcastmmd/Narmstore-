@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Moon, Sun, Flame, type LucideIcon } from "lucide-react";
+import { Moon, Sun, Flame, Zap, type LucideIcon } from "lucide-react";
 
-type Theme = "light" | "dark" | "warm";
-const ORDER: Theme[] = ["light", "dark", "warm"];
+type Theme = "light" | "dark" | "warm" | "amoled";
+const ORDER: Theme[] = ["light", "dark", "warm", "amoled"];
 // آیکونِ تمِ بعدی (چیزی که با کلیک بهش می‌ری)
-const NEXT_ICON: Record<Theme, LucideIcon> = { light: Moon, dark: Flame, warm: Sun };
-const NEXT_LABEL: Record<Theme, string> = { light: "حالت تاریک", dark: "حالت گرم", warm: "حالت روشن" };
+const NEXT_ICON: Record<Theme, LucideIcon> = { light: Moon, dark: Flame, warm: Zap, amoled: Sun };
+const NEXT_LABEL: Record<Theme, string> = { light: "حالت تاریک", dark: "حالت گرم", warm: "حالت امولد", amoled: "حالت روشن" };
 
 function applyTheme(t: Theme) {
   document.documentElement.setAttribute("data-theme", t);
@@ -15,7 +15,7 @@ function applyTheme(t: Theme) {
 
 function readTheme(): Theme {
   const t = document.documentElement.getAttribute("data-theme");
-  return t === "warm" ? "warm" : t === "light" ? "light" : "dark";
+  return t === "amoled" ? "amoled" : t === "warm" ? "warm" : t === "light" ? "light" : "dark";
 }
 
 export default function ThemeToggle() {
