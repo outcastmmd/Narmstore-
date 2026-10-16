@@ -21,19 +21,23 @@ export type CardApp = {
 function Initial({ name }: { name: string }) {
   const ch = (name || "?").trim().charAt(0);
   return (
-    <span className="w-14 h-14 rounded-2xl bg-primary-soft text-primary flex items-center justify-center text-2xl font-bold shrink-0" aria-hidden="true">
+    <span
+      className="w-14 h-14 rounded-2xl bg-primary-soft text-primary flex items-center justify-center text-2xl font-bold shrink-0"
+      aria-hidden="true"
+    >
       {ch}
     </span>
   );
 }
 
-// کارت برنامه — ارتفاع یکسان: آیکون + نام + استار/دانلود، بدون توضیحات
+// کارت برنامه — ساده و ثابت: آیکون + نام + ردیف استار/دانلود
+// محتوا وسط‌چین عمودی است؛ ردیف آمار همیشه دقیقاً زیر نام می‌ماند (بدون mt-auto)
 export default function AppCard({ app, index = 0 }: { app: CardApp; index?: number }) {
   return (
     <Link
       href={app.platform && app.platform !== "android" ? `/app/${app.slug}?platform=${app.platform}` : `/app/${app.slug}`}
       style={{ animationDelay: `${Math.min(index, 12) * 35}ms` }}
-      className="animate-card-in card-hover group bg-surface border border-border rounded-2xl p-4 flex gap-3 h-full"
+      className="animate-card-in card-hover group bg-surface border border-border rounded-2xl p-4 flex items-center gap-3"
     >
       {app.iconUrl ? (
         <PxImg
@@ -46,14 +50,14 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
       ) : (
         <Initial name={app.nameFa} />
       )}
-      <div className="min-w-0 flex-1 flex flex-col">
+      <div className="min-w-0 flex-1">
         <h3 className="font-bold truncate leading-6 group-hover:text-primary transition-colors">{app.nameFa}</h3>
-        <div className="flex items-center gap-3 mt-auto pt-2 text-xs text-muted">
-          <span className="inline-flex items-center gap-1">
+        <div className="flex items-center gap-3 mt-1.5 text-xs text-muted">
+          <span className="inline-flex items-center gap-1 shrink-0">
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
             {toFaDigits(app.githubStars ?? 0)}
           </span>
-          <span className="inline-flex items-center gap-1">
+          <span className="inline-flex items-center gap-1 shrink-0">
             <Download className="w-3.5 h-3.5" aria-hidden="true" />
             {toFaDigits(app.downloadCount ?? 0)}
           </span>
