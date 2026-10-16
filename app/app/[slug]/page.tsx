@@ -13,7 +13,6 @@ import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import CompareButton from "@/components/CompareButton";
-import CopyHashButton from "@/components/CopyHashButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
@@ -296,14 +295,6 @@ export default async function AppPage({ params }: Props) {
               <InfoRow k="نام بسته" v={app.packageName} ltr />
               <InfoRow k="مجوز" v={app.license || "نامشخص"} ltr />
               <InfoRow k="توسعه‌دهنده" v={app.developerName || "نامشخص"} />
-              {v?.sha256 && (
-                <InfoRow k="SHA-256" v={
-                  <span className="inline-flex items-center gap-2">
-                    <span className="text-xs font-mono break-all" dir="ltr">{v.sha256}</span>
-                    <CopyHashButton hash={v.sha256} />
-                  </span>
-                } />
-              )}
               <InfoRow k="منبع" v={app.sourceUrl ? (
                 <a href={app.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline" dir="ltr">
                   {app.sourceType === "fdroid" ? "F-Droid" : app.sourceUrl}
