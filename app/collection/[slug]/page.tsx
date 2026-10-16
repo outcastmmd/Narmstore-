@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getCollectionBySlug } from "@/lib/store";
 import AppCard from "@/components/AppCard";
+import CollectionPlatformSync from "@/components/CollectionPlatformSync";
 import { toFaDigits } from "@/lib/fa";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -18,9 +19,13 @@ export default async function CollectionPage({ params }: Props) {
   const { slug } = await params;
   const col = await getCollectionBySlug(slug);
   if (!col) notFound();
+  // تشخیص پلتفرم از روی برنامه‌ها (کالکشن‌های ویندوز/لینوکس)
+  const plat = col.apps.length > 0 ? (col.apps[0] as { platform?: string }).platform : undefined;
+  const platform = plat === "windows" || plat === "linux" ? plat : "android";
 
   return (
     <div className="animate-fade-up">
+      <CollectionPlatformSync platform={platform} />
       <nav className="text-sm text-muted mb-4" aria-label="مسیر">
         <Link href="/" className="hover:text-primary">خانه</Link>
         <span className="mx-2">/</span>

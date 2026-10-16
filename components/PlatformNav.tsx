@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -13,13 +13,20 @@ const PLATFORMS: { slug: Platform; label: string; icon: string }[] = [
 
 function PlatformNavInner() {
   const sp = useSearchParams();
+  const pathname = usePathname();
   const urlPlatform = sp.get("platform") as Platform | null;
-  // پلتفرم از URL، وگرنه از localStorage (برای صفحه‌های برنامه و کالکشن)
   const [stored, setStored] = useState<Platform | null>(null);
+
+  // خواندن پلتفرم از localStorage در هر تغییر مسیر
   useEffect(() => {
-    const s = localStorage.getItem("narm-platform") as Platform | null;
-    if (s === "windows" || s === "linux" || s === "android") setStored(s);
-  }, []);
+    try {
+      const s = localStorage.getItem("narm-platform") as Platform | null;
+      setStored(s === "windows" || s === "linux" ? s : null);
+    } catch {
+      setStored(null);
+    }
+  }, [pathname, urlPlatform]);
+
   const current = urlPlatform || stored || "android";
 
   const savePlatform = (p: Platform) => {
