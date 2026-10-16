@@ -1,24 +1,28 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Moon, Sun, Contrast, type LucideIcon } from "lucide-react";
+import { Moon, Sun, Zap, type LucideIcon } from "lucide-react";
 
-type Theme = "light" | "dark" | "amoled";
-const ORDER: Theme[] = ["light", "dark", "amoled"];
+type Theme = "light" | "dark" | "neon";
+const ORDER: Theme[] = ["light", "dark", "neon"];
 // آیکونِ تمِ بعدی (چیزی که با کلیک بهش می‌ری)
-const NEXT_ICON: Record<Theme, LucideIcon> = { light: Moon, dark: Contrast, amoled: Sun };
-const NEXT_LABEL: Record<Theme, string> = { light: "حالت تاریک", dark: "حالت امولد (مشکی خالص)", amoled: "حالت روشن" };
+const NEXT_ICON: Record<Theme, LucideIcon> = { light: Moon, dark: Zap, neon: Sun };
+const NEXT_LABEL: Record<Theme, string> = { light: "حالت تاریک", dark: "حالت نئونی", neon: "حالت روشن" };
 
 function applyTheme(t: Theme) {
   document.documentElement.setAttribute("data-theme", t);
   try { localStorage.setItem("narm-theme", t); } catch {}
 }
 
+function readTheme(): Theme {
+  const t = document.documentElement.getAttribute("data-theme");
+  return t === "neon" ? "neon" : t === "dark" ? "dark" : "light";
+}
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
-    const t = document.documentElement.getAttribute("data-theme");
-    const current: Theme = t === "amoled" ? "amoled" : t === "dark" ? "dark" : "light";
+    const current = readTheme();
     // همگام‌سازی با چیزی که اسکریپت layout اعمال کرده
     if (document.documentElement.getAttribute("data-theme") !== current) {
       applyTheme(current);
@@ -28,8 +32,7 @@ export default function ThemeToggle() {
 
   const toggle = () => {
     // خواندن وضعیت واقعی از DOM (نه فقط state) تا همیشه درست بچرخه
-    const cur = document.documentElement.getAttribute("data-theme");
-    const current: Theme = cur === "amoled" ? "amoled" : cur === "dark" ? "dark" : "light";
+    const current = readTheme();
     const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
     applyTheme(next);
     setTheme(next);

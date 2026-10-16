@@ -15,33 +15,34 @@
   --radius: 0.75rem;
 }
 
+/* تیره — جسور ولی سنجیده: بنفش/صورتی با خویشتن‌داری */
 [data-theme="dark"] {
-  --bg: #0e1318;
-  --surface: #161d24;
-  --surface-2: #1e2731;
-  --fg: #e9edf1;
-  --muted: #93a1b3;
-  --border: #26313c;
-  --primary: #2dd4a7;
-  --primary-soft: #123b31;
-  --primary-fg: #06281f;
-  --accent: #f59e0b;
-  --danger: #f97316;
+  --bg: #16131d;
+  --surface: #1e1928;
+  --surface-2: #272134;
+  --fg: #f2eef9;
+  --muted: #9d92b8;
+  --border: rgba(255, 255, 255, 0.07);
+  --primary: #e879a8;
+  --primary-soft: rgba(232, 121, 168, 0.12);
+  --primary-fg: #1d0a14;
+  --accent: #a78bfa;
+  --danger: #fb7185;
 }
 
-/* تم امولد — مشکی خالص برای صرفه‌جویی باتری */
-[data-theme="amoled"] {
+/* نئونی — مشکی خالص با لهجه‌ی سایان */
+[data-theme="neon"] {
   --bg: #000000;
-  --surface: #0a0a0a;
-  --surface-2: #141414;
-  --fg: #f0f2f5;
-  --muted: #9aa5b1;
-  --border: #1f1f1f;
-  --primary: #2dd4a7;
-  --primary-soft: #0d2b23;
-  --primary-fg: #06281f;
-  --accent: #f59e0b;
-  --danger: #f97316;
+  --surface: #0b0d10;
+  --surface-2: #13171c;
+  --fg: #e6f4f1;
+  --muted: #7d8a96;
+  --border: rgba(34, 211, 238, 0.14);
+  --primary: #22d3ee;
+  --primary-soft: rgba(34, 211, 238, 0.10);
+  --primary-fg: #00181d;
+  --accent: #a3e635;
+  --danger: #ff4d6d;
 }
 
 @theme inline {
@@ -109,6 +110,43 @@ body {
   animation-duration: 0.25s;
   animation-timing-function: ease;
 }
+
+/* هاله‌های پس‌زمینه — فقط در تم تیره، بسیار ظریف */
+.bg-glows { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.bg-glows span { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.16; }
+.bg-glows .g1 { width: 480px; height: 480px; background: #6d28d9; top: -160px; right: -140px; }
+.bg-glows .g2 { width: 380px; height: 380px; background: #9d174d; bottom: 8%; left: -160px; opacity: 0.12; }
+.bg-glows .g3 { display: none; }
+[data-theme="light"] .bg-glows { display: none; }
+[data-theme="neon"] .bg-glows .g1 { background: #0e7490; opacity: 0.14; }
+[data-theme="neon"] .bg-glows .g2 { background: #155e75; opacity: 0.10; }
+
+/* بوردر گرادیانی ظریف — فقط برای تأکید، نه همه‌جا */
+.grad-border { position: relative; }
+.grad-border::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+  background: linear-gradient(140deg, rgba(139,92,246,.35), transparent 45%, transparent 55%, rgba(232,121,168,.25));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none;
+}
+[data-theme="neon"] .grad-border::before {
+  background: linear-gradient(140deg, rgba(34,211,238,.4), transparent 45%, transparent 55%, rgba(163,230,53,.25));
+}
+[data-theme="light"] .grad-border::before { display: none; }
+
+/* درخشش متن هیرو — ملایم */
+.hero-glow { text-shadow: 0 0 28px rgba(232,121,168,.35); }
+[data-theme="neon"] .hero-glow { text-shadow: 0 0 28px rgba(34,211,238,.4); }
+[data-theme="light"] .hero-glow { text-shadow: none; }
+
+/* اعداد رتبه‌بندی — تایپوگرافی تمیز */
+.rank-num {
+  font-family: var(--font-lalezar), var(--font-vazir), system-ui, sans-serif;
+  font-size: 1.65rem; line-height: 1; color: var(--muted); font-weight: 400;
+  min-width: 2rem; text-align: center; flex: none;
+}
+[data-theme="dark"] .rank-num, [data-theme="neon"] .rank-num { color: var(--primary); opacity: 0.85; }
 
 /* مخفی کردن اسکرول‌بار افقی اسلایدرها */
 .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }

@@ -31,31 +31,33 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
 
   return (
     <>
-      {/* برنامه‌ی شاخص — مثل رفرنس: کارت بزرگ با رنگ تأکید */}
+      {/* برنامه‌ی شاخص — تیره و سنجیده: پس‌زمینه‌ی عمیق، تک‌لهجه‌ی صورتی */}
       {hero && (
         <Link href={appHref(hero.slug, platform)} aria-label={hero.nameFa}
-          className="block mb-6 rounded-[20px] bg-primary text-primary-fg p-6 sm:p-7">
-          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 items-center">
+          className="block mb-8 rounded-3xl p-7 sm:p-9 relative overflow-hidden bg-surface border border-border">
+          <div aria-hidden="true" className="pointer-events-none absolute rounded-full"
+            style={{ width: 320, height: 320, top: -140, left: -100, background: "radial-gradient(circle,rgba(232,121,168,.14),transparent 70%)" }} />
+          <div className="relative grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-6 gap-y-2 items-center">
             {hero.iconUrl ? (
               <PxImg src={px(hero.iconUrl) || "/icons/icon-192.png"} alt="" width={84} height={84}
-                className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] object-cover sm:row-span-3 bg-primary-fg mb-2 sm:mb-0" />
+                className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl object-cover sm:row-span-3 bg-surface-2 mb-2 sm:mb-0 border border-border" />
             ) : (
-              <span className="w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-[22px] sm:row-span-3 grid place-items-center text-4xl font-bold bg-primary-fg text-primary mb-2 sm:mb-0" dir="ltr">
+              <span className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl sm:row-span-3 grid place-items-center text-4xl font-bold bg-surface-2 text-muted mb-2 sm:mb-0 border border-border" dir="ltr">
                 {hero.nameEn.charAt(0)}
               </span>
             )}
-            <small className="text-[13px] opacity-80">پیشنهاد این هفته</small>
-            <span className="font-head text-4xl leading-tight">{hero.nameFa}</span>
-            <p className="opacity-90 text-[15px] leading-7 line-clamp-2 max-w-[46ch]">{hero.shortDescFa || hero.shortDesc}</p>
-            <span className="justify-self-start mt-2 bg-primary-fg text-primary rounded-full px-6 py-2 font-bold text-sm">
+            <span className="text-[12px] font-bold text-primary tracking-wide">پیشنهاد این هفته</span>
+            <span className="font-head text-4xl sm:text-5xl leading-tight text-fg">{hero.nameFa}</span>
+            <p className="text-muted text-[15px] leading-7 line-clamp-2 max-w-[48ch]">{hero.shortDescFa || hero.shortDesc}</p>
+            <span className="justify-self-start mt-3 bg-primary text-primary-fg rounded-full px-7 py-2.5 font-bold text-sm pressable">
               دریافت
             </span>
           </div>
         </Link>
       )}
 
-      {/* نوار آمار زنده — ظریف، زیر هیرو */}
-      <div className="mb-10 flex items-center justify-center gap-4 sm:gap-6 text-[13px] text-muted" role="status" aria-label="آمار فروشگاه">
+      {/* نوار آمار — تمیز و مینیمال */}
+      <div className="mb-10 flex items-center justify-center gap-5 sm:gap-7 text-[13px] text-muted" role="status" aria-label="آمار فروشگاه">
         <span><b className="text-fg font-bold">{toFaDigits(stats.apps)}</b> برنامه</span>
         <span className="w-px h-4 bg-border" aria-hidden="true" />
         <span><b className="text-fg font-bold">{toFaDigits(stats.downloads)}</b> دانلود</span>
@@ -90,7 +92,7 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
       {/* پرطرفدارها — لیست فشرده */}
       <Section title="پرطرفدارها" href={platform ? `/popular?platform=${platform}` : "/popular"} empty="هنوز آماری ثبت نشده است.">
         <div className="border-t border-border">
-          {popular.map((a) => <PopularRow key={a.id} app={a} platform={platform} />)}
+          {popular.map((a, i) => <PopularRow key={a.id} app={a} platform={platform} index={i} />)}
         </div>
       </Section>
 

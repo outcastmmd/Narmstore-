@@ -40,7 +40,7 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
           alt={`آیکون ${app.nameFa}`}
           width={56}
           height={56}
-          className="w-14 h-14 rounded-2xl object-cover shrink-0 bg-surface-2"
+          className="w-14 h-14 rounded-xl object-cover shrink-0 bg-surface-2 border border-border"
         />
       ) : (
         <Initial name={app.nameFa} />

@@ -34,14 +34,15 @@ export const viewport: Viewport = {
   initialScale: 1,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0e1318" },
+    { media: "(prefers-color-scheme: dark)", color: "#16131d" },
   ],
 };
 
 // فروشگاه دیتامحور است: رندر سمت سرور برای هر درخواست (بدون prerender استاتیک)
 export const instant = false;
 
-const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('narm-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
+// تم پیش‌فرض: تیره‌ی جسورانه
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('narm-theme');if(!t){t='dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -51,8 +52,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className={`${vazir.variable} ${lalezar.variable} min-h-full flex flex-col`}>
         <SWRegister />
+        <div className="bg-glows" aria-hidden="true"><span className="g1" /><span className="g2" /><span className="g3" /></div>
         <Header />
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">{children}</main>
+        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 relative z-[1]">{children}</main>
         <Footer />
         <InstallButton />
       </body>

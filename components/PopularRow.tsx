@@ -11,42 +11,40 @@ export type PopularApp = {
   createdAt?: Date | string | null;
 };
 
-// ردیف فشرده‌ی «پرطرفدارها» — مثل رفرنس: آیکون، نام، توضیح تک‌خطی، بج لایسنس و دکمه‌ی دریافت
-export default function PopularRow({ app, platform }: { app: PopularApp; platform?: string }) {
+// ردیف «پرطرفدارها» — تمیز و تحریریه‌ای: رتبه، آیکون، نام، بج لایسنس
+export default function PopularRow({ app, platform, index = 0 }: { app: PopularApp; platform?: string; index?: number }) {
   const href = platform && platform !== "android" ? `/app/${app.slug}?platform=${platform}` : `/app/${app.slug}`;
   const desc = app.shortDescFa || app.shortDesc;
   return (
-    <div className="flex items-center gap-3.5 py-3 border-b border-border last:border-b-0">
+    <div className="flex items-center gap-3.5 py-3.5 border-b border-border last:border-b-0 group">
+      <span className="rank-num" aria-hidden="true">{(index + 1).toLocaleString("fa-IR")}</span>
       <Link href={href} className="shrink-0" aria-hidden="true" tabIndex={-1}>
         {app.iconUrl ? (
-          <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt="" width={56} height={56}
-            className="w-14 h-14 rounded-[15px] object-cover bg-surface-2" />
+          <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt="" width={52} height={52}
+            className="w-[52px] h-[52px] rounded-xl object-cover bg-surface-2 border border-border" />
         ) : (
-          <span className="w-14 h-14 rounded-[15px] bg-surface-2 grid place-items-center text-2xl font-bold text-muted" dir="ltr">
+          <span className="w-[52px] h-[52px] rounded-xl bg-surface-2 border border-border grid place-items-center text-xl font-bold text-muted" dir="ltr">
             {app.nameEn.charAt(0)}
           </span>
         )}
       </Link>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 min-w-0">
-          <Link href={href} className="block font-bold leading-6 hover:text-primary transition truncate min-w-0">
+          <Link href={href} className="block font-bold leading-6 group-hover:text-primary transition-colors truncate min-w-0">
             {app.nameFa}{" "}
             <span className="text-muted font-normal text-[13px]" dir="ltr" style={{ unicodeBidi: "isolate" }}>{app.nameEn}</span>
           </Link>
           <NewBadge createdAt={app.createdAt} className="shrink-0" />
         </div>
-        {desc && <span className="block text-muted text-[13px] truncate">{desc}</span>}
-        <div className="flex items-center gap-2 mt-0.5 text-xs text-muted">
-          <span className={`border rounded-md px-1.5 leading-5 ${app.isOpenSource ? "border-primary text-primary" : "border-border"}`}>
-            {app.isOpenSource ? "متن‌باز" : "غیرمتن‌باز"}
-          </span>
-          {app.fileSize ? <span>{formatBytes(app.fileSize)}</span> : null}
-        </div>
+        {desc && <span className="block text-muted text-[13px] truncate mt-0.5">{desc}</span>}
       </div>
-      <Link href={href}
-        className="shrink-0 border border-primary text-primary rounded-full px-5 py-1.5 font-medium text-sm transition hover:bg-primary hover:text-primary-fg">
-        دریافت
-      </Link>
+      <span className={`shrink-0 text-[11px] font-bold rounded-full px-3 py-1 border ${
+        app.isOpenSource
+          ? "text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
+          : "text-sky-600 dark:text-sky-400 border-sky-500/30 bg-sky-500/10"
+      }`}>
+        {app.isOpenSource ? "متن‌باز" : "رایگان"}
+      </span>
     </div>
   );
 }

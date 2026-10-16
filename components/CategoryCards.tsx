@@ -8,14 +8,14 @@ import DbIcon from "./DbIcon";
 
 type Cat = { id: string; slug: string; nameFa: string; icon?: string | null; appCount?: number };
 
-// پالت‌های ملایم — یکی در میان: گرادیان ملایم یا بوردر ساده
+// پالت‌های دسته‌بندی — در تم روشن ملایم، در تم تیره عمیق
 const GRADIENTS = [
-  "from-violet-500/15 to-transparent",
-  "from-amber-500/15 to-transparent",
-  "from-rose-500/15 to-transparent",
-  "from-emerald-500/15 to-transparent",
-  "from-sky-500/15 to-transparent",
-  "from-orange-500/15 to-transparent",
+  "from-violet-500/12 to-transparent dark:from-violet-500/25 dark:to-violet-950/40",
+  "from-amber-500/12 to-transparent dark:from-amber-500/20 dark:to-amber-950/40",
+  "from-rose-500/12 to-transparent dark:from-rose-500/20 dark:to-rose-950/40",
+  "from-emerald-500/12 to-transparent dark:from-emerald-500/20 dark:to-emerald-950/40",
+  "from-sky-500/12 to-transparent dark:from-sky-500/20 dark:to-sky-950/40",
+  "from-orange-500/12 to-transparent dark:from-orange-500/20 dark:to-orange-950/40",
 ];
 
 export default function CategoryCards({ cats }: { cats: Cat[] }) {
