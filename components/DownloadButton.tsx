@@ -19,7 +19,17 @@ export default function DownloadButton({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+    <>
+      {/* دکمه ثابت پایین صفحه در موبایل */}
+      <div className="md:hidden fixed bottom-20 inset-x-4 z-40">
+        <a
+          href={url}
+          className="block bg-primary text-primary-fg text-center font-extrabold text-lg py-4 rounded-2xl shadow-xl shadow-primary/30 active:scale-[0.99] transition"
+        >
+          ⬇️ دانلود نسخه <span dir="ltr">{versionName}</span>
+        </a>
+      </div>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
       <a
         href={url}
         className="flex-1 bg-primary text-primary-fg text-center font-extrabold text-lg py-4 rounded-2xl hover:opacity-90 active:scale-[0.99] transition shadow-lg shadow-primary/20"
@@ -32,6 +42,7 @@ export default function DownloadButton({
           {copied ? "✅ کپی شد!" : "🔗 کپی لینک"}
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
