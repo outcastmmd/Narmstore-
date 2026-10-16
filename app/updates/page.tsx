@@ -6,6 +6,7 @@ import * as s from "@/db/schema";
 import { eq, and, desc, sql, inArray } from "drizzle-orm";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
+import { Inbox, RefreshCw, CheckCircle2 } from "lucide-react";
 import PxImg from "@/components/PxImg";
 
 export const metadata = { title: "به‌روزرسانی‌ها | نرم‌استور" };
@@ -32,7 +33,7 @@ export default async function UpdatesPage() {
   if (!latestDl.size) {
     return (
       <div className="max-w-2xl mx-auto text-center py-16">
-        <div className="text-6xl mb-4">📭</div>
+        <Inbox className="w-14 h-14 mx-auto mb-4 text-muted" aria-hidden="true" />
         <h1 className="text-xl font-extrabold mb-2">هنوز چیزی دانلود نکردی</h1>
         <p className="text-muted mb-6">برنامه‌هایی که دانلود می‌کنی اینجا دنبال می‌شن و وقتی نسخه‌ی جدید بیاد خبرت می‌کنم</p>
         <Link href="/" className="inline-block bg-primary text-primary-fg font-bold px-6 py-3 rounded-2xl">
@@ -67,11 +68,13 @@ export default async function UpdatesPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-extrabold mb-1">🔄 به‌روزرسانی‌ها</h1>
+      <h1 className="text-2xl font-extrabold mb-1 flex items-center gap-2">
+        <RefreshCw className="w-6 h-6 text-primary" aria-hidden="true" /> به‌روزرسانی‌ها
+      </h1>
       <p className="text-sm text-muted mb-6">
         {updates.length > 0
           ? `${toFaDigits(updates.length)} برنامه نسخه‌ی جدید دارن`
-          : "همه‌ی برنامه‌هات به‌روزن ✨"}
+          : "همه‌ی برنامه‌هات به‌روزن"}
       </p>
 
       {updates.length > 0 && (
@@ -104,7 +107,9 @@ export default async function UpdatesPage() {
 
       {upToDate.length > 0 && (
         <>
-          <h2 className="text-lg font-extrabold mb-3">✅ به‌روز هستن</h2>
+          <h2 className="text-lg font-extrabold mb-3 flex items-center gap-2">
+            <CheckCircle2 className="w-5 h-5 text-primary" aria-hidden="true" /> به‌روز هستن
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {upToDate.map((app) => (
               <Link key={app.id} href={`/app/${app.slug}`}

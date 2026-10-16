@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import AppCard from "@/components/AppCard";
+import { Heart, Lock } from "lucide-react";
 
 export default function FavoritesPage() {
   const [items, setItems] = useState<any[]>([]);
@@ -25,7 +26,7 @@ export default function FavoritesPage() {
   if (state === "denied") {
     return (
       <div className="bg-surface border border-border rounded-3xl p-10 text-center max-w-md mx-auto">
-        <p className="text-4xl mb-3">🔐</p>
+        <Lock className="w-10 h-10 mx-auto mb-3 text-muted" aria-hidden="true" />
         <p className="font-extrabold mb-1">وارد نشده‌اید</p>
         <p className="text-sm text-muted mb-4">برای دیدن علاقه‌مندی‌ها وارد حساب شوید.</p>
         <Link href="/login" className="inline-block bg-primary text-primary-fg font-bold px-6 py-2.5 rounded-xl">ورود</Link>
@@ -35,7 +36,9 @@ export default function FavoritesPage() {
 
   return (
     <div className="animate-fade-up">
-      <h1 className="text-2xl font-extrabold mb-6">❤️ علاقه‌مندی‌های من</h1>
+      <h1 className="text-2xl font-extrabold mb-6 flex items-center gap-2">
+        <Heart className="w-6 h-6 text-red-500" fill="currentColor" aria-hidden="true" /> علاقه‌مندی‌های من
+      </h1>
       {items.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {items.map((a: any, i: number) => (
@@ -47,7 +50,7 @@ export default function FavoritesPage() {
         </div>
       ) : (
         <div className="bg-surface border border-border rounded-3xl p-10 text-center">
-          <p className="text-4xl mb-3">🤍</p>
+          <Heart className="w-10 h-10 mx-auto mb-3 text-muted" aria-hidden="true" />
           <p className="font-bold mb-1">هنوز چیزی ذخیره نکرده‌اید</p>
           <p className="text-sm text-muted">روی قلب هر برنامه بزنید تا اینجا ذخیره شود.</p>
         </div>

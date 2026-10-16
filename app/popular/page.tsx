@@ -10,5 +10,5 @@ export default async function PopularPage({ searchParams }: Props) {
   const { platform } = await searchParams;
   const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
   const apps = await getPopularApps(48, plat);
-  return <AppGrid title="🔥 محبوب‌ترین‌ها" subtitle="بر اساس تعداد دانلود واقعی ثبت‌شده" apps={apps} />;
+  return <AppGrid title="محبوب‌ترین‌ها" subtitle="بر اساس تعداد دانلود واقعی ثبت‌شده" apps={apps} />;
 }

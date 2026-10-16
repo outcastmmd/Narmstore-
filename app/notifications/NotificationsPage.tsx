@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Bell, BellOff, Package } from "lucide-react";
 import { toFaDigits } from "@/lib/fa";
 
 type Notif = {
@@ -35,7 +36,9 @@ export default function NotificationsPage() {
   return (
     <div className="animate-fade-up max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-extrabold">🔔 اعلان‌ها</h1>
+        <h1 className="text-2xl font-extrabold flex items-center gap-2">
+          <Bell className="w-6 h-6 text-primary" aria-hidden="true" /> اعلان‌ها
+        </h1>
         {items.some((x) => !x.isRead) && (
           <button onClick={markAll} className="text-sm text-primary font-bold hover:underline">
             همه را خوانده‌شده کن
@@ -44,7 +47,7 @@ export default function NotificationsPage() {
       </div>
       {items.length === 0 ? (
         <div className="text-center py-16 bg-surface border border-border rounded-3xl">
-          <p className="text-4xl mb-3">🔕</p>
+          <BellOff className="w-10 h-10 mx-auto mb-3 text-muted" aria-hidden="true" />
           <p className="text-muted text-sm">اعلانی ندارید. برنامه‌های محبوبتان را به علاقه‌مندی‌ها اضافه کنید تا از نسخه‌های جدید باخبر شوید.</p>
         </div>
       ) : (
@@ -52,7 +55,9 @@ export default function NotificationsPage() {
           {items.map((n) => (
             <li key={n.id}
               className={`bg-surface border rounded-2xl p-4 flex gap-3 ${n.isRead ? "border-border opacity-70" : "border-primary/40"}`}>
-              <span className="text-2xl shrink-0">📦</span>
+              <span className="shrink-0 w-10 h-10 rounded-xl bg-surface-2 flex items-center justify-center">
+                <Package className="w-5 h-5 text-muted" aria-hidden="true" />
+              </span>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-sm">{n.title}</p>
                 {n.message && <p className="text-sm text-muted mt-1">{n.message}</p>}

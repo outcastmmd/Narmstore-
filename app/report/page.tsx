@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { CheckCircle2 } from "lucide-react";
 
 const TYPES = [
   ["broken_link", "لینک دانلود خراب است"],
@@ -36,7 +37,7 @@ function Form() {
   if (status === "done") {
     return (
       <div className="bg-surface border border-border rounded-3xl p-10 text-center max-w-xl mx-auto">
-        <p className="text-4xl mb-3">✅</p>
+        <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-primary" aria-hidden="true" />
         <p className="font-extrabold mb-1">گزارش شما ثبت شد</p>
         <p className="text-sm text-muted">تیم نرم‌استور آن را بررسی می‌کند. ممنون از همراهی شما!</p>
       </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAllCategories, getCategoryCounts } from "@/lib/store";
 import type { Platform } from "@/lib/store";
+import DbIcon from "@/components/DbIcon";
 
 export const metadata = { title: "دسته‌بندی‌ها" };
 
@@ -23,7 +24,9 @@ export default async function CategoriesPage({ searchParams }: Props) {
           return (
             <section key={r.id} className="bg-surface border border-border rounded-3xl p-6" aria-label={r.nameFa}>
               <Link href={`/category/${r.slug}`} className="flex items-center gap-3 mb-4 group">
-                <span className="text-3xl" aria-hidden="true">{r.icon || "📦"}</span>
+                <span className="w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <DbIcon icon={r.icon} className="w-6 h-6" />
+                </span>
                 <h2 className="text-lg font-extrabold group-hover:text-primary transition">{r.nameFa}</h2>
                 <span className="text-xs font-bold bg-primary-soft text-primary rounded-full px-2.5 py-1">
                   {(counts.get(r.id) ?? 0).toLocaleString("fa-IR")} برنامه
@@ -35,7 +38,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
                   {kids.map((k) => (
                     <Link key={k.id} href={`/category/${k.slug}`}
                       className="text-sm bg-surface-2 hover:bg-primary-soft hover:text-primary border border-border rounded-full px-4 py-2 transition flex items-center gap-1.5">
-                      {k.icon} {k.nameFa}
+                      <DbIcon icon={k.icon} className="w-4 h-4" /> {k.nameFa}
                       <span className="text-xs text-muted font-bold">{(counts.get(k.id) ?? 0).toLocaleString("fa-IR")}</span>
                     </Link>
                   ))}

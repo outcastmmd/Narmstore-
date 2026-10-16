@@ -18,6 +18,11 @@ import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
 import { computeTags } from "@/lib/tags";
 import { px } from "@/lib/img";
+import DbIcon from "@/components/DbIcon";
+import {
+  User, Star, Download, Clock, RefreshCw, Monitor, Globe,
+  AppWindow, Terminal, BadgeCheck, TriangleAlert, Lightbulb,
+} from "lucide-react";
 import { siteUrl } from "@/lib/site-url";
 
 
@@ -107,21 +112,21 @@ export default async function AppPage({ params }: Props) {
             </div>
             <p className="text-muted text-sm mb-2" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
-              {app.developerName && <span>👤 {app.developerName}</span>}
+              {app.developerName && <span className="inline-flex items-center gap-1"><User className="w-4 h-4" aria-hidden="true" /> {app.developerName}</span>}
               {app.githubStars ? (
-                <span>⭐ {toFaDigits(app.githubStars)} استار گیت‌هاب</span>
+                <span className="inline-flex items-center gap-1"><Star className="w-4 h-4" aria-hidden="true" /> {toFaDigits(app.githubStars)} استار گیت‌هاب</span>
               ) : (
-                <span>⬇️ {toFaDigits(app.downloadCount)} دانلود</span>
+                <span className="inline-flex items-center gap-1"><Download className="w-4 h-4" aria-hidden="true" /> {toFaDigits(app.downloadCount)} دانلود</span>
               )}
-              {v && <span>🕐 به‌روزرسانی: {timeAgo(v.publishedAt || v.createdAt)}</span>}
+              {v && <span className="inline-flex items-center gap-1"><Clock className="w-4 h-4" aria-hidden="true" /> به‌روزرسانی: {timeAgo(v.publishedAt || v.createdAt)}</span>}
             </div>
             {(app.shortDescFa || app.shortDesc) && <p className="mt-3 text-sm leading-7">{app.shortDescFa || app.shortDesc}</p>}
             {/* برچسب‌های هوشمند */}
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3" aria-label="برچسب‌ها">
                 {tags.map((t) => (
-                  <span key={t.slug} className="text-xs font-bold bg-primary-soft text-primary rounded-full px-3 py-1.5">
-                    {t.icon} {t.label}
+                  <span key={t.slug} className="text-xs font-bold bg-primary-soft text-primary rounded-full px-3 py-1.5 inline-flex items-center gap-1.5">
+                    <t.Icon className="w-3.5 h-3.5" aria-hidden="true" /> {t.label}
                   </span>
                 ))}
               </div>
@@ -132,7 +137,7 @@ export default async function AppPage({ params }: Props) {
         {/* بنر آپدیت — اگر نسخه جدید آمده */}
         {hasUpdate && v && (
           <div className="mt-4 bg-primary-soft border border-primary/30 rounded-2xl p-4 flex items-center gap-3" role="status">
-            <span className="text-2xl" aria-hidden="true">🔄</span>
+            <RefreshCw className="w-6 h-6 text-primary shrink-0" aria-hidden="true" />
             <div className="flex-1">
               <p className="font-extrabold text-sm">نسخه‌ی جدید موجوده!</p>
               <p className="text-xs text-muted mt-0.5">
@@ -159,7 +164,7 @@ export default async function AppPage({ params }: Props) {
                 <p className="text-xs text-muted font-mono" dir="ltr">{app.githubRepo}</p>
               </div>
               {app.githubStars ? (
-                <span className="ms-auto text-sm font-bold">⭐ {toFaDigits(app.githubStars)}</span>
+                <span className="ms-auto text-sm font-bold inline-flex items-center gap-1"><Star className="w-4 h-4" aria-hidden="true" /> {toFaDigits(app.githubStars)}</span>
               ) : null}
             </a>
           </div>
@@ -182,18 +187,18 @@ export default async function AppPage({ params }: Props) {
               <DownloadButton versionId={v.id} versionName={v.versionName} fileSize={v.fileSize} />
             ) : (
               <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
-                <p className="font-bold mb-2">💻 نسخه‌ی دسکتاپ</p>
+                <p className="font-bold mb-2 inline-flex items-center gap-2"><Monitor className="w-5 h-5" aria-hidden="true" /> نسخه‌ی دسکتاپ</p>
                 <p className="text-sm text-muted mb-4">برای دانلود به صفحه‌ی رسمی پروژه مراجعه کن</p>
                 <div className="flex gap-2 justify-center">
                   {app.githubRepo ? (
                     <a href={`https://github.com/${app.githubRepo}`} target="_blank" rel="noopener"
                       className="inline-flex items-center gap-2 bg-[#24292f] text-white font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
-                      <span>⭐</span> گیت‌هاب پروژه
+                      <Star className="w-4 h-4" aria-hidden="true" /> گیت‌هاب پروژه
                     </a>
                   ) : app.sourceUrl ? (
                     <a href={app.sourceUrl} target="_blank" rel="noopener"
                       className="inline-flex items-center gap-2 bg-primary text-primary-fg font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
-                      🌐 سایت رسمی
+                      <Globe className="w-4 h-4" aria-hidden="true" /> سایت رسمی
                     </a>
                   ) : null}
                 </div>
@@ -255,7 +260,9 @@ export default async function AppPage({ params }: Props) {
                 </>
               )}
               {app.platform !== "android" && (
-                <InfoRow k="پلتفرم" v={app.platform === "windows" ? "🪟 ویندوز" : "🐧 لینوکس"} />
+                <InfoRow k="پلتفرم" v={app.platform === "windows"
+                  ? <span className="inline-flex items-center gap-1.5"><AppWindow className="w-4 h-4" aria-hidden="true" /> ویندوز</span>
+                  : <span className="inline-flex items-center gap-1.5"><Terminal className="w-4 h-4" aria-hidden="true" /> لینوکس</span>} />
               )}
               <InfoRow k="نام بسته" v={app.packageName} ltr />
               <InfoRow k="مجوز" v={app.license || "نامشخص"} ltr />
@@ -272,8 +279,8 @@ export default async function AppPage({ params }: Props) {
               ) : "داخلی"} />
               <InfoRow k="وضعیت تأیید" v={
                 v?.verifiedAt
-                  ? <span className="text-primary font-bold">✅ بررسی‌شده {formatDate(v.verifiedAt)}</span>
-                  : <span className="text-accent font-bold">⏳ این نسخه هنوز بررسی نشده است</span>
+                  ? <span className="text-primary font-bold inline-flex items-center gap-1"><BadgeCheck className="w-4 h-4" aria-hidden="true" /> بررسی‌شده {formatDate(v.verifiedAt)}</span>
+                  : <span className="text-accent font-bold inline-flex items-center gap-1"><Clock className="w-4 h-4" aria-hidden="true" /> این نسخه هنوز بررسی نشده است</span>
               } />
             </dl>
             {v?.sha256 && (
@@ -291,8 +298,8 @@ export default async function AppPage({ params }: Props) {
               <div className="flex flex-wrap gap-2">
                 {app.categories.map((c) => (
                   <Link key={c.slug} href={`/category/${c.slug}`}
-                    className="text-xs bg-surface-2 hover:bg-primary-soft hover:text-primary border border-border rounded-full px-3 py-1.5 transition">
-                    {c.icon} {c.nameFa}
+                    className="text-xs bg-surface-2 hover:bg-primary-soft hover:text-primary border border-border rounded-full px-3 py-1.5 transition inline-flex items-center gap-1.5">
+                    <DbIcon icon={c.icon} className="w-3.5 h-3.5" /> {c.nameFa}
                   </Link>
                 ))}
               </div>
@@ -314,8 +321,8 @@ export default async function AppPage({ params }: Props) {
           )}
 
           <Link href={`/report?app=${app.slug}`}
-            className="block text-center text-sm text-muted hover:text-danger border border-border rounded-2xl py-3 transition">
-            ⚠️ گزارش مشکل یا لینک خراب
+            className="flex items-center justify-center gap-2 text-sm text-muted hover:text-danger border border-border rounded-2xl py-3 transition">
+            <TriangleAlert className="w-4 h-4" aria-hidden="true" /> گزارش مشکل یا لینک خراب
           </Link>
         </div>
       </div>
@@ -326,7 +333,9 @@ export default async function AppPage({ params }: Props) {
       {/* شاید بپسندی */}
       {app.similar.length > 0 && (
         <section className="mt-10" aria-label="شاید بپسندی">
-          <h2 className="text-xl font-extrabold mb-4">💡 شاید بپسندی</h2>
+          <h2 className="text-xl font-extrabold mb-4 flex items-center gap-2">
+            <Lightbulb className="w-5 h-5 text-primary" aria-hidden="true" /> شاید بپسندی
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {app.similar.map((a, i) => <AppCard key={a.id} app={a} index={i} />)}
           </div>

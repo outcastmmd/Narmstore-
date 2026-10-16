@@ -5,6 +5,7 @@ import { getCollectionBySlug } from "@/lib/store";
 import AppCard from "@/components/AppCard";
 import CollectionPlatformSync from "@/components/CollectionPlatformSync";
 import { toFaDigits } from "@/lib/fa";
+import DbIcon from "@/components/DbIcon";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -34,9 +35,11 @@ export default async function CollectionPage({ params }: Props) {
         <span className="text-foreground font-bold">{col.nameFa}</span>
       </nav>
 
-      <section className="rounded-3xl overflow-hidden border border-border bg-gradient-to-l from-primary-soft/60 to-surface mb-8">
+      <section className="rounded-3xl overflow-hidden border border-border bg-surface mb-8">
         <div className="p-6 sm:p-8 flex items-center gap-5">
-          <span className="text-5xl sm:text-6xl" aria-hidden="true">{col.icon || "✨"}</span>
+          <span className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+            <DbIcon icon={col.icon} className="w-9 h-9 sm:w-11 sm:h-11" />
+          </span>
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold">{col.nameFa}</h1>
             <p className="text-sm text-muted mt-1">{toFaDigits(col.apps.length)} برنامه</p>

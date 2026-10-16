@@ -3,6 +3,7 @@ import { searchApps } from "@/lib/store";
 import AppCard from "@/components/AppCard";
 import { toFaDigits } from "@/lib/fa";
 import type { Metadata } from "next";
+import { SearchX } from "lucide-react";
 
 
 type Props = { searchParams: Promise<{ q?: string; sort?: string; oss?: string; page?: string }> };
@@ -57,7 +58,7 @@ export default async function SearchPage({ searchParams }: Props) {
         </div>
       ) : (
         <div className="bg-surface border border-border rounded-3xl p-10 text-center">
-          <p className="text-4xl mb-3">🔍</p>
+          <SearchX className="w-10 h-10 mx-auto mb-3 text-muted" aria-hidden="true" />
           <p className="font-bold mb-1">نتیجه‌ای یافت نشد</p>
           <p className="text-sm text-muted">املای عبارت را بررسی کنید یا از کلمات ساده‌تر استفاده کنید.</p>
         </div>

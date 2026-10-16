@@ -10,5 +10,5 @@ export default async function LatestPage({ searchParams }: Props) {
   const { platform } = await searchParams;
   const plat = (platform === "windows" || platform === "linux") ? platform as Platform : undefined;
   const apps = await getLatestApps(48, plat);
-  return <AppGrid title="✨ تازه‌ترین نسخه‌ها" subtitle="برنامه‌هایی که اخیراً به‌روزرسانی شده‌اند" apps={apps} />;
+  return <AppGrid title="تازه‌ترین نسخه‌ها" subtitle="برنامه‌هایی که اخیراً به‌روزرسانی شده‌اند" apps={apps} />;
 }

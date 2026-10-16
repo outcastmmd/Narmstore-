@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { getCategoryApps, getCategoryBySlug, getChildPreviews } from "@/lib/store";
 import AppCard from "@/components/AppCard";
 import { toFaDigits } from "@/lib/fa";
+import DbIcon from "@/components/DbIcon";
+import { Inbox } from "lucide-react";
 
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sort?: string; page?: string }> };
@@ -46,9 +48,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   return (
     <div className="animate-fade-up">
       {/* سربرگ */}
-      <section className="rounded-3xl overflow-hidden border border-border bg-gradient-to-l from-primary-soft/50 to-surface mb-8" aria-label={cat.nameFa}>
+      <section className="rounded-3xl overflow-hidden border border-border bg-surface mb-8" aria-label={cat.nameFa}>
         <div className="p-6 sm:p-8 flex items-center gap-5">
-          <span className="text-5xl sm:text-6xl shrink-0" aria-hidden="true">{cat.icon || "📦"}</span>
+          <span className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+            <DbIcon icon={cat.icon} className="w-9 h-9 sm:w-11 sm:h-11" />
+          </span>
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold">{cat.nameFa}</h1>
             <p className="text-sm text-muted mt-1">{toFaDigits(total)} برنامه</p>
@@ -64,7 +68,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             <section key={ch.id} aria-label={ch.nameFa}>
               <div className="flex items-center justify-between mb-4">
                 <Link href={`/category/${ch.slug}`} className="flex items-center gap-2 group">
-                  <span className="text-2xl" aria-hidden="true">{ch.icon || "📦"}</span>
+                  <DbIcon icon={ch.icon} className="w-5 h-5 text-primary" />
                   <h2 className="text-lg font-extrabold group-hover:text-primary transition">{ch.nameFa}</h2>
                   <span className="text-xs text-muted">({toFaDigits(t)})</span>
                 </Link>
@@ -104,7 +108,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             </div>
           ) : (
             <div className="bg-surface border border-border rounded-3xl p-10 text-center">
-              <p className="text-4xl mb-3">📭</p>
+              <Inbox className="w-10 h-10 mx-auto mb-3 text-muted" aria-hidden="true" />
               <p className="font-bold mb-1">برنامه‌ای در این دسته ثبت نشده است</p>
               <p className="text-sm text-muted">به‌زودی برنامه‌های جدید اضافه می‌شود.</p>
             </div>
