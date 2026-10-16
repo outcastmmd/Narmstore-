@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Search } from "lucide-react";
 
 export default function SearchBox({ compact = false }: { compact?: boolean }) {
   const [q, setQ] = useState("");
@@ -27,7 +28,7 @@ export default function SearchBox({ compact = false }: { compact?: boolean }) {
         aria-label="جست‌وجو"
         className="absolute end-1 top-1 w-9 h-9 rounded-lg bg-primary text-primary-fg flex items-center justify-center hover:opacity-90 transition"
       >
-        🔍
+        <Search className="w-4 h-4" aria-hidden="true" />
       </button>
     </form>
   );

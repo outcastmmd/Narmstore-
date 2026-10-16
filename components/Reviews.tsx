@@ -1,16 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import { toFaDigits, timeAgo } from "@/lib/fa";
+import { Star } from "lucide-react";
 
 type Review = { id: string; rating: number; text: string | null; createdAt: string; userName: string | null };
 
-function Stars({ value, onPick, size = "text-2xl" }: { value: number; onPick?: (n: number) => void; size?: string }) {
+function Stars({ value, onPick, size = "w-7 h-7" }: { value: number; onPick?: (n: number) => void; size?: string }) {
   return (
-    <div className={`flex gap-1 ${size}`} role={onPick ? "radiogroup" : undefined} aria-label="امتیاز">
+    <div className="flex gap-1" role={onPick ? "radiogroup" : undefined} aria-label="امتیاز">
       {[1, 2, 3, 4, 5].map((n) => (
         <button key={n} type="button" disabled={!onPick} onClick={() => onPick?.(n)}
           aria-label={`${n} ستاره`} className={onPick ? "hover:scale-125 transition-transform" : "cursor-default"}>
-          <span className={n <= value ? "" : "grayscale opacity-30"}>⭐</span>
+          <Star className={`${size} ${n <= value ? "text-amber-400" : "text-muted/40"}`} fill="currentColor" aria-hidden="true" />
         </button>
       ))}
     </div>
@@ -37,14 +38,14 @@ export default function Reviews({ appId }: { appId: string }) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!rating) { setMsg("❌ اول امتیاز بدهید"); return; }
+    if (!rating) { setMsg("اول امتیاز بدهید"); return; }
     setSending(true); setMsg("");
     const r = await fetch("/api/reviews", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ appId, rating, text: text.trim() || undefined }),
     });
     const j = await r.json();
-    setMsg(r.ok ? `✅ ${j.message}` : `❌ ${j.error || "خطا"}`);
+    setMsg(r.ok ? j.message : (j.error || "خطا"));
     if (r.ok) { setText(""); setRating(0); }
     setSending(false);
   };
@@ -54,8 +55,8 @@ export default function Reviews({ appId }: { appId: string }) {
       <div className="flex items-center gap-3 mb-5">
         <h2 className="font-extrabold">نظرات و امتیازها</h2>
         {avg !== null && (
-          <span className="text-sm bg-primary-soft text-primary font-bold rounded-full px-3 py-1">
-            ⭐ {toFaDigits(avg)} ({toFaDigits(count)} نظر)
+          <span className="text-sm bg-primary-soft text-primary font-bold rounded-full px-3 py-1 inline-flex items-center gap-1">
+            <Star className="w-4 h-4" fill="currentColor" aria-hidden="true" /> {toFaDigits(avg)} ({toFaDigits(count)} نظر)
           </span>
         )}
       </div>

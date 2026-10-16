@@ -1,5 +1,6 @@
 import AppCard, { type CardApp } from "@/components/AppCard";
 import { toFaDigits } from "@/lib/fa";
+import { Inbox } from "lucide-react";
 
 export default function AppGrid({ title, subtitle, apps }: {
   title: string; subtitle?: string; apps: CardApp[];
@@ -15,7 +16,7 @@ export default function AppGrid({ title, subtitle, apps }: {
         </div>
       ) : (
         <div className="bg-surface border border-border rounded-3xl p-10 text-center">
-          <p className="text-4xl mb-3">📭</p>
+          <Inbox className="w-10 h-10 mx-auto mb-3 text-muted" aria-hidden="true" />
           <p className="font-bold mb-1">موردی برای نمایش وجود ندارد</p>
           <p className="text-sm text-muted">هنوز داده‌ی کافی ثبت نشده است.</p>
         </div>

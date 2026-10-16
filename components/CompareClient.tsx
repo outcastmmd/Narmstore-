@@ -4,6 +4,7 @@ import Link from "next/link";
 import PxImg from "@/components/PxImg";
 import { px } from "@/lib/img";
 import { getCompareList } from "@/components/CompareButton";
+import { Scale, Star } from "lucide-react";
 
 type CApp = {
   slug: string; nameFa: string; iconUrl: string | null; shortDescFa: string | null;
@@ -43,7 +44,7 @@ export default function CompareClient() {
   if (loading) return <p className="text-muted">در حال بارگذاری...</p>;
   if (!apps.length) return (
     <div className="text-center py-16">
-      <p className="text-5xl mb-4">⚖️</p>
+      <Scale className="w-12 h-12 mx-auto mb-4 text-muted" aria-hidden="true" />
       <p className="font-bold mb-2">لیست مقایسه خالی است</p>
       <p className="text-sm text-muted mb-6">از صفحه‌ی هر برنامه، «افزودن به مقایسه» را بزنید</p>
       <Link href="/" className="text-primary font-bold">← بازگشت به خانه</Link>
@@ -55,7 +56,7 @@ export default function CompareClient() {
     ["آخرین نسخه", (a) => fa(a.versionName as any) === "—" ? (a.versionName || "—") : a.versionName],
     ["حجم فایل", (a) => a.fileSize ? `${(a.fileSize / 1048576).toLocaleString("fa-IR", { maximumFractionDigits: 1 })} مگابایت` : "—"],
     ["دانلودها", (a) => fa(a.downloadCount)],
-    ["امتیاز", (a) => a.rating ? `⭐ ${a.rating.toLocaleString("fa-IR")}` : "—"],
+    ["امتیاز", (a) => a.rating ? <span className="inline-flex items-center gap-1"><Star className="w-3.5 h-3.5" aria-hidden="true" /> {a.rating.toLocaleString("fa-IR")}</span> : "—"],
     ["دسته‌ها", (a) => <span className="text-xs">{a.categories || "—"}</span>],
     ["تعداد دسترسی‌ها", (a) => fa(a.permCount)],
     ["آخرین به‌روزرسانی", (a) => a.updatedAt ? new Date(a.updatedAt).toLocaleDateString("fa-IR") : "—"],

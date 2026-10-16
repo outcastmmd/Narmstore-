@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Bell, BellOff } from "lucide-react";
 
 export default function FollowButton({ appId }: { appId: string }) {
   const [following, setFollowing] = useState(false);
@@ -41,13 +42,13 @@ export default function FollowButton({ appId }: { appId: string }) {
       onClick={toggle}
       disabled={loading}
       title={following ? "لغو دنبال کردن" : "دنبال کن تا از نسخه جدید باخبر شی"}
-      className={`pressable text-xs font-bold rounded-full px-3 py-1.5 border transition ${
+      className={`pressable text-xs font-bold rounded-full px-3 py-1.5 border transition inline-flex items-center gap-1.5 ${
         following
           ? "bg-primary text-primary-fg border-primary"
           : "bg-surface border-border text-muted hover:text-foreground hover:border-primary/50"
       } ${loading ? "opacity-60" : ""}`}
     >
-      {following ? "🔔 دنبال می‌کنی" : "🔕 دنبال کن"}
+      {following ? <><Bell className="w-3.5 h-3.5" aria-hidden="true" /> دنبال می‌کنی</> : <><BellOff className="w-3.5 h-3.5" aria-hidden="true" /> دنبال کن</>}
     </button>
   );
 }

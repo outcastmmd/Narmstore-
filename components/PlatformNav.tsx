@@ -3,12 +3,13 @@
 import { useSearchParams, usePathname } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
+import { Smartphone, AppWindow, Terminal, type LucideIcon } from "lucide-react";
 
 type Platform = "android" | "windows" | "linux";
-const PLATFORMS: { slug: Platform; label: string; icon: string }[] = [
-  { slug: "android", label: "اندروید", icon: "🤖" },
-  { slug: "windows", label: "ویندوز", icon: "🪟" },
-  { slug: "linux", label: "لینوکس", icon: "🐧" },
+const PLATFORMS: { slug: Platform; label: string; Icon: LucideIcon }[] = [
+  { slug: "android", label: "اندروید", Icon: Smartphone },
+  { slug: "windows", label: "ویندوز", Icon: AppWindow },
+  { slug: "linux", label: "لینوکس", Icon: Terminal },
 ];
 
 function PlatformNavInner() {
@@ -73,7 +74,7 @@ function PlatformNavInner() {
                   : "text-muted hover:text-foreground hover:bg-surface-2"
               }`}
             >
-              <span className="text-xl leading-none" aria-hidden="true">{p.icon}</span>
+              <p.Icon className="w-5 h-5" aria-hidden="true" />
               <span className={active ? "" : "hidden sm:inline"}>{p.label}</span>
             </Link>
           );

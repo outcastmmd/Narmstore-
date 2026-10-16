@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Heart, Wrench, LogOut } from "lucide-react";
 
 type Me = { id: string; name: string | null; email: string; role: string } | null;
 
@@ -50,14 +51,14 @@ export default function UserMenu() {
             <p className="px-3 pb-2 text-xs text-muted truncate" dir="ltr" style={{ textAlign: "right" }}>{me.email}</p>
             <div className="border-t border-border pt-1">
               <Link href="/favorites" onClick={() => setOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-sm hover:bg-surface-2 transition">❤️ علاقه‌مندی‌ها</Link>
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm hover:bg-surface-2 transition"><Heart className="w-4 h-4" aria-hidden="true" /> علاقه‌مندی‌ها</Link>
               {me.role !== "user" && (
                 <Link href="/admin" onClick={() => setOpen(false)}
-                  className="block px-3 py-2.5 rounded-xl text-sm hover:bg-surface-2 transition">🛠️ پنل مدیریت</Link>
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm hover:bg-surface-2 transition"><Wrench className="w-4 h-4" aria-hidden="true" /> پنل مدیریت</Link>
               )}
               <button onClick={logout}
-                className="w-full text-start px-3 py-2.5 rounded-xl text-sm text-danger hover:bg-danger/10 transition">
-                🚪 خروج
+                className="w-full text-start px-3 py-2.5 rounded-xl text-sm text-danger hover:bg-danger/10 transition flex items-center gap-2">
+                <LogOut className="w-4 h-4" aria-hidden="true" /> خروج
               </button>
             </div>
           </div>

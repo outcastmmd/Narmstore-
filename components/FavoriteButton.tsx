@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Heart } from "lucide-react";
 
 export default function FavoriteButton({ appId, appName }: { appId: string; appName: string }) {
   const [fav, setFav] = useState<boolean | null>(null);
@@ -42,12 +43,12 @@ export default function FavoriteButton({ appId, appName }: { appId: string; appN
       aria-label={fav ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
       aria-pressed={!!fav}
       title={fav ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
-      className={`w-12 h-12 rounded-2xl border flex items-center justify-center text-xl transition shrink-0 ${fav
+      className={`w-12 h-12 rounded-2xl border flex items-center justify-center transition shrink-0 ${fav
         ? "bg-red-50 border-red-200 text-red-500"
         : "bg-surface border-border text-muted hover:border-red-300 hover:text-red-400"
         }`}
     >
-      {fav ? "❤️" : "🤍"}
+      <Heart className="w-6 h-6" fill={fav ? "currentColor" : "none"} aria-hidden="true" />
     </button>
   );
 }

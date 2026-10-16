@@ -2,6 +2,8 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { Home } from "lucide-react";
+import DbIcon from "./DbIcon";
 
 type Cat = { id: string; slug: string; nameFa: string; icon?: string | null; appCount?: number };
 
@@ -34,12 +36,12 @@ export default function CategoryPills({ cats }: { cats: Cat[] }) {
       className="sticky top-0 z-30 -mx-4 px-4 py-3 mb-6 bg-background/90 backdrop-blur-md border-b border-border/50">
       <div className="flex gap-2 overflow-x-auto pb-1 snap-x scrollbar-none">
         <button onClick={() => go("/")} className={pill(!active)} aria-current={!active ? "page" : undefined}>
-          <span aria-hidden="true">🏠</span> خانه
+          <Home className="w-4 h-4" aria-hidden="true" /> خانه
         </button>
         {cats.map((c) => (
           <button key={c.id} onClick={() => go(`/?cat=${c.slug}`)} className={pill(active === c.slug)}
             aria-current={active === c.slug ? "page" : undefined}>
-            <span aria-hidden="true">{c.icon || "📦"}</span> {c.nameFa}
+            <DbIcon icon={c.icon} className="w-4 h-4" /> {c.nameFa}
             {typeof c.appCount === "number" && (
               <span className={`text-xs font-bold rounded-full px-2 py-0.5 ${active === c.slug ? "bg-white/25" : "bg-surface-2 text-muted"}`}>
                 {c.appCount.toLocaleString("fa-IR")}

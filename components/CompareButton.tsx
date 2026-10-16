@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Scale, Check } from "lucide-react";
 
 type App = { slug: string; nameFa: string };
 
@@ -28,10 +29,10 @@ export default function CompareButton({ slug, nameFa }: App) {
 
   return (
     <button onClick={toggle}
-      className={`text-sm font-bold border rounded-2xl px-4 py-2.5 transition ${
+      className={`text-sm font-bold border rounded-2xl px-4 py-2.5 transition inline-flex items-center gap-1.5 ${
         inList ? "bg-primary text-primary-fg border-primary" : "border-border hover:border-primary"
       }`}>
-      {inList ? "✓ در لیست مقایسه" : "⚖️ افزودن به مقایسه"}
+      {inList ? <><Check className="w-4 h-4" aria-hidden="true" /> در لیست مقایسه</> : <><Scale className="w-4 h-4" aria-hidden="true" /> افزودن به مقایسه</>}
     </button>
   );
 }

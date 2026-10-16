@@ -2,6 +2,7 @@ import Link from "next/link";
 import PxImg from "@/components/PxImg";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
+import { Star, Download } from "lucide-react";
 
 export type CardApp = {
   id: string;
@@ -53,9 +54,9 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
             <span className="bg-surface-2 rounded-md px-2 py-0.5" dir="ltr">v{app.versionName}</span>
           )}
           {app.githubStars ? (
-            <span>⭐ {toFaDigits(app.githubStars)}</span>
+            <span className="inline-flex items-center gap-1"><Star className="w-3.5 h-3.5" aria-hidden="true" /> {toFaDigits(app.githubStars)}</span>
           ) : (
-            <span>⬇️ {toFaDigits(app.downloadCount)}</span>
+            <span className="inline-flex items-center gap-1"><Download className="w-3.5 h-3.5" aria-hidden="true" /> {toFaDigits(app.downloadCount)}</span>
           )}
         </div>
       </div>
