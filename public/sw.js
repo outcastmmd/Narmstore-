@@ -1,5 +1,5 @@
 // Service Worker نرم‌استور — کش هوشمند
-const CACHE = "narmstore-v2"; // v2: پروکسی تصاویر (آبان ۱۴۰۵)
+const CACHE = "narmstore-v3"; // v3: تم امولد + شمارش دسته‌ها
 const STATIC_ASSETS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {

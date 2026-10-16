@@ -3,32 +3,45 @@ import { useEffect, useState } from "react";
 
 type Theme = "light" | "dark" | "amoled";
 const ORDER: Theme[] = ["light", "dark", "amoled"];
-const ICON: Record<Theme, string> = { light: "🌙", dark: "⬛", amoled: "☀️" };
-const LABEL: Record<Theme, string> = { light: "حالت تاریک", dark: "حالت امولد", amoled: "حالت روشن" };
+// آیکونِ تمِ بعدی (چیزی که با کلیک بهش می‌ری)
+const NEXT_ICON: Record<Theme, string> = { light: "🌙", dark: "⬛", amoled: "☀️" };
+const NEXT_LABEL: Record<Theme, string> = { light: "حالت تاریک", dark: "حالت امولد (مشکی خالص)", amoled: "حالت روشن" };
+
+function applyTheme(t: Theme) {
+  document.documentElement.setAttribute("data-theme", t);
+  try { localStorage.setItem("narm-theme", t); } catch {}
+}
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     const t = document.documentElement.getAttribute("data-theme");
-    setTheme(t === "dark" ? "dark" : t === "amoled" ? "amoled" : "light");
+    const current: Theme = t === "amoled" ? "amoled" : t === "dark" ? "dark" : "light";
+    // همگام‌سازی با چیزی که اسکریپت layout اعمال کرده
+    if (document.documentElement.getAttribute("data-theme") !== current) {
+      applyTheme(current);
+    }
+    setTheme(current);
   }, []);
 
   const toggle = () => {
-    const next = ORDER[(ORDER.indexOf(theme) + 1) % ORDER.length];
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("narm-theme", next);
+    // خواندن وضعیت واقعی از DOM (نه فقط state) تا همیشه درست بچرخه
+    const cur = document.documentElement.getAttribute("data-theme");
+    const current: Theme = cur === "amoled" ? "amoled" : cur === "dark" ? "dark" : "light";
+    const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
+    applyTheme(next);
     setTheme(next);
   };
 
   return (
     <button
       onClick={toggle}
-      aria-label={LABEL[theme]}
-      title={LABEL[theme]}
+      aria-label={NEXT_LABEL[theme]}
+      title={NEXT_LABEL[theme]}
       className="w-10 h-10 rounded-xl bg-surface-2 hover:bg-border flex items-center justify-center text-xl transition-colors"
     >
-      {ICON[theme]}
+      {NEXT_ICON[theme]}
     </button>
   );
 }
