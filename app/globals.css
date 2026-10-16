@@ -74,7 +74,7 @@
   --color-accent: var(--accent);
   --color-danger: var(--danger);
   --font-sans: var(--font-vazir), system-ui, sans-serif;
-  --font-head: var(--font-lalezar), var(--font-vazir), system-ui, sans-serif;
+  --font-head: var(--font-vazir), system-ui, sans-serif;
 }
 
 html {
@@ -181,10 +181,13 @@ body {
   box-shadow: 0 8px 20px rgb(0 0 0 / 0.25);
 }
 
+/* تیترها — وزیرمتن بولد */
+.font-head { font-weight: 800; letter-spacing: -0.01em; }
+
 /* اعداد رتبه‌بندی — تایپوگرافی تمیز */
 .rank-num {
-  font-family: var(--font-lalezar), var(--font-vazir), system-ui, sans-serif;
-  font-size: 1.65rem; line-height: 1; color: var(--muted); font-weight: 400;
+  font-family: var(--font-vazir), system-ui, sans-serif;
+  font-size: 1.65rem; line-height: 1; color: var(--muted); font-weight: 700;
   min-width: 2rem; text-align: center; flex: none;
 }
 [data-theme="dark"] .rank-num, [data-theme="warm"] .rank-num { color: var(--primary); opacity: 0.85; }

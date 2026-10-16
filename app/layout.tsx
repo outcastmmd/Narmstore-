@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Vazirmatn, Lalezar } from "next/font/google";
+import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -13,12 +13,6 @@ const vazir = Vazirmatn({
   display: "swap",
 });
 
-const lalezar = Lalezar({
-  variable: "--font-lalezar",
-  subsets: ["arabic", "latin"],
-  weight: "400",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: { default: "نرم‌استور | فروشگاه فارسی نرم‌افزار اندروید", template: "%s | نرم‌استور" },
@@ -51,7 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
-      <body className={`${vazir.variable} ${lalezar.variable} min-h-full flex flex-col`}>
+      <body className={`${vazir.variable} min-h-full flex flex-col`}>
         <SWRegister />
         <ErrorReporter />
         <div className="bg-glows" aria-hidden="true"><span className="g1" /><span className="g2" /><span className="g3" /></div>
