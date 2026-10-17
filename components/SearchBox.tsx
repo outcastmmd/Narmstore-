@@ -101,7 +101,6 @@ function SearchBoxInner({ compact = false, slim = false, large = false }: { comp
   };
 
   const h = large ? "h-12" : slim ? "h-10" : "h-11";
-  const btn = large ? "w-10 h-10" : slim ? "w-8 h-8" : "w-9 h-9";
   const radius = large ? "rounded-2xl" : "rounded-xl";
 
   return (
@@ -121,7 +120,7 @@ function SearchBoxInner({ compact = false, slim = false, large = false }: { comp
         <button
           type="submit"
           aria-label="جست‌وجو"
-          className={`absolute end-1 top-1/2 -translate-y-1/2 ${btn} rounded-lg bg-primary text-primary-fg flex items-center justify-center hover:opacity-90 transition shrink-0`}
+          className={`absolute end-1 top-1/2 -translate-y-1/2 btn btn-primary btn-square ${large ? "" : "btn-sm"} shrink-0`}
         >
           {loading
             ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
@@ -164,7 +163,7 @@ function SearchBoxInner({ compact = false, slim = false, large = false }: { comp
           <button
             type="button"
             onClick={() => goSearch(q)}
-            className="w-full px-3 py-2.5 text-sm font-bold text-primary hover:bg-surface-2 transition border-t border-border text-center"
+            className="btn btn-ghost w-full"
           >
             دیدن همه‌ی نتایج «{q.trim()}»
           </button>

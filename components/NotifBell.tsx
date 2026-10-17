@@ -24,14 +24,14 @@ export default function NotifBell() {
   if (!unread) {
     return (
       <Link href="/notifications" aria-label="اعلان‌ها"
-        className="w-10 h-10 rounded-full hover:bg-surface-2 flex items-center justify-center transition">
+        className="btn btn-ghost btn-circle">
         <Bell className="w-5 h-5" aria-hidden="true" />
       </Link>
     );
   }
   return (
     <Link href="/notifications" aria-label={`${unread} اعلان خوانده‌نشده`}
-      className="relative w-10 h-10 rounded-full hover:bg-surface-2 flex items-center justify-center transition">
+      className="btn btn-ghost btn-circle relative">
       <Bell className="w-5 h-5" aria-hidden="true" />
       <span className="absolute top-1 end-1 min-w-5 h-5 px-1 rounded-full bg-danger text-white text-[11px] font-bold flex items-center justify-center">
         {unread > 9 ? "۹+" : unread}

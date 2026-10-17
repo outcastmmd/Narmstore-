@@ -39,7 +39,7 @@ export default function ReportButton({ appId, appName }: { appId: string; appNam
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="text-sm text-muted hover:text-foreground flex items-center gap-1.5 transition"
+        className="btn btn-ghost btn-sm"
       >
         <Flag className="w-4 h-4" /> گزارش مشکل
       </button>
@@ -67,7 +67,7 @@ export default function ReportButton({ appId, appName }: { appId: string; appNam
           <button
             onClick={submit}
             disabled={!reason || sending}
-            className="bg-primary text-primary-fg font-bold text-sm px-4 py-2 rounded-xl disabled:opacity-50"
+            className="btn btn-primary btn-sm"
           >
             {sending ? "در حال ارسال…" : "ثبت گزارش"}
           </button>

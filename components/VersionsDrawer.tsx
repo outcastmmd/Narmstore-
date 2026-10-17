@@ -22,7 +22,7 @@ export default function VersionsDrawer({ versions }: { versions: Version[] }) {
     <section className="bg-surface border border-border rounded-3xl overflow-hidden" aria-label="نسخه‌های قبلی">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-6 hover:bg-surface-2/50 transition-colors"
+        className="btn btn-ghost w-full justify-between"
         aria-expanded={open}
       >
         <span className="flex items-center gap-2 font-extrabold">

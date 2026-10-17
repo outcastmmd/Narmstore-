@@ -77,13 +77,13 @@ export default function Gallery({ shots, appName }: { shots: Shot[]; appName: st
           <div className="flex items-center justify-between p-4 text-white" onClick={(e) => e.stopPropagation()}>
             <span className="text-sm font-bold">{appName} — {open! + 1} از {shots.length}</span>
             <button onClick={close} aria-label="بستن"
-              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-xl transition">
+              className="btn btn-circle btn-ghost text-white">
               ✕
             </button>
           </div>
           <div className="flex-1 flex items-center justify-center gap-2 px-2 pb-4 min-h-0" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => step(-1)} aria-label="قبلی"
-              className="w-11 h-11 shrink-0 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl transition z-10">
+              className="btn btn-circle btn-ghost text-white shrink-0 z-10">
               ›
             </button>
             <div className="flex-1 flex items-center justify-center min-h-0 h-full relative">
@@ -92,7 +92,7 @@ export default function Gallery({ shots, appName }: { shots: Shot[]; appName: st
                   <span className="text-sm">تصویر بارگذاری نشد</span>
                   <button
                     onClick={() => { setFailedUrl(null); setRetry((r) => r + 1); }}
-                    className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-sm transition">
+                    className="btn btn-ghost text-white rounded-full">
                     تلاش مجدد
                   </button>
                 </div>

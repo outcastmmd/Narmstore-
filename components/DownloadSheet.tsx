@@ -68,7 +68,7 @@ export default function DownloadSheet({
         <button
           onClick={onClose}
           aria-label="بستن"
-          className="absolute top-4 left-4 w-9 h-9 grid place-items-center rounded-full bg-surface-2 text-muted hover:text-foreground transition"
+          className="btn btn-ghost btn-circle btn-sm absolute top-4 left-4"
         >
           <X className="w-5 h-5" aria-hidden="true" />
         </button>
@@ -109,7 +109,7 @@ export default function DownloadSheet({
           </div>
           {sha256 && (
             <div className="px-4 py-3">
-              <button onClick={() => setShowHash(!showHash)} className="flex items-center justify-between w-full">
+              <button onClick={() => setShowHash(!showHash)} className="btn btn-ghost w-full justify-between">
                 <span className="inline-flex items-center gap-2 text-muted"><Hash className="w-4 h-4" aria-hidden="true" /> هش SHA-256</span>
                 <ChevronLeft className={`w-4 h-4 text-muted transition-transform ${showHash ? "-rotate-90" : ""}`} aria-hidden="true" />
               </button>
@@ -125,7 +125,7 @@ export default function DownloadSheet({
           <a
             href={primary.href}
             {...(primary.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="flex items-center justify-center gap-2 w-full bg-primary text-white font-extrabold text-base rounded-2xl py-4 mb-3 hover:brightness-110 active:scale-[0.98] transition shadow-lg shadow-primary/25"
+            className="btn btn-primary btn-lg w-full mb-3"
           >
             <Download className="w-5 h-5" aria-hidden="true" />
             دانلود {versionName ? <span dir="ltr">{versionName}</span> : null}
@@ -141,7 +141,7 @@ export default function DownloadSheet({
                 key={o.label}
                 href={o.href}
                 {...(o.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="flex items-center justify-between w-full border border-border rounded-2xl px-4 py-3 hover:border-primary/50 transition group"
+                className="btn btn-ghost w-full justify-between h-auto py-3 group"
               >
                 <span>
                   <span className="block font-bold text-sm group-hover:text-primary transition">{o.label}</span>

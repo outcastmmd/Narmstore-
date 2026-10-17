@@ -41,11 +41,11 @@ export function InstallButton() {
           <p className="font-bold text-sm">Vesper را نصب کنید</p>
           <p className="text-xs text-muted">دسترسی سریع‌تر، مثل یک اپ واقعی</p>
         </div>
-        <button onClick={install} className="bg-primary text-primary-fg text-sm font-bold px-4 py-2 rounded-xl hover:opacity-90 shrink-0">
+        <button onClick={install} className="btn btn-primary btn-sm shrink-0">
           نصب
         </button>
         <button onClick={() => setDismissed(true)} aria-label="بستن"
-          className="text-muted hover:text-fg text-lg px-1 shrink-0">✕</button>
+          className="btn btn-ghost btn-circle btn-sm shrink-0">✕</button>
       </div>
     </div>
   );

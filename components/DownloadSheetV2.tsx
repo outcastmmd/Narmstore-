@@ -78,8 +78,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
       {/* دکمه‌ی اصلی — تمیز، بدون شماره نسخه */}
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center justify-center gap-2.5 w-full font-extrabold text-base rounded-2xl py-4 transition active:scale-[0.98] text-white shadow-lg"
-        style={{ background: "var(--primary)", boxShadow: "0 8px 24px -8px var(--primary)" }}
+        className="btn btn-primary btn-lg w-full"
       >
         {optionIcon(primary?.key ?? "", app, "w-6 h-6")}
         دانلود
@@ -103,7 +102,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
             }}>
             <div className="w-10 h-1 rounded-full bg-white/20 mx-auto mt-3 mb-4 sm:hidden" aria-hidden="true" />
             <button onClick={() => setOpen(false)} aria-label="بستن"
-              className="absolute top-4 left-4 w-9 h-9 grid place-items-center rounded-full bg-white/10 hover:bg-white/20 transition">
+              className="btn btn-ghost btn-circle btn-sm absolute top-4 left-4">
               <X className="w-5 h-5" aria-hidden="true" />
             </button>
 
@@ -135,7 +134,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
                 </div>
                 {sha256 && (
                   <div className="px-4 py-3">
-                    <button onClick={() => setShowHash(!showHash)} className="flex items-center justify-between w-full">
+                    <button onClick={() => setShowHash(!showHash)} className="btn btn-ghost w-full justify-between">
                       <span className="inline-flex items-center gap-2 text-muted"><Hash className="w-4 h-4" aria-hidden="true" /> هش SHA-256</span>
                       <ChevronDown className={`w-4 h-4 text-muted transition-transform ${showHash ? "rotate-180" : ""}`} aria-hidden="true" />
                     </button>
@@ -159,7 +158,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
               {rest.length > 0 && (
                 <div>
                   <button onClick={() => setShowMore(!showMore)}
-                    className="flex items-center justify-center gap-1.5 w-full text-[13px] text-muted font-bold py-2.5 hover:text-foreground transition">
+                    className="btn btn-ghost btn-sm w-full">
                     {showMore ? "بستن گزینه‌ها" : `گزینه‌های بیشتر (${toFaDigits(rest.length)})`}
                     <ChevronDown className={`w-4 h-4 transition-transform ${showMore ? "rotate-180" : ""}`} aria-hidden="true" />
                   </button>
@@ -169,8 +168,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
                         {rest.map((o) => (
                           <a key={o.key} href={o.href} {...(o.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                             onClick={() => setOpen(false)}
-                            className="flex items-center gap-3 w-full rounded-2xl px-4 py-3 border border-white/10 hover:border-white/25 transition"
-                            style={{ background: "color-mix(in srgb, var(--surface-2) 50%, transparent)" }}>
+                            className="btn btn-ghost w-full justify-start h-auto py-3">
                             <span className="text-primary shrink-0">{o.icon}</span>
                             <span className="flex-1 min-w-0">
                               <span className="block font-bold text-sm truncate">{o.label}</span>

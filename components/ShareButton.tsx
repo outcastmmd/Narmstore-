@@ -43,7 +43,7 @@ export default function ShareButton({ appName, slug }: { appName: string; slug: 
       onClick={share}
       aria-label="اشتراک‌گذاری"
       title={copied ? "لینک کپی شد" : "اشتراک‌گذاری"}
-      className="w-12 h-12 rounded-2xl border bg-surface border-border text-muted hover:border-primary hover:text-primary flex items-center justify-center transition shrink-0"
+      className="btn btn-ghost btn-circle shrink-0"
     >
       {copied ? (
         <Check className="w-6 h-6 text-green-500" aria-hidden="true" />

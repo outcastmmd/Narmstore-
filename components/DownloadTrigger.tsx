@@ -38,7 +38,7 @@ export default function DownloadTrigger({ app, appName, iconUrl, sha256 }: Props
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center justify-center gap-2 w-full bg-primary text-white font-extrabold text-base rounded-2xl py-4 hover:brightness-110 active:scale-[0.98] transition shadow-lg shadow-primary/25"
+        className="btn btn-primary btn-lg w-full"
       >
         <Download className="w-5 h-5" aria-hidden="true" />
         دانلود

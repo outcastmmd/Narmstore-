@@ -29,7 +29,7 @@ export default function DownloadButton({
       </a>
       <div className="flex items-center gap-3 text-sm text-muted">
         <span className="bg-surface-2 rounded-lg px-3 py-2 inline-flex items-center gap-1.5"><Package className="w-4 h-4" aria-hidden="true" /> {formatBytes(fileSize)}</span>
-        <button onClick={copy} className="bg-surface-2 hover:bg-border rounded-lg px-3 py-2 transition inline-flex items-center gap-1.5" aria-label="کپی لینک دانلود">
+        <button onClick={copy} className="btn btn-ghost btn-sm" aria-label="کپی لینک دانلود">
           {copied ? <><Check className="w-4 h-4" aria-hidden="true" /> کپی شد!</> : <><Link2 className="w-4 h-4" aria-hidden="true" /> کپی لینک</>}
         </button>
       </div>

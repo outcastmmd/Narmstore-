@@ -28,13 +28,13 @@ function platformIcon(platform: string, className: string) {
   return <AndroidIcon className={className} />;
 }
 
-// رنگ نئونی هر پلتفرم/مقصد
-const NEON: Record<string, string> = {
-  android: "#10b981",
-  windows: "#3b82f6",
-  linux: "#f59e0b",
-  web: "#8b5cf6",
-  github: "#a1a1aa",
+// رنگ دیزی هر پلتفرم/مقصد
+const BTN_TINT: Record<string, string> = {
+  android: "btn-success",
+  windows: "btn-info",
+  linux: "btn-warning",
+  web: "btn-accent",
+  github: "btn-neutral",
 };
 
 const platformFa: Record<string, string> = {
@@ -47,14 +47,15 @@ type PillProps = {
   href: string;
   external?: boolean;
   downloadable?: boolean;
-  color: string;
+  tint: string;
   icon: React.ReactNode;
   label: string;
+  text: string;
   big?: boolean;
 };
 
-// دکمه‌ی قرصی نئونی: آیکون پلتفرم | خط جداکننده | آیکون دانلود
-function NeonPill({ href, external, downloadable, color, icon, label, big }: PillProps) {
+// دکمه‌ی دانلود دیزی: آیکون پلتفرم + نام + آیکون دانلود
+function NeonPill({ href, external, downloadable, tint, icon, label, text, big }: PillProps) {
   return (
     <a
       href={href}
@@ -63,28 +64,16 @@ function NeonPill({ href, external, downloadable, color, icon, label, big }: Pil
       download={downloadable ? "" : undefined}
       title={label}
       aria-label={label}
-      className={`flex items-center rounded-full border-2 transition active:scale-95 hover:brightness-125 ${
-        big ? "gap-3 px-5 py-2.5" : "gap-2.5 px-4 py-2"
-      }`}
-      style={{
-        borderColor: color,
-        color,
-        background: `color-mix(in srgb, ${color} 10%, transparent)`,
-        boxShadow: `0 0 28px -8px ${color}`,
-      }}
+      className={`btn rounded-full ${tint} ${big ? "btn-lg" : ""}`}
     >
-      <span className={big ? "[&>svg]:w-6 [&>svg]:h-6" : "[&>svg]:w-5 [&>svg]:h-5"}>{icon}</span>
-      <span
-        aria-hidden="true"
-        className={big ? "w-px h-7" : "w-px h-5"}
-        style={{ background: color, opacity: 0.45 }}
-      />
-      <Download className={big ? "w-6 h-6" : "w-5 h-5"} aria-hidden="true" />
+      <span className="[&>svg]:w-5 [&>svg]:h-5">{icon}</span>
+      {text}
+      <Download className="w-5 h-5" aria-hidden="true" />
     </a>
   );
 }
 
-// دکمه‌های دانلود نئونی — فقط آیکون، بدون متن نسخه
+// دکمه‌های دانلود — قرصی دیزی با رنگ هر پلتفرم
 export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
   const opts = getDownloadOptions(app);
   if (!opts.length) return null;
@@ -99,9 +88,10 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
           href={primary.href}
           external={primary.external}
           downloadable={!primary.external}
-          color={NEON[app.platform] ?? NEON.android}
+          tint={BTN_TINT[app.platform] ?? BTN_TINT.android}
           icon={platformIcon(app.platform, "")}
           label={`دانلود برای ${platformFa[app.platform] ?? app.platform}`}
+          text={platformFa[app.platform] ?? app.platform}
           big
         />
         {rest.map((o) => (
@@ -109,9 +99,10 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
             key={o.key}
             href={o.href}
             external={o.external}
-            color={NEON[o.key] ?? NEON.web}
+            tint={BTN_TINT[o.key] ?? BTN_TINT.web}
             icon={o.icon}
             label={o.label}
+            text={o.label}
             big
           />
         ))}

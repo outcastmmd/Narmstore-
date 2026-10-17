@@ -43,10 +43,7 @@ export default function FavoriteButton({ appId, appName }: { appId: string; appN
       aria-label={fav ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
       aria-pressed={!!fav}
       title={fav ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
-      className={`w-12 h-12 rounded-2xl border flex items-center justify-center transition shrink-0 ${fav
-        ? "bg-red-50 border-red-200 text-red-500"
-        : "bg-surface border-border text-muted hover:border-red-300 hover:text-red-400"
-        }`}
+      className={`btn btn-circle shrink-0 ${fav ? "btn-error" : "btn-ghost"}`}
     >
       <Heart className="w-6 h-6" fill={fav ? "currentColor" : "none"} aria-hidden="true" />
     </button>

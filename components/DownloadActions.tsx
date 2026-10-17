@@ -169,7 +169,7 @@ export default function DownloadActions({ app }: { app: DownloadAppInfo }) {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="mt-3 w-full flex items-center justify-center gap-2 text-sm font-bold text-primary hover:opacity-80 transition py-2"
+        className="btn btn-ghost btn-sm w-full mt-3"
       >
         <ChevronDown
           className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`}
@@ -201,12 +201,8 @@ function ActionButton({ option: o, big }: { option: Option; big?: boolean }) {
       {...(o.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={
         o.primary
-          ? `flex items-center justify-center gap-3 font-extrabold rounded-2xl transition active:scale-[0.99] shadow-lg shadow-primary/20 bg-primary text-primary-fg hover:opacity-90 ${
-              big ? "text-lg py-4 px-6" : "py-3 px-5"
-            }`
-          : `flex items-center gap-3 rounded-2xl border border-border bg-surface-2 hover:border-primary/50 transition p-4 ${
-              big ? "py-4" : ""
-            }`
+          ? `btn btn-primary w-full ${big ? "btn-lg" : ""}`
+          : `btn btn-ghost w-full justify-start h-auto py-3 text-start`
       }
     >
       <span className={o.primary ? "" : "text-primary shrink-0"}>{o.icon}</span>
