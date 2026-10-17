@@ -38,11 +38,7 @@ export default function PopularRow({ app, platform, index = 0 }: { app: PopularA
         </div>
         {desc && <span className="block text-muted text-[13px] truncate mt-0.5">{desc}</span>}
       </div>
-      <span className={`shrink-0 text-[11px] font-bold rounded-full px-3 py-1 border ${
-        app.isOpenSource
-          ? "text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
-          : "text-sky-600 dark:text-sky-400 border-sky-500/30 bg-sky-500/10"
-      }`}>
+      <span className={`badge badge-sm badge-soft shrink-0 ${app.isOpenSource ? "badge-success" : "badge-info"}`}>
         {app.isOpenSource ? "متن‌باز" : "رایگان"}
       </span>
     </div>
