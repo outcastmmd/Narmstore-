@@ -51,8 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 function InfoRow({ k, v, ltr = false }: { k: string; v: React.ReactNode; ltr?: boolean }) {
   return (
-    <div className="flex justify-between gap-4 py-2.5 border-b border-border last:border-0 text-sm">
-      <dt className="text-muted shrink-0">{k}</dt>
+    <div className="flex justify-between gap-4 py-2 border-b border-base-300 last:border-0 text-[13px]">
+      <dt className="opacity-60 shrink-0">{k}</dt>
       <dd className="font-medium text-left break-all min-w-0" dir={ltr ? "ltr" : "rtl"}>{v}</dd>
     </div>
   );
@@ -251,56 +251,92 @@ export default async function AppPage({ params }: Props) {
 
       <div className="h-px bg-border" />
 
-      {/* اطلاعات — استایل گروهی iOS */}
+      {/* اطلاعات — daisyUI */}
       <section className="py-6" aria-label="اطلاعات">
-        <h2 className="font-extrabold text-[17px] px-1 mb-3">اطلاعات</h2>
-        <dl className="bg-surface rounded-2xl px-4">
-          {app.platform === "android" && (
+        <h2 className="font-extrabold text-[15px] px-1 mb-3">اطلاعات</h2>
+
+        {/* اعداد کلیدی */}
+        <div className="stats w-full bg-base-200 shadow-sm mb-3">
+          {app.platform === "android" ? (
             <>
-              <InfoRow k="نسخه" v={v ? <span dir="ltr">{v.versionName}</span> : "—"} ltr />
-              <InfoRow k="حجم" v={formatBytes(v?.fileSize)} />
-              <InfoRow k="حداقل اندروید" v={androidVersion(v?.minSdk)} />
+              <div className="stat px-4 py-3">
+                <div className="stat-title text-[11px]">نسخه</div>
+                <div className="stat-value text-lg font-bold" dir="ltr">{v?.versionName ?? "—"}</div>
+              </div>
+              <div className="stat px-4 py-3">
+                <div className="stat-title text-[11px]">حجم</div>
+                <div className="stat-value text-lg font-bold">{formatBytes(v?.fileSize)}</div>
+              </div>
             </>
-          )}
-          {app.platform !== "android" && (
-            <InfoRow k="پلتفرم" v={app.platform === "windows" ? "ویندوز" : "لینوکس"} />
-          )}
-          <InfoRow k="توسعه‌دهنده" v={app.developerName || "نامشخص"} />
-          <InfoRow k="مجوز" v={app.license || "نامشخص"} ltr />
-          <InfoRow k="به‌روزرسانی" v={v ? timeAgo(v.publishedAt || v.createdAt) : "—"} />
-          <InfoRow k="منبع" v={app.sourceUrl ? (
-            <a href={app.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary" dir="ltr">
-              {app.sourceType === "fdroid" ? "F-Droid" : new URL(app.sourceUrl).hostname.replace(/^www\./, "")}
-            </a>
-          ) : "داخلی"} />
-          <InfoRow k="وضعیت بررسی" v={
-            v?.verifiedAt
-              ? <span className="text-primary font-bold inline-flex items-center gap-1"><BadgeCheck className="w-4 h-4" aria-hidden="true" /> {formatDate(v.verifiedAt)}</span>
-              : <span className="text-muted">در انتظار بررسی</span>
-          } />
-          {(v?.sha256 || app.permissions.length > 0) && (
-            <div className="border-t border-border py-3 space-y-3">
-              {v?.sha256 && (
-                <details className="text-[13px]">
-                  <summary className="cursor-pointer text-primary font-bold">هش SHA-256</summary>
-                  <code className="block mt-2 p-3 bg-surface-2 rounded-xl break-all font-mono text-[12px]" dir="ltr">{v.sha256}</code>
-                </details>
-              )}
-              {app.permissions.length > 0 && (
-                <details className="text-[13px]">
-                  <summary className="cursor-pointer text-primary font-bold">مجوزهای درخواستی ({toFaDigits(app.permissions.length)})</summary>
-                  <ul className="mt-2 space-y-2 max-h-44 overflow-y-auto">
-                    {app.permissions.map((p) => (
-                      <li key={p.id} className="font-mono bg-surface-2 rounded-lg px-3 py-2 break-all text-[12px]" dir="ltr" style={{ textAlign: "left" }}>
-                        {p.permission}
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              )}
+          ) : (
+            <div className="stat px-4 py-3">
+              <div className="stat-title text-[11px]">پلتفرم</div>
+              <div className="stat-value text-lg font-bold">{app.platform === "windows" ? "ویندوز" : "لینوکس"}</div>
             </div>
           )}
-        </dl>
+          <div className="stat px-4 py-3">
+            <div className="stat-title text-[11px]">مجوز</div>
+            <div className="stat-value text-[13px] font-bold break-words" dir="ltr">{app.license || "—"}</div>
+          </div>
+        </div>
+
+        {/* جزئیات */}
+        <div className="card bg-base-200 shadow-sm">
+          <div className="card-body p-4">
+            <dl>
+              {app.platform === "android" && (
+                <InfoRow k="حداقل اندروید" v={androidVersion(v?.minSdk)} />
+              )}
+              <InfoRow k="توسعه‌دهنده" v={app.developerName || "نامشخص"} />
+              <InfoRow k="به‌روزرسانی" v={v ? timeAgo(v.publishedAt || v.createdAt) : "—"} />
+              <InfoRow k="منبع" v={app.sourceUrl ? (
+                <a href={app.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary" dir="ltr">
+                  {app.sourceType === "fdroid" ? "F-Droid" : new URL(app.sourceUrl).hostname.replace(/^www\./, "")}
+                </a>
+              ) : "داخلی"} />
+              <div className="flex justify-between items-center gap-4 py-2 text-[13px]">
+                <dt className="opacity-60 shrink-0">وضعیت بررسی</dt>
+                <dd>
+                  {v?.verifiedAt ? (
+                    <span className="badge badge-success badge-sm gap-1">
+                      <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" /> {formatDate(v.verifiedAt)}
+                    </span>
+                  ) : (
+                    <span className="badge badge-ghost badge-sm">در انتظار بررسی</span>
+                  )}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        {/* هش و مجوزها */}
+        {(v?.sha256 || app.permissions.length > 0) && (
+          <div className="space-y-2 mt-3">
+            {v?.sha256 && (
+              <div className="collapse collapse-arrow bg-base-200 shadow-sm">
+                <input type="checkbox" />
+                <div className="collapse-title text-[13px] font-bold py-3 min-h-0">هش SHA-256</div>
+                <div className="collapse-content">
+                  <code className="block p-3 bg-base-300 rounded-xl break-all font-mono text-[11px]" dir="ltr">{v.sha256}</code>
+                </div>
+              </div>
+            )}
+            {app.permissions.length > 0 && (
+              <div className="collapse collapse-arrow bg-base-200 shadow-sm">
+                <input type="checkbox" />
+                <div className="collapse-title text-[13px] font-bold py-3 min-h-0">مجوزهای درخواستی ({toFaDigits(app.permissions.length)})</div>
+                <div className="collapse-content">
+                  <div className="flex flex-wrap gap-1.5 max-h-44 overflow-y-auto">
+                    {app.permissions.map((p) => (
+                      <span key={p.id} className="badge badge-ghost badge-sm font-mono" dir="ltr">{p.permission}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* جایگزین‌ها */}
