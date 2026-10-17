@@ -33,8 +33,6 @@ import { siteUrl } from "@/lib/site-url";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const revalidate = 3600; // کش ISR: صفحه‌ی اپ حداکثر هر ۱ ساعت تازه می‌شود
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const app = await getAppBySlug(slug);
