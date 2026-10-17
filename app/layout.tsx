@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Vazirmatn } from "next/font/google";
+import { Vazirmatn, Cinzel } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -10,6 +10,14 @@ import { siteUrl } from "@/lib/site-url";
 const vazir = Vazirmatn({
   variable: "--font-vazir",
   subsets: ["arabic", "latin"],
+  display: "swap",
+});
+
+// فونت وردمارک لاتین Vesper — هم‌سبک حکاکی روی لوگو
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["700"],
   display: "swap",
 });
 
@@ -45,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
-      <body className={`${vazir.variable} min-h-full flex flex-col`}>
+      <body className={`${vazir.variable} ${cinzel.variable} min-h-full flex flex-col`}>
         <SWRegister />
         <ErrorReporter />
         <div className="bg-glows" aria-hidden="true"><span className="g1" /><span className="g2" /><span className="g3" /></div>
