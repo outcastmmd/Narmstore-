@@ -136,7 +136,7 @@ export default async function AppPage({ params }: Props) {
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-2 shrink-0 pt-1">
+          <div className="flex flex-row gap-2 shrink-0 pt-1">
             <FavoriteButton appId={app.id} appName={app.slug} />
             <FollowButton appId={app.id} />
           </div>

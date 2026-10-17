@@ -31,8 +31,8 @@ export default function FollowButton({ appId }: { appId: string }) {
 
   if (loading && !following) {
     return (
-      <button disabled className="text-xs font-bold bg-surface-2 text-muted rounded-full px-3 py-1.5 opacity-60">
-        ...
+      <button disabled aria-label="در حال بارگذاری" className="w-12 h-12 rounded-2xl border bg-surface border-border text-muted flex items-center justify-center opacity-60 shrink-0">
+        <Bell className="w-6 h-6" aria-hidden="true" />
       </button>
     );
   }
@@ -41,14 +41,14 @@ export default function FollowButton({ appId }: { appId: string }) {
     <button
       onClick={toggle}
       disabled={loading}
+      aria-pressed={following}
       title={following ? "لغو دنبال کردن" : "دنبال کن تا از نسخه جدید باخبر شی"}
-      className={`pressable text-xs font-bold rounded-full px-3 py-1.5 border transition inline-flex items-center gap-1.5 ${
-        following
-          ? "bg-primary text-primary-fg border-primary"
-          : "bg-surface border-border text-muted hover:text-foreground hover:border-primary/50"
-      } ${loading ? "opacity-60" : ""}`}
+      className={`w-12 h-12 rounded-2xl border flex items-center justify-center transition shrink-0 ${following
+        ? "bg-primary/10 border-primary/40 text-primary"
+        : "bg-surface border-border text-muted hover:border-primary/50 hover:text-primary"
+        } ${loading ? "opacity-60" : ""}`}
     >
-      {following ? <><Bell className="w-3.5 h-3.5" aria-hidden="true" /> دنبال می‌کنی</> : <><BellOff className="w-3.5 h-3.5" aria-hidden="true" /> دنبال کن</>}
+      {following ? <Bell className="w-6 h-6" aria-hidden="true" /> : <BellOff className="w-6 h-6" aria-hidden="true" />}
     </button>
   );
 }
