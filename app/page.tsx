@@ -10,6 +10,7 @@ import DbIcon from "@/components/DbIcon";
 import WeeklyPicks from "@/components/WeeklyPicks";
 import CollectionBrowser from "@/components/CollectionBrowser";
 import TopInRail from "@/components/TopInRail";
+import HeroSearch from "@/components/HeroSearch";
 import { ChevronLeft } from "lucide-react";
 import {
   getRootCategories, getPopularApps,
@@ -42,6 +43,9 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
 
   return (
     <>
+      {/* هیرو: جست‌وجو */}
+      <HeroSearch />
+
       {/* پیشنهادهای هفته — ۶ اپ منتخب سردبیر با آیکون کوچک */}
       <WeeklyPicks apps={weeklyPicks} platform={platform} />
 
