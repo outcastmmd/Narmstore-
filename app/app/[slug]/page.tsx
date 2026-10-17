@@ -150,12 +150,10 @@ export default async function AppPage({ params }: Props) {
               <div className="text-[12px] text-muted mt-1">نسخه</div>
             </div>
           )}
-          {v?.fileSize ? (
-            <div role="listitem" className="flex-1 text-center px-2 border-s border-border">
-              <div dir="ltr" className="font-bold text-[17px]">{formatBytes(v.fileSize)}</div>
-              <div className="text-[12px] text-muted mt-1">حجم</div>
-            </div>
-          ) : null}
+          <div role="listitem" className="flex-1 text-center px-2 border-s border-border">
+            <div dir="ltr" className="font-bold text-[17px]">{v?.fileSize ? formatBytes(v.fileSize) : "varies"}</div>
+            <div className="text-[12px] text-muted mt-1">حجم</div>
+          </div>
           <div role="listitem" className="flex-1 text-center px-2 border-s border-border">
             <div className="font-bold text-[17px]">
               {app.platform === "android" ? "اندروید" : app.platform === "windows" ? "ویندوز" : "لینوکس"}
