@@ -133,7 +133,7 @@ export default async function AppPage({ params }: Props) {
             </span>
           )}
           <div className="flex-1 min-w-0 pt-1">
-            <h1 className="text-[19px] font-extrabold leading-7 break-words">{app.nameFa}</h1>
+            <h1 title={app.nameFa} className="text-[19px] font-extrabold leading-7 break-words line-clamp-2">{app.nameFa}</h1>
             {app.developerName && (
               <p className="text-primary text-[15px] mt-0.5">{app.developerName}</p>
             )}
