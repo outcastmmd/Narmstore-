@@ -18,18 +18,29 @@ export default function UserMenu() {
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setMe(null);
+    setOpen(false);
     router.push("/");
     router.refresh();
   };
 
-  // فعلاً دکمه‌های ورود/ثبت‌نام در هدر نیست؛ ورود به‌صورت موقعیتی (مثلاً هنگام علاقه‌مندی) انجام می‌شود
-  if (me === undefined || !me) return null;
+  const logoBtn = (
+    <span className="block w-10 h-10 rounded-full overflow-hidden ring-2 ring-primary/60 ring-offset-2 ring-offset-surface shrink-0">
+      <img src="/icons/icon-192.png" alt="Vesper" width={40} height={40} className="w-full h-full object-cover" />
+    </span>
+  );
+
+  if (!me) {
+    return (
+      <Link href="/" aria-label="Vesper - صفحه‌ی اصلی">
+        {logoBtn}
+      </Link>
+    );
+  }
 
   return (
     <div className="relative">
-      <button onClick={() => setOpen((o) => !o)} aria-label="منوی کاربر" aria-expanded={open}
-        className="w-10 h-10 rounded-xl bg-primary-soft text-primary font-extrabold flex items-center justify-center hover:opacity-80 transition">
-        {(me.name || me.email).charAt(0)}
+      <button onClick={() => setOpen((o) => !o)} aria-label="منوی کاربر" aria-expanded={open}>
+        {logoBtn}
       </button>
       {open && (
         <>
