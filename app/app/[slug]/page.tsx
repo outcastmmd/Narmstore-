@@ -10,11 +10,11 @@ import { eq, and, desc, sql } from "drizzle-orm";
 import { toFaDigits, formatBytes, formatDate, timeAgo, androidVersion } from "@/lib/fa";
 import AppCard from "@/components/AppCard";
 import PlatformBadge from "@/components/PlatformBadge";
-import DownloadButton from "@/components/DownloadButton";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import CompareButton from "@/components/CompareButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
+import DownloadActions from "@/components/DownloadActions";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
@@ -25,7 +25,7 @@ import ReportButton from "@/components/ReportButton";
 import Alternatives from "@/components/Alternatives";
 import { findAlternatives } from "@/data/alternatives";
 import {
-  User, Star, Download, Clock, RefreshCw, Monitor, Globe,
+  User, Star, Download, Clock, RefreshCw,
   AppWindow, Terminal, BadgeCheck, TriangleAlert, Lightbulb, ExternalLink,
 } from "lucide-react";
 import { siteUrl } from "@/lib/site-url";
@@ -176,67 +176,25 @@ export default async function AppPage({ params }: Props) {
           </div>
         )}
 
-        {/* لینک منبع — فقط برای اندروید (ویندوز/لینوکس تک‌لینک هوشمند پایین دارند) */}
-        {app.platform === "android" && app.githubRepo && (
-          <div className="mt-6 pt-6 border-t border-border">
-            <a href={`https://github.com/${app.githubRepo}`} target="_blank" rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 bg-surface-2 border border-border rounded-2xl p-4 hover:border-primary/50 transition group">
-              <svg viewBox="0 0 24 24" className="w-8 h-8 fill-current" aria-hidden="true">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-              </svg>
-              <div className="text-start">
-                <p className="font-bold text-sm">مشاهده در گیت‌هاب</p>
-                <p className="text-xs text-muted font-mono" dir="ltr">{app.githubRepo}</p>
-              </div>
-              {app.githubStars ? (
-                <span className="ms-auto text-sm font-bold inline-flex items-center gap-1"><Star className="w-4 h-4" aria-hidden="true" /> {toFaDigits(app.githubStars)}</span>
-              ) : null}
-            </a>
-          </div>
-        )}
-
-        {/* دانلود */}
-        <div className="mt-6 pt-6 border-t border-border">
-          {app.platform === "android" ? (
-            v ? (
-              <DownloadButton versionId={v.id} versionName={v.versionName} fileSize={v.fileSize} />
-            ) : (
-              <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
-                <p className="font-bold mb-1">لینک دانلود در دسترس نیست</p>
-                <p className="text-sm text-muted">در حال حاضر نسخه‌ی فعالی برای این برنامه ثبت نشده است.</p>
-              </div>
-            )
-          ) : (
-            /* ویندوز/لینوکس: تک‌لینک هوشمند — سایت رسمی (غیر گیت‌هاب) در اولویت، وگرنه گیت‌هاب */
-            v && v.fileType !== "external" && v.fileUrl ? (
-              <DownloadButton versionId={v.id} versionName={v.versionName} fileSize={v.fileSize} />
-            ) : (
-              <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
-                <p className="font-bold mb-2 inline-flex items-center gap-2"><Monitor className="w-5 h-5" aria-hidden="true" /> نسخه‌ی دسکتاپ</p>
-                {(() => {
-                  const isGhUrl = app.sourceUrl?.includes("github.com");
-                  const officialSite = app.sourceUrl && !isGhUrl ? app.sourceUrl : null;
-                  const ghUrl = app.githubRepo ? `https://github.com/${app.githubRepo}` : (isGhUrl ? app.sourceUrl! : null);
-                  const url = officialSite || ghUrl;
-                  if (!url) return <p className="text-sm text-muted">لینک دانلود در دسترس نیست.</p>;
-                  return (
-                    <>
-                      <p className="text-sm text-muted mb-4">برای دانلود به {officialSite ? "وب‌سایت رسمی" : "صفحه‌ی گیت‌هاب"} پروژه مراجعه کن</p>
-                      <a href={url} target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-primary text-primary-fg font-bold px-6 py-3 rounded-xl hover:opacity-90 transition">
-                        {officialSite ? (
-                          <><Globe className="w-5 h-5" aria-hidden="true" /> صفحه رسمی پروژه</>
-                        ) : (
-                          <><Download className="w-5 h-5" aria-hidden="true" /> مشاهده در گیت‌هاب{app.githubStars ? ` · ${toFaDigits(app.githubStars)} استار` : ""}</>
-                        )}
-                      </a>
-                    </>
-                  );
-                })()}
-              </div>
-            )
-          )}
-        </div>
+        {/* دانلود — کامپوننت هوشمند یکپارچه */}
+        <DownloadActions
+          app={{
+            platform: app.platform,
+            githubRepo: app.githubRepo,
+            githubStars: app.githubStars,
+            sourceUrl: app.sourceUrl,
+            sourceType: app.sourceType,
+            version: v
+              ? {
+                  id: v.id,
+                  versionName: v.versionName,
+                  fileSize: v.fileSize,
+                  fileType: v.fileType,
+                  fileUrl: v.fileUrl,
+                }
+              : null,
+          }}
+        />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
