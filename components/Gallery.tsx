@@ -17,7 +17,6 @@ function Spinner() {
 
 export default function Gallery({ shots, appName }: { shots: Shot[]; appName: string }) {
   const [open, setOpen] = useState<number | null>(null);
-  const [loadedUrl, setLoadedUrl] = useState<string | null>(null);
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
 
@@ -26,10 +25,9 @@ export default function Gallery({ shots, appName }: { shots: Shot[]; appName: st
     setOpen((i) => (i === null ? i : (i + d + shots.length) % shots.length));
   }, [shots.length]);
 
-  // ریست وضعیت بارگذاری + پیش‌بارگذاری تصاویر هنگام باز شدن/جابه‌جایی لایت‌باکس
+  // ریست وضعیت + پیش‌بارگذاری تصاویر هنگام باز شدن/جابه‌جایی لایت‌باکس
   useEffect(() => {
     if (open === null) return;
-    setLoadedUrl(null);
     setFailedUrl(null);
     setRetry(0);
     // پیش‌بارگذاری همه‌ی اسکرین‌شات‌ها تا جابه‌جایی بدون مکث باشد
@@ -58,7 +56,6 @@ export default function Gallery({ shots, appName }: { shots: Shot[]; appName: st
 
   const current = open !== null ? shots[open] : null;
   const failed = !!current && failedUrl === current.url;
-  const loading = !!current && !failed && loadedUrl !== current.url;
 
   return (
     <>
@@ -90,28 +87,23 @@ export default function Gallery({ shots, appName }: { shots: Shot[]; appName: st
               ›
             </button>
             <div className="flex-1 flex items-center justify-center min-h-0 h-full relative">
-              {loading && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Spinner />
-                </div>
-              )}
               {failed ? (
                 <div className="flex flex-col items-center gap-3 text-white/80">
                   <span className="text-sm">تصویر بارگذاری نشد</span>
                   <button
-                    onClick={() => { setFailedUrl(null); setLoadedUrl(null); setRetry((r) => r + 1); }}
+                    onClick={() => { setFailedUrl(null); setRetry((r) => r + 1); }}
                     className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-sm transition">
                     تلاش مجدد
                   </button>
                 </div>
               ) : (
-                <PxImg
+                <img
                   key={`${current.id}-${retry}`}
                   src={current.url}
                   alt={`تصویر ${open! + 1} از ${appName}`}
-                  width={360} height={640} loading="eager"
-                  className={`max-h-full max-w-full w-auto h-auto object-contain rounded-lg transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"}`}
-                  onLoad={() => setLoadedUrl(current.url)}
+                  loading="eager"
+                  decoding="async"
+                  className="max-h-full max-w-full w-auto h-auto object-contain rounded-lg"
                   onError={() => setFailedUrl(current.url)}
                 />
               )}
