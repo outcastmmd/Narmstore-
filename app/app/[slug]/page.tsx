@@ -14,7 +14,7 @@ import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import CompareButton from "@/components/CompareButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
-import DownloadActions from "@/components/DownloadActions";
+import DownloadTrigger from "@/components/DownloadTrigger";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
@@ -208,7 +208,7 @@ export default async function AppPage({ params }: Props) {
         )}
 
         {/* دانلود — کامپوننت هوشمند یکپارچه */}
-        <DownloadActions
+        <DownloadTrigger
           app={{
             platform: app.platform,
             githubRepo: app.githubRepo,
@@ -225,6 +225,9 @@ export default async function AppPage({ params }: Props) {
                 }
               : null,
           }}
+          appName={app.nameFa}
+          iconUrl={app.iconUrl}
+          sha256={v?.sha256 ?? null}
         />
       </div>
 
