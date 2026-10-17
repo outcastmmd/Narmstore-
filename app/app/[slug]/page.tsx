@@ -176,8 +176,8 @@ export default async function AppPage({ params }: Props) {
           </div>
         )}
 
-        {/* لینک منبع (گیت‌هاب) — بالای دانلود برای اعتماد */}
-        {app.githubRepo && (
+        {/* لینک منبع — فقط برای اندروید (ویندوز/لینوکس تک‌لینک هوشمند پایین دارند) */}
+        {app.platform === "android" && app.githubRepo && (
           <div className="mt-6 pt-6 border-t border-border">
             <a href={`https://github.com/${app.githubRepo}`} target="_blank" rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 bg-surface-2 border border-border rounded-2xl p-4 hover:border-primary/50 transition group">
@@ -195,21 +195,6 @@ export default async function AppPage({ params }: Props) {
           </div>
         )}
 
-        {/* صفحه‌ی رسمی پروژه */}
-        {app.sourceUrl && app.sourceType !== "fdroid" && (
-          <div className="mt-6">
-            <a href={app.sourceUrl} target="_blank" rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 bg-primary/10 border border-primary/30 rounded-2xl p-4 hover:border-primary/60 hover:bg-primary/15 transition">
-              <Globe className="w-7 h-7 text-primary" aria-hidden="true" />
-              <div className="text-start">
-                <p className="font-bold text-sm">صفحه‌ی رسمی پروژه</p>
-                <p className="text-xs text-muted">مشاهده‌ی وب‌سایت رسمی و دانلود مستقیم</p>
-              </div>
-              <ExternalLink className="w-5 h-5 text-primary ms-auto" aria-hidden="true" />
-            </a>
-          </div>
-        )}
-
         {/* دانلود */}
         <div className="mt-6 pt-6 border-t border-border">
           {app.platform === "android" ? (
@@ -222,33 +207,32 @@ export default async function AppPage({ params }: Props) {
               </div>
             )
           ) : (
-            /* ویندوز/لینوکس: فقط دانلود واقعی، وگرنه لینک گیت‌هاب */
+            /* ویندوز/لینوکس: تک‌لینک هوشمند — سایت رسمی (غیر گیت‌هاب) در اولویت، وگرنه گیت‌هاب */
             v && v.fileType !== "external" && v.fileUrl ? (
               <DownloadButton versionId={v.id} versionName={v.versionName} fileSize={v.fileSize} />
             ) : (
               <div className="bg-surface-2 border border-border rounded-2xl p-5 text-center">
                 <p className="font-bold mb-2 inline-flex items-center gap-2"><Monitor className="w-5 h-5" aria-hidden="true" /> نسخه‌ی دسکتاپ</p>
-                {(app.githubRepo || app.sourceUrl) ? (
-                  <>
-                    <p className="text-sm text-muted mb-4">برای دانلود به صفحه‌ی رسمی پروژه مراجعه کن</p>
-                    <div className="flex gap-2 justify-center flex-wrap">
-                      {app.githubRepo ? (
-                        <a href={`https://github.com/${app.githubRepo}`} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 bg-[#24292f] text-white font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
-                          <Download className="w-4 h-4" aria-hidden="true" /> دانلود از GitHub
-                        </a>
-                      ) : null}
-                      {app.sourceUrl ? (
-                        <a href={app.sourceUrl} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 bg-primary text-primary-fg font-bold px-5 py-2.5 rounded-xl hover:opacity-90 transition">
-                          <Globe className="w-4 h-4" aria-hidden="true" /> صفحه رسمی پروژه
-                        </a>
-                      ) : null}
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-sm text-muted">لینک دانلود در دسترس نیست.</p>
-                )}
+                {(() => {
+                  const isGhUrl = app.sourceUrl?.includes("github.com");
+                  const officialSite = app.sourceUrl && !isGhUrl ? app.sourceUrl : null;
+                  const ghUrl = app.githubRepo ? `https://github.com/${app.githubRepo}` : (isGhUrl ? app.sourceUrl! : null);
+                  const url = officialSite || ghUrl;
+                  if (!url) return <p className="text-sm text-muted">لینک دانلود در دسترس نیست.</p>;
+                  return (
+                    <>
+                      <p className="text-sm text-muted mb-4">برای دانلود به {officialSite ? "وب‌سایت رسمی" : "صفحه‌ی گیت‌هاب"} پروژه مراجعه کن</p>
+                      <a href={url} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-primary text-primary-fg font-bold px-6 py-3 rounded-xl hover:opacity-90 transition">
+                        {officialSite ? (
+                          <><Globe className="w-5 h-5" aria-hidden="true" /> صفحه رسمی پروژه</>
+                        ) : (
+                          <><Download className="w-5 h-5" aria-hidden="true" /> مشاهده در گیت‌هاب{app.githubStars ? ` · ${toFaDigits(app.githubStars)} استار` : ""}</>
+                        )}
+                      </a>
+                    </>
+                  );
+                })()}
               </div>
             )
           )}
