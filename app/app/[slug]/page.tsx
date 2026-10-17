@@ -122,8 +122,8 @@ export default async function AppPage({ params }: Props) {
 
   return (
     <div className="animate-fade-up max-w-3xl mx-auto">
-      {/* سربرگ iOS-استایل */}
-      <div className="px-1 pt-2 pb-6">
+      {/* سربرگ یکپارچه: معرفی + مشخصات + دانلود */}
+      <div className="bg-surface border border-border rounded-3xl p-5 sm:p-6">
         <div className="flex gap-3 items-start">
           {app.iconUrl ? (
             <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={88} height={88}
@@ -152,7 +152,7 @@ export default async function AppPage({ params }: Props) {
         </div>
 
         {/* ردیف اطلاعات iOS — نسخه / حجم / پلتفرم */}
-        <div className="flex mt-6 py-2" role="list" aria-label="مشخصات برنامه">
+        <div className="flex mt-5 pt-5 border-t border-border" role="list" aria-label="مشخصات برنامه">
           {v?.versionName && (
             <div role="listitem" className="flex-1 text-center px-2">
               <div dir="ltr" className="font-bold text-[17px]">{v.versionName}</div>
@@ -216,8 +216,6 @@ export default async function AppPage({ params }: Props) {
           />
         </div>
       </div>
-
-      <div className="h-px bg-border" />
 
       {/* تصاویر */}
       {app.screenshots.length > 0 && (
