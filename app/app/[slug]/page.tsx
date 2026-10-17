@@ -128,9 +128,9 @@ export default async function AppPage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-2 mb-1">
               <h1 className="text-2xl font-extrabold">{app.nameFa}</h1>
               <PlatformBadge platform={app.platform} />
-              {app.isOpenSource && (
-                <span className="text-xs bg-primary-soft text-primary font-bold px-2.5 py-1 rounded-full">متن‌باز</span>
-              )}
+              {tags.map((t) => (
+                <span key={t.slug} className="text-xs bg-primary-soft text-primary font-bold px-2.5 py-1 rounded-full">{t.label}</span>
+              ))}
               <span className="ms-auto flex items-center gap-2">
                 <FollowButton appId={app.id} />
                 <FavoriteButton appId={app.id} appName={app.slug} />
@@ -176,16 +176,6 @@ export default async function AppPage({ params }: Props) {
                 ) : null;
               })()}
             </div>
-            {/* برچسب‌های هوشمند */}
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3" aria-label="برچسب‌ها">
-                {tags.map((t) => (
-                  <span key={t.slug} className="text-xs font-bold bg-primary-soft text-primary rounded-full px-3 py-1.5 inline-flex items-center gap-1.5">
-                    <t.Icon className="w-3.5 h-3.5" aria-hidden="true" /> {t.label}
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
