@@ -42,9 +42,9 @@ export default function Header() {
           aria-hidden={scrolled}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-2 sm:gap-3">
-            <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Vesper - صفحه اصلی" tabIndex={scrolled ? -1 : 0}>
-              <img src="/icons/icon-192.png" alt="لوگوی Vesper" width={32} height={32} className="w-8 h-8 rounded-xl object-cover" />
-              <span className="font-bold text-[17px] hidden sm:inline">Vesper</span>
+            <Link href="/" className="flex items-center gap-2.5 shrink-0" aria-label="Vesper - صفحه اصلی" tabIndex={scrolled ? -1 : 0}>
+              <img src="/icons/icon-192.png" alt="لوگوی Vesper" width={40} height={40} className="w-10 h-10 rounded-xl object-cover" />
+              <span className="font-wordmark font-bold text-[19px] tracking-[0.18em] pt-0.5">Vesper</span>
             </Link>
             {!isHome && (
               <div className="hidden md:block flex-1 max-w-md">
