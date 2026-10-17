@@ -7,9 +7,11 @@ import AppCard from "@/components/AppCard";
 import Section from "@/components/Section";
 import CategoryCards from "@/components/CategoryCards";
 import DbIcon from "@/components/DbIcon";
+import WeeklyPicks from "@/components/WeeklyPicks";
 import {
   getRootCategories, getFeaturedApps, getPopularApps,
   getLatestApps, getCategoryBySlug, getChildPreviews, getCollections, getHomeStats,
+  getEditorChoice,
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
@@ -22,9 +24,10 @@ function appHref(slug: string, platform?: Platform) {
 }
 
 async function HomeSlide({ platform }: { platform?: Platform }) {
-  const [featured, popular, latest, collections, stats] = await Promise.all([
+  const [featured, popular, latest, collections, stats, weeklyPicks] = await Promise.all([
     getFeaturedApps(4, platform), getPopularApps(8, platform),
     getLatestApps(8, platform), getCollections(platform, 6), getHomeStats(platform),
+    getEditorChoice(6, platform),
   ]);
   const hero = featured[0];
 
@@ -53,6 +56,9 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
           </div>
         </Link>
       )}
+
+      {/* پیشنهادهای هفته — ۶ اپ منتخب سردبیر با آیکون کوچک */}
+      <WeeklyPicks apps={weeklyPicks} platform={platform} />
 
       {/* نوار آمار — کارت‌های کوچک با اعداد هلویی */}
       <div className="mb-10 grid grid-cols-3 gap-3 text-center" role="status" aria-label="آمار فروشگاه">
