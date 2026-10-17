@@ -10,6 +10,7 @@ import DbIcon from "@/components/DbIcon";
 import WeeklyPicks from "@/components/WeeklyPicks";
 import CollectionBrowser from "@/components/CollectionBrowser";
 import TopInRail from "@/components/TopInRail";
+import HeroSearch from "@/components/HeroSearch";
 import { ChevronLeft } from "lucide-react";
 import {
   getRootCategories, getPopularApps,
@@ -42,6 +43,15 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
 
   return (
     <>
+      {/* هیرو: جست‌وجوی بزرگ + چیپ دسته‌ها */}
+      <HeroSearch
+        cats={cats.filter((c) => (c.appCount ?? 0) >= 5)
+          .sort((a, b) => (b.appCount ?? 0) - (a.appCount ?? 0))
+          .slice(0, 6)
+          .map((c) => ({ slug: c.slug, nameFa: c.nameFa }))}
+        platform={platform}
+      />
+
       {/* پیشنهادهای هفته — ۶ اپ منتخب سردبیر با آیکون کوچک */}
       <WeeklyPicks apps={weeklyPicks} platform={platform} />
 
