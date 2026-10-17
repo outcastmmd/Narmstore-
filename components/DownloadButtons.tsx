@@ -28,13 +28,63 @@ function platformIcon(platform: string, className: string) {
   return <AndroidIcon className={className} />;
 }
 
+// رنگ نئونی هر پلتفرم/مقصد
+const NEON: Record<string, string> = {
+  android: "#10b981",
+  windows: "#3b82f6",
+  linux: "#f59e0b",
+  web: "#8b5cf6",
+  github: "#a1a1aa",
+};
+
 const platformFa: Record<string, string> = {
   android: "اندروید",
   windows: "ویندوز",
   linux: "لینوکس",
 };
 
-// دکمه‌های دانلود آیکونی — فقط آیکون پلتفرم، بدون متن نسخه
+type PillProps = {
+  href: string;
+  external?: boolean;
+  downloadable?: boolean;
+  color: string;
+  icon: React.ReactNode;
+  label: string;
+  big?: boolean;
+};
+
+// دکمه‌ی قرصی نئونی: آیکون پلتفرم | خط جداکننده | آیکون دانلود
+function NeonPill({ href, external, downloadable, color, icon, label, big }: PillProps) {
+  return (
+    <a
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      download={downloadable ? "" : undefined}
+      title={label}
+      aria-label={label}
+      className={`flex items-center rounded-full border-2 transition active:scale-95 hover:brightness-125 ${
+        big ? "gap-5 px-8 py-4" : "gap-3.5 px-5 py-2.5"
+      }`}
+      style={{
+        borderColor: color,
+        color,
+        background: `color-mix(in srgb, ${color} 10%, transparent)`,
+        boxShadow: `0 0 28px -8px ${color}`,
+      }}
+    >
+      <span className={big ? "[&>svg]:w-8 [&>svg]:h-8" : "[&>svg]:w-6 [&>svg]:h-6"}>{icon}</span>
+      <span
+        aria-hidden="true"
+        className={big ? "w-px h-9" : "w-px h-6"}
+        style={{ background: color, opacity: 0.45 }}
+      />
+      <Download className={big ? "w-8 h-8" : "w-6 h-6"} aria-hidden="true" />
+    </a>
+  );
+}
+
+// دکمه‌های دانلود نئونی — فقط آیکون، بدون متن نسخه
 export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
   const opts = getDownloadOptions(app);
   if (!opts.length) return null;
@@ -44,42 +94,25 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
 
   return (
     <section aria-label="دانلود" className="mt-6">
-      <div className="flex items-center gap-3">
-        <a
+      <div className="flex flex-wrap items-center gap-3">
+        <NeonPill
           href={primary.href}
-          target={primary.external ? "_blank" : undefined}
-          rel={primary.external ? "noopener noreferrer" : undefined}
-          download={!primary.external ? "" : undefined}
-          title="دانلود"
-          aria-label={`دانلود برای ${platformFa[app.platform] ?? app.platform}`}
-          className="relative grid place-items-center w-20 h-20 rounded-3xl text-white transition active:scale-95 hover:brightness-110"
-          style={{
-            background: "linear-gradient(135deg, color-mix(in srgb, var(--primary) 85%, black), color-mix(in srgb, var(--primary) 60%, black))",
-            boxShadow: "0 12px 32px -10px var(--primary)",
-          }}
-        >
-          <span className="relative [&>svg]:w-10 [&>svg]:h-10">
-            {platformIcon(app.platform, "")}
-            <span
-              className="absolute -bottom-1 -end-1 grid place-items-center w-7 h-7 rounded-full text-white shadow-md ring-2 ring-white/25"
-              style={{ background: "rgba(0,0,0,0.6)" }}
-            >
-              <Download className="w-4 h-4" aria-hidden="true" />
-            </span>
-          </span>
-        </a>
+          external={primary.external}
+          downloadable={!primary.external}
+          color={NEON[app.platform] ?? NEON.android}
+          icon={platformIcon(app.platform, "")}
+          label={`دانلود برای ${platformFa[app.platform] ?? app.platform}`}
+          big
+        />
         {rest.map((o) => (
-          <a
+          <NeonPill
             key={o.key}
             href={o.href}
-            target={o.external ? "_blank" : undefined}
-            rel={o.external ? "noopener noreferrer" : undefined}
-            title={o.label}
-            aria-label={o.label}
-            className="grid place-items-center w-12 h-12 rounded-2xl border border-border bg-surface text-foreground transition active:scale-95 hover:border-primary/60"
-          >
-            <span className="[&>svg]:w-6 [&>svg]:h-6 text-primary">{o.icon}</span>
-          </a>
+            external={o.external}
+            color={NEON[o.key] ?? NEON.web}
+            icon={o.icon}
+            label={o.label}
+          />
         ))}
       </div>
     </section>
