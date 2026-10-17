@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
 import ThemeToggle from "./ThemeToggle";
@@ -5,38 +8,66 @@ import UserMenu from "./UserMenu";
 import NotifBell from "./NotifBell";
 import PlatformNav from "./PlatformNav";
 
+const NAV = [
+  { href: "/", label: "خانه" },
+  { href: "/categories", label: "دسته‌بندی‌ها" },
+  { href: "/popular", label: "محبوب‌ترین‌ها" },
+  { href: "/latest", label: "تازه‌ها" },
+];
+
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 120);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
       <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Vesper - صفحه اصلی">
-            <img src="/icons/icon-192.png" alt="لوگوی Vesper" width={36} height={36} className="w-9 h-9 rounded-xl object-cover" />
-            <span className="font-bold text-lg hidden sm:inline">Vesper</span>
-          </Link>
-          <div className="hidden md:block flex-1 max-w-md">
-            <SearchBox compact />
-          </div>
-          <nav className="hidden md:flex items-center gap-1 text-sm ms-auto" aria-label="ناوبری اصلی">
-            <Link href="/" className="px-3 py-2 rounded-lg hover:bg-surface-2 transition">خانه</Link>
-            <Link href="/categories" className="px-3 py-2 rounded-lg hover:bg-surface-2 transition">دسته‌بندی‌ها</Link>
-            <Link href="/popular" className="px-3 py-2 rounded-lg hover:bg-surface-2 transition">محبوب‌ترین‌ها</Link>
-            <Link href="/latest" className="px-3 py-2 rounded-lg hover:bg-surface-2 transition">تازه‌ها</Link>
-          </nav>
-          <div className="ms-auto md:ms-0 flex items-center gap-2">
-            <NotifBell />
-            <ThemeToggle />
-            <UserMenu />
+        {/* ردیف اصلی: لوگو، جست‌وجو، ناوبری، ابزارها — هنگام اسکرول جمع می‌شود */}
+        <div
+          className={`overflow-hidden transition-[max-height,opacity] duration-300 ${scrolled ? "max-h-0 opacity-0" : "max-h-16 opacity-100"}`}
+          aria-hidden={scrolled}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-2 sm:gap-3">
+            <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Vesper - صفحه اصلی" tabIndex={scrolled ? -1 : 0}>
+              <img src="/icons/icon-192.png" alt="لوگوی Vesper" width={32} height={32} className="w-8 h-8 rounded-xl object-cover" />
+              <span className="font-bold text-[17px] hidden sm:inline">Vesper</span>
+            </Link>
+            <div className="hidden md:block flex-1 max-w-md">
+              <SearchBox compact />
+            </div>
+            <nav className="hidden md:flex items-center gap-1 text-sm ms-auto" aria-label="ناوبری اصلی">
+              {NAV.map((n) => (
+                <Link key={n.href} href={n.href} tabIndex={scrolled ? -1 : 0}
+                  className="px-3 py-2 rounded-xl hover:bg-surface-2 transition font-medium">
+                  {n.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="ms-auto md:ms-0 flex items-center gap-1.5">
+              <NotifBell />
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
         </div>
-        <div className="md:hidden px-4 pb-3">
-          <SearchBox compact />
+
+        {/* ردیف جست‌وجو: موبایل همیشه دو ردیفه؛ دسکتاپ فقط هنگام اسکرول نوار باریک */}
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 ${scrolled ? "" : "md:hidden"}`}>
+          <div className={scrolled ? "py-2" : "pt-1 pb-3"}>
+            <SearchBox compact slim={scrolled} />
+          </div>
         </div>
       </header>
 
       {/* نوبار شناور پلتفرم (موبایل و دسکتاپ) */}
       <PlatformNav />
-      <div className="h-20" aria-hidden="true" />
+      <div className="h-10" aria-hidden="true" />
     </>
   );
 }
