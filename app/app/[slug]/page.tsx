@@ -179,11 +179,11 @@ export default async function AppPage({ params }: Props) {
 
         {/* بنر آپدیت */}
         {hasUpdate && v && (
-          <div className="mt-4 bg-primary-soft rounded-2xl p-4 flex items-center gap-3" role="status">
-            <RefreshCw className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
+          <div className="alert alert-success mt-4" role="status">
+            <RefreshCw className="w-5 h-5 shrink-0" aria-hidden="true" />
             <p className="text-sm">
               <b>نسخه‌ی جدید موجوده!</b>{" "}
-              <span className="text-muted">
+              <span className="opacity-80">
                 {downloadedVersion ? (
                   <>از <span dir="ltr">{downloadedVersion}</span> به <span dir="ltr">{v.versionName}</span></>
                 ) : (
