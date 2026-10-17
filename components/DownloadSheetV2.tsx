@@ -91,11 +91,11 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
       )}
 
       {open && (
-        <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={`دانلود ${appName}`}>
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] animate-fade-in" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-0 inset-x-0 sm:inset-x-auto sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[420px] sm:rounded-[28px] max-h-[88dvh] overflow-y-auto rounded-t-[28px] animate-sheet-up border border-white/10"
+        <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label={`دانلود ${appName}`}>
+          <div className="absolute inset-0 bg-black/50 animate-fade-in" onClick={() => setOpen(false)} />
+          <div className="fixed bottom-0 inset-x-0 sm:absolute sm:bottom-auto sm:inset-x-auto sm:top-1/2 sm:left-1/2 sm:w-[420px] max-h-[85dvh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] border border-white/10 animate-sheet-up"
             style={{
-              background: "color-mix(in srgb, var(--surface) 72%, transparent)",
+              background: "color-mix(in srgb, var(--surface) 88%, transparent)",
               backdropFilter: "blur(24px) saturate(1.4)",
               WebkitBackdropFilter: "blur(24px) saturate(1.4)",
             }}>

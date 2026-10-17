@@ -130,12 +130,16 @@ body {
 
 /* باتم‌شیت دانلود */
 @keyframes sheet-up {
-  from { opacity: 0; transform: translateY(48px) scale(0.98); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .animate-sheet-up { animation: sheet-up 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
 @media (min-width: 640px) {
-  .animate-sheet-up { animation-name: card-in; }
+  @keyframes sheet-center {
+    from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  .animate-sheet-up { animation-name: sheet-center; }
 }
 @keyframes fade-in {
   from { opacity: 0; }
