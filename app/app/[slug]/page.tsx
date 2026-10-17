@@ -60,7 +60,8 @@ function InfoRow({ k, v, ltr = false }: { k: string; v: React.ReactNode; ltr?: b
 }
 
 // پاک‌سازی نشانه‌های مارک‌داون از توضیحات (دیتای دیتابیس دست‌نخورده می‌ماند)
-function stripMd(t: string): string {
+function stripMd(t: string | null | undefined): string {
+  if (!t) return "";
   return t
     .replace(/(\*\*|__)([\s\S]*?)\1/g, "$2")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
