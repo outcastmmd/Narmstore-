@@ -200,6 +200,14 @@ export async function getRelatedApps(appId: string, limit = 8, platform?: Platfo
   return [...score.values()].sort((a, b) => b.n - a.n).slice(0, limit).map((e) => e.app);
 }
 
+export async function getAppByNameEn(nameEn: string) {
+  await dyn();
+  const rows = await db.select(cardCols).from(s.apps)
+    .where(and(pub, eq(s.apps.nameEn, nameEn)))
+    .limit(1);
+  return rows[0] ?? null;
+}
+
 export async function getAppBySlug(slug: string) {
   await dyn();
   const rows = await db.select({
