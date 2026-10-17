@@ -12,7 +12,6 @@ import AppCard from "@/components/AppCard";
 import PlatformBadge from "@/components/PlatformBadge";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
-import CompareButton from "@/components/CompareButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
 import DownloadTrigger from "@/components/DownloadTrigger";
 import Reviews from "@/components/Reviews";
@@ -356,10 +355,6 @@ export default async function AppPage({ params }: Props) {
         </section>
       )}
 
-      {/* مقایسه: آخر صفحه */}
-      <div className="mt-8 flex justify-center">
-        <CompareButton slug={app.slug} nameFa={app.nameFa} />
-      </div>
     </div>
   );
 }
