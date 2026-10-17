@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import NotifBell from "./NotifBell";
+import ThemeToggle from "./ThemeToggle";
 import PlatformNav from "./PlatformNav";
 
 export default function Header() {
@@ -16,6 +17,8 @@ export default function Header() {
           <div className="flex-1" aria-hidden="true" />
           <div className="flex items-center shrink-0 rounded-full border border-border bg-surface-2/60 p-1">
             <NotifBell />
+            <span className="w-px h-6 bg-border shrink-0" aria-hidden="true" />
+            <ThemeToggle />
           </div>
         </div>
       </header>

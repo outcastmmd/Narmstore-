@@ -1,27 +1,28 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: all;
+  themes: dim --default, dracula, halloween;
 }
 
 :root {
-  --bg: #1a1428;
-  --surface: #241d38;
-  --surface-2: #2e2547;
-  --fg: #f4eefc;
-  --muted: #a89cc9;
-  --border: rgba(255, 255, 255, 0.08);
-  --primary: #f5c99b;
-  --primary-soft: rgba(245, 201, 155, 0.13);
-  --primary-fg: #3a2410;
-  --accent: #b39ddb;
-  --danger: #fb7185;
+  /* نگاشت به تم فعال daisyUI — با عوض شدن data-theme همه به‌روز می‌شن */
+  --bg: var(--color-base-100);
+  --surface: var(--color-base-200);
+  --surface-2: var(--color-base-300);
+  --fg: var(--color-base-content);
+  --muted: color-mix(in oklab, var(--color-base-content) 62%, transparent);
+  --border: var(--color-base-300);
+  --primary: var(--color-primary);
+  --primary-soft: color-mix(in oklab, var(--color-primary) 13%, transparent);
+  --primary-fg: var(--color-primary-content);
+  --accent: var(--color-secondary);
+  --danger: var(--color-error);
   --radius: 0.75rem;
-  /* کارت هلویی هیرو — گرادیان + متن و دکمه‌ی روی آن */
-  --peach-1: #f7d9b8;
-  --peach-2: #f0bd85;
-  --peach-ink: #4a3220;
-  --peach-cta: #2b2945;
-  --peach-cta-fg: #ffffff;
+  /* کارت هیرو — هماهنگ با تم فعال */
+  --peach-1: var(--color-primary);
+  --peach-2: var(--color-secondary);
+  --peach-ink: var(--color-primary-content);
+  --peach-cta: var(--color-neutral);
+  --peach-cta-fg: var(--color-neutral-content);
 }
 
 @theme inline {
@@ -36,8 +37,8 @@
   --color-primary-fg: var(--primary-fg);
   --color-accent: var(--accent);
   --color-danger: var(--danger);
-  --font-sans: var(--font-vazir), system-ui, sans-serif;
-  --font-head: var(--font-vazir), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-vazir), system-ui, sans-serif;
+  --font-head: var(--font-inter), var(--font-vazir), system-ui, sans-serif;
   --font-wordmark: var(--font-cinzel), "Times New Roman", serif;
 }
 
@@ -49,7 +50,7 @@ html {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-vazir), system-ui, Tahoma, sans-serif;
+  font-family: var(--font-inter), var(--font-vazir), system-ui, Tahoma, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -114,22 +115,22 @@ body {
 /* هاله‌های پس‌زمینه — ظریف، هماهنگ با حس گرم هر تم */
 .bg-glows { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .bg-glows span { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.16; }
-.bg-glows .g1 { width: 480px; height: 480px; background: #b39ddb; top: -160px; right: -140px; }
-.bg-glows .g2 { width: 380px; height: 380px; background: #e8a94b; bottom: 8%; left: -160px; opacity: 0.12; }
+.bg-glows .g1 { width: 480px; height: 480px; background: color-mix(in oklab, var(--color-primary) 55%, transparent); top: -160px; right: -140px; }
+.bg-glows .g2 { width: 380px; height: 380px; background: color-mix(in oklab, var(--color-secondary) 55%, transparent); bottom: 8%; left: -160px; opacity: 0.12; }
 .bg-glows .g3 { display: none; }
 
 /* بوردر گرادیانی ظریف — فقط برای تأکید، نه همه‌جا */
 .grad-border { position: relative; }
 .grad-border::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
-  background: linear-gradient(140deg, rgba(245,201,155,.4), transparent 45%, transparent 55%, rgba(179,157,219,.3));
+  background: linear-gradient(140deg, color-mix(in oklab, var(--color-primary) 40%, transparent), transparent 45%, transparent 55%, color-mix(in oklab, var(--color-secondary) 30%, transparent));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
   pointer-events: none;
 }
 
 /* درخشش متن هیرو — ملایم */
-.hero-glow { text-shadow: 0 0 28px rgba(245,201,155,.35); }
+.hero-glow { text-shadow: 0 0 28px color-mix(in oklab, var(--color-primary) 35%, transparent); }
 
 /* کارت هلویی هیرو — امضای طراحی بنفش-هلویی */
 .hero-peach {

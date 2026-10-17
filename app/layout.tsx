@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Vazirmatn, Cinzel } from "next/font/google";
+import { Vazirmatn, Cinzel, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -10,6 +10,13 @@ import { siteUrl } from "@/lib/site-url";
 const vazir = Vazirmatn({
   variable: "--font-vazir",
   subsets: ["arabic", "latin"],
+  display: "swap",
+});
+
+// فونت لاتین — برای متن‌ها و اعداد انگلیسی (فارسی همچنان وزیرمتن)
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -41,10 +48,16 @@ export const viewport: Viewport = {
 // فروشگاه دیتامحور است: رندر سمت سرور برای هر درخواست (بدون prerender استاتیک)
 export const instant = false;
 
+// تم پیش‌فرض daisyUI + خواندن انتخاب کاربر
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('vesper-theme');if(t!=='dim'&&t!=='dracula'&&t!=='halloween'){t='dim';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fa" dir="rtl">
-      <body className={`${vazir.variable} ${cinzel.variable} min-h-full flex flex-col`}>
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
+      <body className={`${inter.variable} ${vazir.variable} ${cinzel.variable} min-h-full flex flex-col`}>
         <SWRegister />
         <ErrorReporter />
         <div className="bg-glows" aria-hidden="true"><span className="g1" /><span className="g2" /><span className="g3" /></div>
