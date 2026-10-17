@@ -4,7 +4,7 @@
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import * as s from "./schema";
 
 const FDROID = "https://f-droid.org/repo";
@@ -72,16 +72,32 @@ async function main() {
   let added = 0, updated = 0, skipped = 0;
   const notes: string[] = [];
 
+  // بچ: همه‌ی versionCodeهای موجود را با یک کوئری می‌گیریم (رفع N+1)
+  const appIds = apps.map((a) => a.id);
+  const knownByApp = new Map<string, Set<number>>();
+  if (appIds.length) {
+    const BATCH = 500;
+    for (let i = 0; i < appIds.length; i += BATCH) {
+      const rows = await db
+        .select({ appId: s.appVersions.appId, versionCode: s.appVersions.versionCode })
+        .from(s.appVersions)
+        .where(inArray(s.appVersions.appId, appIds.slice(i, i + BATCH)));
+      for (const r of rows) {
+        let set = knownByApp.get(r.appId);
+        if (!set) { set = new Set(); knownByApp.set(r.appId, set); }
+        set.add(r.versionCode);
+      }
+    }
+  }
+
   for (const app of apps) {
     const pkg = app.externalId || app.packageName;
     const p = pkgs[pkg];
     const md = p?.metadata;
     if (!p || !md) { skipped++; continue; }
 
-    // نسخه‌های موجود در دیتابیس
-    const existing = await db.select({ versionCode: s.appVersions.versionCode })
-      .from(s.appVersions).where(eq(s.appVersions.appId, app.id));
-    const known = new Set(existing.map((v) => v.versionCode));
+    // نسخه‌های موجود در دیتابیس (از مپ بچ‌شده)
+    const known = knownByApp.get(app.id) ?? new Set<number>();
 
     const allVers = (Object.values(p.versions || {}) as any[])
       .filter((v) => v?.manifest?.versionCode && v?.file?.name)
@@ -91,21 +107,21 @@ async function main() {
       const vc = Number(v.manifest.versionCode);
       if (known.has(vc)) continue;
       const f = v.file, m = v.manifest;
-      await db.insert(s.appVersions).values({
+      // returning شناسه را مستقیم برمی‌گرداند (بدون کوئری مجدد)
+      const [nv] = await db.insert(s.appVersions).values({
         appId: app.id,
         versionName: String(m.versionName), versionCode: vc,
         fileUrl: FDROID + f.name, fileSize: f.size ?? null,
         sha256: f.sha256 || null, minSdk: m.usesSdk?.minSdkVersion ?? null,
         fileType: "apk", status: "pending", isCurrent: false,
         source: "F-Droid auto-sync", publishedAt: v.added ? new Date(v.added) : new Date(),
-      });
-      // مجوزها
+      }).returning({ id: s.appVersions.id });
+      // مجوزها — درج گروهی
       const perms: string[] = (m.usesPermission || []).map((x: any) => x.name).filter(Boolean).slice(0, 60);
-      const [nv] = await db.select({ id: s.appVersions.id }).from(s.appVersions)
-        .where(and(eq(s.appVersions.appId, app.id), eq(s.appVersions.versionCode, vc)))
-        .orderBy(desc(s.appVersions.createdAt)).limit(1);
-      for (const pm of perms) {
-        await db.insert(s.appPermissions).values({ versionId: nv.id, permission: pm });
+      if (perms.length) {
+        await db.insert(s.appPermissions).values(
+          perms.map((pm) => ({ versionId: nv.id, permission: pm }))
+        );
       }
       added++;
       notes.push(`${app.nameFa}: v${m.versionName} (${vc})`);
