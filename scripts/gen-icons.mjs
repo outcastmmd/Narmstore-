@@ -1,14 +1,4 @@
-// آیکون‌های PWA — از فایل‌های JSON (base64) در زمان بیلد ساخته می‌شوند
-import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const dir = join(root, "public", "icons");
-mkdirSync(dir, { recursive: true });
-const files = {
-  ...JSON.parse(readFileSync(join(root, "scripts", "icons-data-512.json"), "utf8")),
-  ...JSON.parse(readFileSync(join(root, "scripts", "icons-data-maskable.json"), "utf8")),
-  ...JSON.parse(readFileSync(join(root, "scripts", "icons-data-2.json"), "utf8")),
-};
-for (const [n, b] of Object.entries(files)) writeFileSync(join(dir, n), Buffer.from(b, "base64"));
-console.log("icons generated");
+// این اسکریپت قبلاً در هر بیلد آیکون‌های public/icons را از نو می‌ساخت و لوگوی جدید را پاک می‌کرد.
+// حالا آیکون‌ها مستقیم در ریپو کامیت می‌شوند؛ این فایل فقط برای سازگاری با buildCommandهای قدیمی
+// (مثل تنظیمات قدیمی داشبورد Render) نگه داشته شده و هیچ کاری نمی‌کند.
+console.log("gen-icons: skipped (icons are committed directly)");
