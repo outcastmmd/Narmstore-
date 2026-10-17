@@ -89,18 +89,29 @@ export function getDownloadOptions(app: DownloadAppInfo): Option[] {
     });
   }
 
-  // ۳) سایت رسمی: فقط اگر غیر گیت‌هاب و غیر F-Droid باشد
+  // ۳) سایت رسمی: اگر گیت‌هاب است ولی githubRepo ست نشده، همان را نشان بده (تکراری نشود)
   const sHost = app.sourceUrl ? hostOf(app.sourceUrl) : "";
+  const isGithubUrl = sHost === "github.com";
   if (
     app.sourceUrl &&
-    sHost !== "github.com" &&
-    app.sourceType !== "fdroid"
+    app.sourceType !== "fdroid" &&
+    (!isGithubUrl || !app.githubRepo)
   ) {
+    // اگر URL گیت‌هاب است، سعی کن repo را استخراج کنی
+    let href = app.sourceUrl;
+    let label = "صفحه رسمی پروژه";
+    if (isGithubUrl && !app.githubRepo) {
+      const m = app.sourceUrl.match(/github\.com\/([^\/]+\/[^\/\#\?]+)/);
+      if (m) {
+        href = `https://github.com/${m[1]}/releases`;
+        label = "مشاهده در گیت‌هاب";
+      }
+    }
     out.push({
       key: "web",
-      label: "صفحه رسمی پروژه",
+      label,
       sub: sHost || "وب‌سایت رسمی",
-      href: app.sourceUrl,
+      href,
       icon: <Globe className="w-5 h-5" aria-hidden="true" />,
       primary: out.length === 0,
       external: true,
