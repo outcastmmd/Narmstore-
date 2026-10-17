@@ -215,29 +215,6 @@ export default async function AppPage({ params }: Props) {
             }}
           />
         </div>
-
-        {(v?.sha256 || app.permissions.length > 0) && (
-          <div className="mt-5 pt-4 border-t border-border space-y-3">
-            {v?.sha256 && (
-              <details className="text-[13px]">
-                <summary className="cursor-pointer text-primary font-bold">هش SHA-256</summary>
-                <code className="block mt-2 p-3 bg-surface-2 rounded-xl break-all font-mono text-[12px]" dir="ltr">{v.sha256}</code>
-              </details>
-            )}
-            {app.permissions.length > 0 && (
-              <details className="text-[13px]">
-                <summary className="cursor-pointer text-primary font-bold">مجوزهای درخواستی ({toFaDigits(app.permissions.length)})</summary>
-                <ul className="mt-2 space-y-2 max-h-44 overflow-y-auto">
-                  {app.permissions.map((p) => (
-                    <li key={p.id} className="font-mono bg-surface-2 rounded-lg px-3 py-2 break-all text-[12px]" dir="ltr" style={{ textAlign: "left" }}>
-                      {p.permission}
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-          </div>
-        )}
       </div>
 
       {/* تصاویر */}
@@ -301,6 +278,28 @@ export default async function AppPage({ params }: Props) {
               ? <span className="text-primary font-bold inline-flex items-center gap-1"><BadgeCheck className="w-4 h-4" aria-hidden="true" /> {formatDate(v.verifiedAt)}</span>
               : <span className="text-muted">در انتظار بررسی</span>
           } />
+          {(v?.sha256 || app.permissions.length > 0) && (
+            <div className="border-t border-border py-3 space-y-3">
+              {v?.sha256 && (
+                <details className="text-[13px]">
+                  <summary className="cursor-pointer text-primary font-bold">هش SHA-256</summary>
+                  <code className="block mt-2 p-3 bg-surface-2 rounded-xl break-all font-mono text-[12px]" dir="ltr">{v.sha256}</code>
+                </details>
+              )}
+              {app.permissions.length > 0 && (
+                <details className="text-[13px]">
+                  <summary className="cursor-pointer text-primary font-bold">مجوزهای درخواستی ({toFaDigits(app.permissions.length)})</summary>
+                  <ul className="mt-2 space-y-2 max-h-44 overflow-y-auto">
+                    {app.permissions.map((p) => (
+                      <li key={p.id} className="font-mono bg-surface-2 rounded-lg px-3 py-2 break-all text-[12px]" dir="ltr" style={{ textAlign: "left" }}>
+                        {p.permission}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </div>
+          )}
         </dl>
       </section>
 
