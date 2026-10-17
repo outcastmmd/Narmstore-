@@ -73,6 +73,25 @@ export function getDownloadOptions(app: DownloadAppInfo): Option[] {
     });
   }
 
+  // ۱-ب) اندروید: نسخه‌ی external (مثلاً صفحه‌ی F-Droid) — لینک به همان صفحه‌ی رسمی دانلود
+  if (
+    app.platform === "android" &&
+    v &&
+    v.fileType === "external" &&
+    v.fileUrl &&
+    out.length === 0
+  ) {
+    out.push({
+      key: "fdroid",
+      label: "دانلود",
+      sub: "صفحه‌ی رسمی دانلود",
+      href: v.fileUrl,
+      icon: <AndroidIcon className="w-5 h-5" />,
+      primary: true,
+      external: true,
+    });
+  }
+
   // ۲) گیت‌هاب: اگر وب‌سایت رسمی جدا داریم (یعنی ریلیز خالی بوده)، لینک به خود ریپو نه ریلیزها
   const sHostEarly = app.sourceUrl ? hostOf(app.sourceUrl) : "";
   const hasSeparateWebsite = !!app.sourceUrl && sHostEarly !== "github.com" && app.sourceType !== "fdroid";
