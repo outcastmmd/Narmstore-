@@ -44,7 +44,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-label={NEXT_LABEL[theme]}
       title={NEXT_LABEL[theme]}
-      className="w-10 h-10 rounded-xl bg-surface-2 hover:bg-border flex items-center justify-center transition-colors"
+      className="w-10 h-10 rounded-full hover:bg-surface-2 flex items-center justify-center transition"
     >
       <NextIcon className="w-5 h-5" aria-hidden="true" />
     </button>
