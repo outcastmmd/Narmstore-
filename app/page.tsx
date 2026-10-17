@@ -9,7 +9,7 @@ import CategoryCards from "@/components/CategoryCards";
 import DbIcon from "@/components/DbIcon";
 import WeeklyPicks from "@/components/WeeklyPicks";
 import {
-  getRootCategories, getFeaturedApps, getPopularApps,
+  getRootCategories, getPopularApps,
   getLatestApps, getCategoryBySlug, getChildPreviews, getCollections, getHomeStats,
   getEditorChoice,
 } from "@/lib/store";
@@ -24,39 +24,14 @@ function appHref(slug: string, platform?: Platform) {
 }
 
 async function HomeSlide({ platform }: { platform?: Platform }) {
-  const [featured, popular, latest, collections, stats, weeklyPicks] = await Promise.all([
-    getFeaturedApps(4, platform), getPopularApps(8, platform),
+  const [popular, latest, collections, stats, weeklyPicks] = await Promise.all([
+    getPopularApps(8, platform),
     getLatestApps(8, platform), getCollections(platform, 6), getHomeStats(platform),
     getEditorChoice(6, platform),
   ]);
-  const hero = featured[0];
 
   return (
     <>
-      {/* برنامه‌ی شاخص — کارت هلویی بنفش-هلویی */}
-      {hero && (
-        <Link href={appHref(hero.slug, platform)} aria-label={hero.nameFa}
-          className="hero-peach block mb-8 p-7 sm:p-9">
-          <div className="relative grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-6 gap-y-2 items-center">
-            {hero.iconUrl ? (
-              <PxImg src={px(hero.iconUrl) || "/icons/icon-192.png"} alt="" width={84} height={84}
-                className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl object-cover sm:row-span-3 mb-2 sm:mb-0 shadow-lg" />
-            ) : (
-              <span className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-2xl sm:row-span-3 grid place-items-center text-4xl font-bold mb-2 sm:mb-0 shadow-lg" dir="ltr"
-                style={{ background: "rgb(0 0 0 / 0.1)", color: "var(--peach-ink)" }}>
-                {hero.nameEn.charAt(0)}
-              </span>
-            )}
-            <span className="kicker">پیشنهاد این هفته</span>
-            <span className="font-head text-4xl sm:text-5xl leading-tight">{hero.nameFa}</span>
-            <p className="text-[15px] leading-7 line-clamp-2 max-w-[48ch] opacity-85">{hero.shortDescFa || hero.shortDesc}</p>
-            <span className="cta justify-self-start mt-3 pressable">
-              دریافت
-            </span>
-          </div>
-        </Link>
-      )}
-
       {/* پیشنهادهای هفته — ۶ اپ منتخب سردبیر با آیکون کوچک */}
       <WeeklyPicks apps={weeklyPicks} platform={platform} />
 
