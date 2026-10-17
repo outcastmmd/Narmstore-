@@ -124,7 +124,7 @@ export default async function AppPage({ params }: Props) {
     <div className="animate-fade-up max-w-3xl mx-auto">
       {/* سربرگ iOS-استایل */}
       <div className="px-1 pt-2 pb-6">
-        <div className="flex gap-4 items-start">
+        <div className="flex gap-3 items-start">
           {app.iconUrl ? (
             <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={88} height={88}
               className="w-[76px] h-[76px] rounded-[24%] object-cover shadow-md shrink-0" />
@@ -134,7 +134,7 @@ export default async function AppPage({ params }: Props) {
             </span>
           )}
           <div className="flex-1 min-w-0 pt-1">
-            <h1 className="text-[22px] font-extrabold leading-8">{app.nameFa}</h1>
+            <h1 className="text-[19px] font-extrabold leading-7 break-words">{app.nameFa}</h1>
             {app.developerName && (
               <p className="text-primary text-[15px] mt-0.5">{app.developerName}</p>
             )}
