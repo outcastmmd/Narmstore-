@@ -114,7 +114,7 @@ export default function AppCard({
         <div className="flex items-center gap-3">
           <Icon app={app} />
           <div className="min-w-0 flex-1">
-            <h3 className="card-title text-[15px] leading-6 group-hover:text-primary transition-colors">
+            <h3 title={app.nameFa} className="card-title text-[15px] leading-6 group-hover:text-primary transition-colors line-clamp-2">
               {app.nameFa}
             </h3>
             {desc && <p className="text-xs opacity-60 truncate mt-0.5">{desc}</p>}
