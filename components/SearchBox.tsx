@@ -1,54 +1,182 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, Suspense } from "react";
-import { Search } from "lucide-react";
+import { useState, useEffect, useRef, Suspense } from "react";
+import Link from "next/link";
+import { Search, Loader2 } from "lucide-react";
+import PxImg from "./PxImg";
 
-function SearchBoxInner({ compact = false }: { compact?: boolean }) {
+type Suggestion = {
+  slug: string;
+  nameFa: string;
+  nameEn: string;
+  iconUrl: string | null;
+  platform: string;
+};
+
+function platformQs(sp: URLSearchParams): string {
+  const p = sp.get("platform");
+  let stored: string | null = null;
+  try {
+    stored = localStorage.getItem("narm-platform");
+  } catch {}
+  const plat = p === "windows" || p === "linux" ? p
+    : stored === "windows" || stored === "linux" ? stored : null;
+  return plat ? `&platform=${plat}` : "";
+}
+
+function SearchBoxInner({ compact = false, slim = false }: { compact?: boolean; slim?: boolean }) {
   const [q, setQ] = useState("");
+  const [items, setItems] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hi, setHi] = useState(-1);
   const router = useRouter();
   const sp = useSearchParams();
+  const boxRef = useRef<HTMLDivElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  useEffect(() => {
+    if (timer.current) clearTimeout(timer.current);
+    const query = q.trim();
+    if (query.length < 2) {
+      setItems([]);
+      setOpen(false);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    timer.current = setTimeout(async () => {
+      try {
+        const r = await fetch(`/api/suggest?q=${encodeURIComponent(query)}${platformQs(sp)}`);
+        const j = await r.json();
+        setItems(Array.isArray(j.items) ? j.items : []);
+        setHi(-1);
+        setOpen(true);
+      } catch {
+        setItems([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 250);
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, [q, sp]);
+
+  const goSearch = (query: string) => {
+    const t = query.trim();
+    if (!t) return;
+    setOpen(false);
+    router.push(`/search?q=${encodeURIComponent(t)}${platformQs(sp)}`);
+  };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const query = q.trim();
-    if (!query) return;
-    // حفظ پلتفرم فعلی در جست‌وجو تا نتایج فقط از همان پلتفرم باشند
-    const p = sp.get("platform");
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem("narm-platform");
-    } catch {}
-    const plat = p === "windows" || p === "linux" ? p
-      : stored === "windows" || stored === "linux" ? stored : null;
-    const qs = plat ? `&platform=${plat}` : "";
-    router.push(`/search?q=${encodeURIComponent(query)}${qs}`);
+    if (hi >= 0 && items[hi]) {
+      setOpen(false);
+      router.push(`/app/${items[hi].slug}`);
+    } else {
+      goSearch(q);
+    }
   };
 
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown" && items.length) {
+      e.preventDefault();
+      setHi((h) => (h + 1) % items.length);
+    } else if (e.key === "ArrowUp" && items.length) {
+      e.preventDefault();
+      setHi((h) => (h - 1 + items.length) % items.length);
+    } else if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
+
+  const h = slim ? "h-10" : "h-11";
+  const btn = slim ? "w-8 h-8" : "w-9 h-9";
+
   return (
-    <form onSubmit={submit} role="search" className={`relative ${compact ? "w-full" : "w-full max-w-xl"}`}>
-      <input
-        type="search"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="جست‌وجوی برنامه‌ها..."
-        aria-label="جست‌وجوی برنامه‌ها"
-        className="w-full h-11 rounded-xl bg-surface-2 border border-border pe-11 ps-4 text-fg placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
-      />
-      <button
-        type="submit"
-        aria-label="جست‌وجو"
-        className="absolute end-1 top-1 w-9 h-9 rounded-lg bg-primary text-primary-fg flex items-center justify-center hover:opacity-90 transition"
-      >
-        <Search className="w-4 h-4" aria-hidden="true" />
-      </button>
-    </form>
+    <div ref={boxRef} className={`relative ${compact ? "w-full" : "w-full max-w-xl"}`}>
+      <form onSubmit={submit} role="search" className="relative">
+        <input
+          type="search"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onFocus={() => { if (items.length > 0) setOpen(true); }}
+          onKeyDown={onKey}
+          placeholder="جست‌وجوی برنامه‌ها..."
+          aria-label="جست‌وجوی برنامه‌ها"
+          autoComplete="off"
+          className={`w-full ${h} rounded-xl bg-surface-2 border border-border pe-11 ps-4 text-fg placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition text-sm`}
+        />
+        <button
+          type="submit"
+          aria-label="جست‌وجو"
+          className={`absolute end-1 top-1/2 -translate-y-1/2 ${btn} rounded-lg bg-primary text-primary-fg flex items-center justify-center hover:opacity-90 transition shrink-0`}
+        >
+          {loading
+            ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+            : <Search className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+        </button>
+      </form>
+
+      {open && items.length > 0 && (
+        <div
+          className="absolute top-full mt-2 inset-x-0 z-50 bg-surface border border-border rounded-xl shadow-xl overflow-hidden animate-fade-up"
+          role="listbox"
+          aria-label="پیشنهادهای جست‌وجو"
+        >
+          <ul className="max-h-80 overflow-y-auto py-1">
+            {items.map((s, i) => (
+              <li key={s.slug} role="option" aria-selected={i === hi}>
+                <Link
+                  href={`/app/${s.slug}`}
+                  onClick={() => setOpen(false)}
+                  onMouseEnter={() => setHi(i)}
+                  className={`flex items-center gap-3 px-3 py-2.5 transition ${i === hi ? "bg-surface-2" : ""}`}
+                >
+                  {s.iconUrl ? (
+                    <PxImg src={s.iconUrl} alt="" width={32} height={32} className="w-8 h-8 rounded-lg object-cover shrink-0" />
+                  ) : (
+                    <span className="w-8 h-8 rounded-lg bg-primary-soft text-primary flex items-center justify-center text-sm font-bold shrink-0">
+                      {s.nameFa.charAt(0)}
+                    </span>
+                  )}
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-sm font-bold truncate">{s.nameFa}</span>
+                    {s.nameEn && s.nameEn !== s.nameFa && (
+                      <span className="block text-xs text-muted truncate" dir="ltr" style={{ textAlign: "right" }}>{s.nameEn}</span>
+                    )}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => goSearch(q)}
+            className="w-full px-3 py-2.5 text-sm font-bold text-primary hover:bg-surface-2 transition border-t border-border text-center"
+          >
+            دیدن همه‌ی نتایج «{q.trim()}»
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
-export default function SearchBox({ compact = false }: { compact?: boolean }) {
+export default function SearchBox({ compact = false, slim = false }: { compact?: boolean; slim?: boolean }) {
   return (
     <Suspense fallback={null}>
-      <SearchBoxInner compact={compact} />
+      <SearchBoxInner compact={compact} slim={slim} />
     </Suspense>
   );
 }
