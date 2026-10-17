@@ -13,7 +13,7 @@ import PlatformBadge from "@/components/PlatformBadge";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
-import DownloadSheetV2 from "@/components/DownloadSheetV2";
+import DownloadButtons from "@/components/DownloadButtons";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
@@ -189,7 +189,7 @@ export default async function AppPage({ params }: Props) {
 
         {/* دانلود */}
         <div className="mt-5">
-          <DownloadSheetV2
+          <DownloadButtons
             app={{
               platform: app.platform,
               githubRepo: app.githubRepo,
@@ -206,9 +206,6 @@ export default async function AppPage({ params }: Props) {
                   }
                 : null,
             }}
-            appName={app.nameFa}
-            iconUrl={app.iconUrl}
-            sha256={v?.sha256 ?? null}
           />
         </div>
       </div>
