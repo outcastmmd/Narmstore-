@@ -112,6 +112,7 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
             color={NEON[o.key] ?? NEON.web}
             icon={o.icon}
             label={o.label}
+            big
           />
         ))}
       </div>
