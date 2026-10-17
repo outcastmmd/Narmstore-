@@ -285,6 +285,18 @@ export default async function AppPage({ params }: Props) {
             <code className="block mt-2 p-3 bg-surface rounded-xl break-all font-mono text-[12px]" dir="ltr">{v.sha256}</code>
           </details>
         )}
+        {app.permissions.length > 0 && (
+          <details className="mt-3 px-1 text-[13px]">
+            <summary className="cursor-pointer text-primary font-bold">مجوزهای درخواستی ({toFaDigits(app.permissions.length)})</summary>
+            <ul className="mt-2 space-y-2 max-h-44 overflow-y-auto">
+              {app.permissions.map((p) => (
+                <li key={p.id} className="font-mono bg-surface rounded-lg px-3 py-2 break-all text-[12px]" dir="ltr" style={{ textAlign: "left" }}>
+                  {p.permission}
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
       </section>
 
       {/* جایگزین‌ها */}
@@ -311,23 +323,6 @@ export default async function AppPage({ params }: Props) {
                 </Link>
               ))}
             </div>
-          </section>
-        </>
-      )}
-
-      {/* مجوزها */}
-      {app.permissions.length > 0 && (
-        <>
-          <div className="h-px bg-border" />
-          <section className="py-6" aria-label="مجوزها">
-            <h2 className="font-extrabold text-[17px] px-1 mb-3">مجوزهای درخواستی ({toFaDigits(app.permissions.length)})</h2>
-            <ul className="px-1 text-[13px] space-y-2 max-h-44 overflow-y-auto">
-              {app.permissions.map((p) => (
-                <li key={p.id} className="font-mono bg-surface rounded-lg px-3 py-2 break-all" dir="ltr" style={{ textAlign: "left" }}>
-                  {p.permission}
-                </li>
-              ))}
-            </ul>
           </section>
         </>
       )}
