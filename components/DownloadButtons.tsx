@@ -38,9 +38,6 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
           </a>
         ))}
       </div>
-      {primary.sub && (
-        <p className="text-xs text-muted text-center mt-2">{primary.sub}</p>
-      )}
     </section>
   );
 }
