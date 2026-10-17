@@ -15,8 +15,6 @@ import FollowButton from "@/components/FollowButton";
 import ShareButton from "@/components/ShareButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
 import DownloadButtons from "@/components/DownloadButtons";
-import Reviews from "@/components/Reviews";
-import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
 import { computeTags } from "@/lib/tags";
 import { px } from "@/lib/img";
@@ -341,9 +339,6 @@ export default async function AppPage({ params }: Props) {
           <TriangleAlert className="w-4 h-4" aria-hidden="true" /> گزارش مشکل یا لینک خراب
         </Link>
       </div>
-
-      <QuickRating appId={app.id} />
-      <Reviews appId={app.id} />
 
       {/* شاید بپسندی */}
       {app.similar.length > 0 && (
