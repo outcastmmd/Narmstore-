@@ -13,7 +13,7 @@ import PlatformBadge from "@/components/PlatformBadge";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
-import DownloadTrigger from "@/components/DownloadTrigger";
+import DownloadSheetV2 from "@/components/DownloadSheetV2";
 import Reviews from "@/components/Reviews";
 import QuickRating from "@/components/QuickRating";
 import Gallery from "@/components/Gallery";
@@ -189,7 +189,7 @@ export default async function AppPage({ params }: Props) {
 
         {/* دانلود */}
         <div className="mt-5">
-          <DownloadTrigger
+          <DownloadSheetV2
             app={{
               platform: app.platform,
               githubRepo: app.githubRepo,
