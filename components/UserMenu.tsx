@@ -22,20 +22,8 @@ export default function UserMenu() {
     router.refresh();
   };
 
-  if (me === undefined) return <span className="w-10 h-10 rounded-xl bg-surface-2 animate-pulse" aria-hidden="true" />;
-
-  if (!me) {
-    return (
-      <div className="flex items-center gap-2">
-        <Link href="/login" className="text-sm font-bold px-3 py-2 rounded-xl hover:bg-surface-2 transition hidden sm:block">
-          ورود
-        </Link>
-        <Link href="/signup" className="text-sm font-bold px-4 py-2 rounded-xl bg-primary text-primary-fg hover:opacity-90 transition">
-          ثبت‌نام
-        </Link>
-      </div>
-    );
-  }
+  // فعلاً دکمه‌های ورود/ثبت‌نام در هدر نیست؛ ورود به‌صورت موقعیتی (مثلاً هنگام علاقه‌مندی) انجام می‌شود
+  if (me === undefined || !me) return null;
 
   return (
     <div className="relative">
