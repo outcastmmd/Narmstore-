@@ -12,6 +12,7 @@ import AppTile from "@/components/AppTile";
 import PlatformBadge from "@/components/PlatformBadge";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
+import ShareButton from "@/components/ShareButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
 import DownloadButtons from "@/components/DownloadButtons";
 import Reviews from "@/components/Reviews";
@@ -148,6 +149,7 @@ export default async function AppPage({ params }: Props) {
           <div className="flex flex-row gap-2 shrink-0 pt-1">
             <FavoriteButton appId={app.id} appName={app.slug} />
             <FollowButton appId={app.id} />
+            <ShareButton appName={app.nameFa} slug={app.slug} />
           </div>
         </div>
 
