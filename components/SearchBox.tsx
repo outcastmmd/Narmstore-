@@ -24,7 +24,7 @@ function platformQs(sp: URLSearchParams): string {
   return plat ? `&platform=${plat}` : "";
 }
 
-function SearchBoxInner({ compact = false, slim = false }: { compact?: boolean; slim?: boolean }) {
+function SearchBoxInner({ compact = false, slim = false, large = false }: { compact?: boolean; slim?: boolean; large?: boolean }) {
   const [q, setQ] = useState("");
   const [items, setItems] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
@@ -100,8 +100,9 @@ function SearchBoxInner({ compact = false, slim = false }: { compact?: boolean; 
     }
   };
 
-  const h = slim ? "h-10" : "h-11";
-  const btn = slim ? "w-8 h-8" : "w-9 h-9";
+  const h = large ? "h-12" : slim ? "h-10" : "h-11";
+  const btn = large ? "w-10 h-10" : slim ? "w-8 h-8" : "w-9 h-9";
+  const radius = large ? "rounded-2xl" : "rounded-xl";
 
   return (
     <div ref={boxRef} className={`relative ${compact ? "w-full" : "w-full max-w-xl"}`}>
@@ -115,7 +116,7 @@ function SearchBoxInner({ compact = false, slim = false }: { compact?: boolean; 
           placeholder="جست‌وجوی برنامه‌ها..."
           aria-label="جست‌وجوی برنامه‌ها"
           autoComplete="off"
-          className={`w-full ${h} rounded-xl bg-surface-2 border border-border pe-11 ps-4 text-fg placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition text-sm`}
+          className={`w-full ${h} ${radius} bg-surface-2 border border-border pe-11 ps-4 text-fg placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition text-sm`}
         />
         <button
           type="submit"
@@ -173,10 +174,10 @@ function SearchBoxInner({ compact = false, slim = false }: { compact?: boolean; 
   );
 }
 
-export default function SearchBox({ compact = false, slim = false }: { compact?: boolean; slim?: boolean }) {
+export default function SearchBox({ compact = false, slim = false, large = false }: { compact?: boolean; slim?: boolean; large?: boolean }) {
   return (
     <Suspense fallback={null}>
-      <SearchBoxInner compact={compact} slim={slim} />
+      <SearchBoxInner compact={compact} slim={slim} large={large} />
     </Suspense>
   );
 }
