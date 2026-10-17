@@ -39,13 +39,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const app = await getAppBySlug(slug);
   if (!app) return { title: "یافت نشد" };
-  const desc = app.shortDescFa || app.shortDesc || `دانلود ${app.nameFa} برای اندروید با لینک مستقیم`;
+  const platFa = app.platform === "android" ? "اندروید" : app.platform === "windows" ? "ویندوز" : "لینوکس";
+  const desc = app.shortDescFa || app.shortDesc || `دانلود ${app.nameFa} برای ${platFa} با لینک مستقیم و بررسی امنیتی`;
   return {
-    title: `دانلود ${app.nameFa}`,
+    title: `دانلود ${app.nameFa} برای ${platFa} | نرم‌استور`,
     description: desc,
     alternates: { canonical: `/app/${app.slug}` },
     openGraph: {
-      title: `${app.nameFa} | نرم‌استور`,
+      title: `دانلود ${app.nameFa} برای ${platFa} | نرم‌استور`,
       description: desc,
       images: app.iconUrl && px(app.iconUrl) ? [siteUrl() + px(app.iconUrl)!] : undefined,
     },
