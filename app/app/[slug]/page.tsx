@@ -126,10 +126,10 @@ export default async function AppPage({ params }: Props) {
       <div className="px-1 pt-2 pb-6">
         <div className="flex gap-4 items-start">
           {app.iconUrl ? (
-            <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={120} height={120}
-              className="w-[104px] h-[104px] rounded-[24%] object-cover shadow-md shrink-0" />
+            <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={88} height={88}
+              className="w-[76px] h-[76px] rounded-[24%] object-cover shadow-md shrink-0" />
           ) : (
-            <span className="w-[104px] h-[104px] rounded-[24%] bg-primary-soft text-primary flex items-center justify-center text-4xl font-bold shrink-0">
+            <span className="w-[76px] h-[76px] rounded-[24%] bg-primary-soft text-primary flex items-center justify-center text-3xl font-bold shrink-0">
               {app.nameFa.charAt(0)}
             </span>
           )}
