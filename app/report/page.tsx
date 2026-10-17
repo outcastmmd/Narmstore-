@@ -55,7 +55,7 @@ function Form() {
       <div>
         <label htmlFor="type" className="block text-sm font-bold mb-2">نوع مشکل</label>
         <select id="type" value={type} onChange={(e) => setType(e.target.value)}
-          className="w-full h-11 rounded-xl bg-surface-2 border border-border px-4 text-sm focus:outline-none focus:border-primary">
+          className="select select-bordered w-full">
           {TYPES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
         </select>
       </div>

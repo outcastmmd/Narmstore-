@@ -49,7 +49,7 @@ export default function ReportButton({ appId, appName }: { appId: string; appNam
           <select
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-sm mb-2"
+            className="select select-bordered w-full select-sm mb-2"
           >
             <option value="">انتخاب کن…</option>
             <option value="broken-link">لینک دانلود خرابه</option>

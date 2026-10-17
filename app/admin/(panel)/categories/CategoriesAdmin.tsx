@@ -62,7 +62,7 @@ export default function CategoriesAdmin() {
         <div className="flex flex-wrap gap-3">
           <input className={input + " flex-1 min-w-40"} placeholder="نام فارسی" value={nameFa} onChange={(e) => setNameFa(e.target.value)} />
           <input className={input + " w-24"} placeholder="آیکون 🎁" value={icon} onChange={(e) => setIcon(e.target.value)} />
-          <select className={input} value={parentId} onChange={(e) => setParentId(e.target.value)}>
+          <select className="select select-bordered" value={parentId} onChange={(e) => setParentId(e.target.value)}>
             <option value="">بدون والد (ریشه)</option>
             {cats.filter((c) => !c.parentId).map((c) => <option key={c.id} value={c.id}>{c.nameFa}</option>)}
           </select>
