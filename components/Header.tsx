@@ -51,7 +51,7 @@ export default function Header() {
                 <SearchBox compact />
               </div>
             )}
-            <nav className="hidden md:flex items-center gap-1 text-sm ms-auto" aria-label="ناوبری اصلی">
+            <nav className={`hidden md:flex items-center gap-1 text-sm ${isHome ? "" : "ms-auto"}`} aria-label="ناوبری اصلی">
               {NAV.map((n) => (
                 <Link key={n.href} href={n.href} tabIndex={scrolled ? -1 : 0}
                   className="px-3 py-2 rounded-xl hover:bg-surface-2 transition font-medium">
@@ -59,7 +59,8 @@ export default function Header() {
                 </Link>
               ))}
             </nav>
-            <div className="ms-auto md:ms-0 flex items-center gap-1.5">
+            <div className={`flex items-center gap-1.5 ${isHome ? "ms-auto" : "ms-auto md:ms-0"}`}>
+
               <NotifBell />
               <ThemeToggle />
               <UserMenu />
