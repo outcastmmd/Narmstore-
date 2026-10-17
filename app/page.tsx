@@ -5,13 +5,14 @@ import PopularRow from "@/components/PopularRow";
 import NewBadge from "@/components/NewBadge";
 import AppCard from "@/components/AppCard";
 import Section from "@/components/Section";
-import CategoryCards from "@/components/CategoryCards";
+import CategoryBrowser from "@/components/CategoryBrowser";
 import DbIcon from "@/components/DbIcon";
 import WeeklyPicks from "@/components/WeeklyPicks";
+import TopInRail from "@/components/TopInRail";
 import {
   getRootCategories, getPopularApps,
   getLatestApps, getCategoryBySlug, getChildPreviews, getCollections, getHomeStats,
-  getEditorChoice,
+  getEditorChoice, getCategoryApps,
 } from "@/lib/store";
 import { toFaDigits } from "@/lib/fa";
 import { px } from "@/lib/img";
@@ -24,16 +25,22 @@ function appHref(slug: string, platform?: Platform) {
 }
 
 async function HomeSlide({ platform }: { platform?: Platform }) {
-  const [popular, latest, collections, stats, weeklyPicks] = await Promise.all([
+  const [popular, latest, collections, stats, weeklyPicks, topDev, topMedia] = await Promise.all([
     getPopularApps(8, platform),
     getLatestApps(8, platform), getCollections(platform, 6), getHomeStats(platform),
     getEditorChoice(6, platform),
+    getCategoryApps("development", 8, 0, "popular", platform).then((r) => r?.items ?? []),
+    getCategoryApps("media-player", 8, 0, "popular", platform).then((r) => r?.items ?? []),
   ]);
 
   return (
     <>
       {/* پیشنهادهای هفته — ۶ اپ منتخب سردبیر با آیکون کوچک */}
       <WeeklyPicks apps={weeklyPicks} platform={platform} />
+
+      {/* برترین‌های دسته‌ها */}
+      <TopInRail title="برترین توسعه‌دهندگان" categorySlug="development" apps={topDev} platform={platform} />
+      <TopInRail title="برترین مدیا" categorySlug="media-player" apps={topMedia} platform={platform} />
 
       {/* نوار آمار — کارت‌های کوچک با اعداد هلویی */}
       <div className="mb-10 grid grid-cols-3 gap-3 text-center" role="status" aria-label="آمار فروشگاه">
@@ -162,11 +169,11 @@ export default async function Home({ searchParams }: Props) {
     <div>
       {!cat && (
         <Suspense>
-          <CategoryCards cats={cats} />
+          <CategoryBrowser cats={cats} platform={plat} />
         </Suspense>
       )}
       {cat ? <CategorySlide slug={cat} platform={plat} /> : <HomeSlide platform={plat} />}
     </div>
   );
 }
-// rebuild-trigger 1792223364
+// rebuild 1792223364
