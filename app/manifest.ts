@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Vesper — فروشگاه فارسی نرم‌افزار اندروید",
+    name: "Vesper — فروشگاه اپ‌های آزاد",
     short_name: "Vesper",
-    description: "معرفی و دانلود امن نرم‌افزارهای اندروید",
+    description: "فروشگاه اپ‌های آزاد؛ معرفی و دانلود امن نرم‌افزار برای اندروید، ویندوز و لینوکس",
     start_url: "/",
     scope: "/",
     display: "standalone",
