@@ -32,9 +32,11 @@ const WindowsIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-function platformIcon(app: DownloadAppInfo, className: string) {
-  if (app.githubRepo) return <GithubIcon className={className} />;
-  if (app.platform === "android") return <AndroidIcon className={className} />;
+function optionIcon(optKey: string, app: DownloadAppInfo, className: string) {
+  // آیکون بر اساس مقصد واقعی دانلود
+  if (optKey === "github") return <GithubIcon className={className} />;
+  if (optKey === "web") return <Globe className={className} aria-hidden="true" />;
+  if (optKey === "apk" || app.platform === "android") return <AndroidIcon className={className} />;
   if (app.platform === "linux") return <TuxIcon className={className} />;
   if (app.platform === "windows") return <WindowsIcon className={className} />;
   return <Download className={className} aria-hidden="true" />;
@@ -79,7 +81,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
         className="flex items-center justify-center gap-2.5 w-full font-extrabold text-base rounded-2xl py-4 transition active:scale-[0.98] text-white shadow-lg"
         style={{ background: "var(--primary)", boxShadow: "0 8px 24px -8px var(--primary)" }}
       >
-        {platformIcon(app, "w-6 h-6")}
+        {optionIcon(primary?.key ?? "", app, "w-6 h-6")}
         دانلود
       </button>
       {/* شماره نسخه زیر دکمه */}
@@ -110,7 +112,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
               <div className="flex items-center gap-4 mb-5">
                 <span className="w-16 h-16 rounded-[22%] grid place-items-center shrink-0 text-white shadow-lg"
                   style={{ background: "var(--primary)" }}>
-                  {platformIcon(app, "w-9 h-9")}
+                  {optionIcon(primary?.key ?? "", app, "w-9 h-9")}
                 </span>
                 <div className="min-w-0">
                   <h2 className="font-extrabold text-lg leading-7 truncate">{appName}</h2>
@@ -148,7 +150,7 @@ export default function DownloadSheetV2({ app, appName, iconUrl, sha256 }: Props
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-center gap-2.5 w-full text-white font-extrabold text-base rounded-2xl py-4 mb-2 transition active:scale-[0.98] shadow-lg"
                   style={{ background: "var(--primary)", boxShadow: "0 8px 24px -8px var(--primary)" }}>
-                  {platformIcon(app, "w-6 h-6")}
+                  {optionIcon(primary?.key ?? "", app, "w-6 h-6")}
                   دانلود
                 </a>
               )}
