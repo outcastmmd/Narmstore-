@@ -11,7 +11,7 @@ import WeeklyPicks from "@/components/WeeklyPicks";
 import CollectionBrowser from "@/components/CollectionBrowser";
 import TopInRail from "@/components/TopInRail";
 import HeroSearch from "@/components/HeroSearch";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, LayoutGrid, Download, Tags } from "lucide-react";
 import {
   getRootCategories, getPopularApps,
   getLatestApps, getCategoryBySlug, getChildPreviews, getCollections, getHomeStats,
@@ -67,19 +67,28 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
       {/* مجموعه‌ها — مینیمال */}
       <CollectionBrowser collections={collections} platform={platform} />
 
-      {/* نوار آمار — کارت‌های کوچک با اعداد هلویی */}
-      <div className="mb-10 grid grid-cols-3 gap-3 text-center" role="status" aria-label="آمار فروشگاه">
-        <div className="bg-surface border border-border rounded-2xl py-4">
-          <b className="block text-xl font-extrabold text-primary">{toFaDigits(stats.apps)}</b>
-          <small className="text-xs text-muted">برنامه</small>
+      {/* نوار آمار — daisyUI stats */}
+      <div className="stats w-full bg-base-200 shadow-sm mb-10" role="status" aria-label="آمار فروشگاه">
+        <div className="stat px-4 py-3">
+          <div className="stat-figure text-primary">
+            <LayoutGrid className="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div className="stat-title text-[11px]">برنامه</div>
+          <div className="stat-value text-xl">{toFaDigits(stats.apps)}</div>
         </div>
-        <div className="bg-surface border border-border rounded-2xl py-4">
-          <b className="block text-xl font-extrabold text-primary">{toFaDigits(stats.downloads)}</b>
-          <small className="text-xs text-muted">دانلود</small>
+        <div className="stat px-4 py-3">
+          <div className="stat-figure text-secondary">
+            <Download className="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div className="stat-title text-[11px]">دانلود</div>
+          <div className="stat-value text-xl">{toFaDigits(stats.downloads)}</div>
         </div>
-        <div className="bg-surface border border-border rounded-2xl py-4">
-          <b className="block text-xl font-extrabold text-primary">{toFaDigits(stats.categories)}</b>
-          <small className="text-xs text-muted">دسته‌بندی</small>
+        <div className="stat px-4 py-3">
+          <div className="stat-figure text-accent">
+            <Tags className="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div className="stat-title text-[11px]">دسته‌بندی</div>
+          <div className="stat-value text-xl">{toFaDigits(stats.categories)}</div>
         </div>
       </div>
 
