@@ -82,10 +82,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   </Link>
                 )}
               </div>
-              <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x scrollbar-none">
+              <div className="flex gap-3 overflow-x-auto pb-3 -mx-1 px-1 snap-x scrollbar-none">
                 {apps.map((a: any, i: number) => (
-                  <div key={a.id} className="w-64 sm:w-72 shrink-0 snap-start">
-                    <AppCard app={a} index={i} />
+                  <div key={a.id} className="w-28 sm:w-32 shrink-0 snap-start">
+                    <AppTile app={a} index={i} />
                   </div>
                 ))}
               </div>
