@@ -27,7 +27,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
       || req.headers.get("x-real-ip") || "unknown";
     const day = new Date().toISOString().slice(0, 10);
-    const ipHash = createHash("sha256").update(`${ip}|${day}|narmstore`).digest("hex");
+    const ipHash = createHash("sha256").update(`${ip}|${day}|vesper`).digest("hex");
     const since = new Date(Date.now() - 24 * 3600 * 1000);
 
     const dup = await db.select({ id: s.downloadEvents.id }).from(s.downloadEvents)

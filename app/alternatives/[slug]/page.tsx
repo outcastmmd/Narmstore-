@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const entry = ALTERNATIVES.find((a) => slugify(a.for) === slug);
   if (!entry) return { title: "یافت نشد" };
   return {
-    title: `جایگزین ${entry.forFa} | نرم‌استور`,
+    title: `جایگزین ${entry.forFa} | Vesper`,
     description: `بهترین جایگزین‌های آزاد و متن‌باز برای ${entry.forFa}: ${entry.alternatives.map((a) => a.nameEn).join("، ")}`,
   };
 }

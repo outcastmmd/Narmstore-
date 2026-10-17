@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BookOpen, Smartphone, Terminal, Monitor } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "راهنماهای نصب | نرم‌استور",
+  title: "راهنماهای نصب | Vesper",
   description: "آموزش قدم‌به‌قدم نصب برنامه در اندروید، لینوکس و ویندوز.",
 };
 

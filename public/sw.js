@@ -1,5 +1,5 @@
-// Service Worker نرم‌استور — کش هوشمند
-const CACHE = "narmstore-v4"; // v4: فیکس نام‌های فارسی
+// Service Worker Vesper — کش هوشمند
+const CACHE = "vesper-v5"; // v5: ری‌برند به Vesper
 const STATIC_ASSETS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {

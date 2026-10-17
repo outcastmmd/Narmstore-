@@ -21,7 +21,7 @@
     "tsx": "4.23.15",
     "typescript": "5.9.3"
   },
-  "name": "narmstore",
+  "name": "vesper",
   "private": true,
   "scripts": {
     "build": "next build",

@@ -19,8 +19,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex flex-col items-center gap-7 text-center">
           <div className="flex items-center gap-2.5">
-            <img src="/icons/icon-192.png" alt="لوگوی نرم‌استور" width={36} height={36} className="w-9 h-9 rounded-xl object-cover" />
-            <span className="font-extrabold text-lg">نرم‌استور</span>
+            <img src="/icons/icon-192.png" alt="لوگوی Vesper" width={36} height={36} className="w-9 h-9 rounded-xl object-cover" />
+            <span className="font-extrabold text-lg">Vesper</span>
           </div>
           <nav aria-label="پیوندها" className="flex flex-wrap justify-center gap-x-7 gap-y-3 text-sm text-muted">
             {links.map((l) => (
@@ -29,7 +29,7 @@ export default function Footer() {
               </Link>
             ))}
           </nav>
-          <p className="text-xs text-muted/60">© ۱۴۰۵ نرم‌استور</p>
+          <p className="text-xs text-muted/60">© ۱۴۰۵ Vesper</p>
         </div>
       </div>
     </footer>

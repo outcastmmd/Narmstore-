@@ -34,11 +34,11 @@ export function InstallButton() {
   };
 
   return (
-    <div className="fixed bottom-20 md:bottom-6 inset-x-4 z-50 max-w-md mx-auto" role="dialog" aria-label="نصب نرم‌استور">
+    <div className="fixed bottom-20 md:bottom-6 inset-x-4 z-50 max-w-md mx-auto" role="dialog" aria-label="نصب Vesper">
       <div className="bg-surface border border-border rounded-2xl p-4 shadow-2xl flex items-center gap-3 animate-fade-up">
-        <img src="/icons/icon-192.png" alt="لوگوی نرم‌استور" width={44} height={44} className="w-11 h-11 rounded-xl object-cover shrink-0" />
+        <img src="/icons/icon-192.png" alt="لوگوی Vesper" width={44} height={44} className="w-11 h-11 rounded-xl object-cover shrink-0" />
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-sm">نرم‌استور را نصب کنید</p>
+          <p className="font-bold text-sm">Vesper را نصب کنید</p>
           <p className="text-xs text-muted">دسترسی سریع‌تر، مثل یک اپ واقعی</p>
         </div>
         <button onClick={install} className="bg-primary text-primary-fg text-sm font-bold px-4 py-2 rounded-xl hover:opacity-90 shrink-0">

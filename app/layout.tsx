@@ -15,12 +15,12 @@ const vazir = Vazirmatn({
 
 
 export const metadata: Metadata = {
-  title: { default: "نرم‌استور | فروشگاه فارسی نرم‌افزار اندروید", template: "%s | نرم‌استور" },
-  description: "نرم‌استور — فروشگاه فارسی نرم‌افزار برای اندروید، ویندوز و لینوکس؛ معرفی و دانلود امن با لینک مستقیم",
+  title: { default: "Vesper | فروشگاه فارسی نرم‌افزار اندروید", template: "%s | Vesper" },
+  description: "Vesper — فروشگاه فارسی نرم‌افزار برای اندروید، ویندوز و لینوکس؛ معرفی و دانلود امن با لینک مستقیم",
   metadataBase: new URL(siteUrl()),
-  openGraph: { locale: "fa_IR", type: "website", siteName: "نرم‌استور" },
+  openGraph: { locale: "fa_IR", type: "website", siteName: "Vesper" },
   robots: { index: true, follow: true },
-  appleWebApp: { capable: true, title: "نرم‌استور", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "Vesper", statusBarStyle: "default" },
   icons: { apple: "/icons/apple-touch-icon.png" },
 };
 
