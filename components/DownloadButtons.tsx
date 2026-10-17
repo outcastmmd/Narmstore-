@@ -51,11 +51,10 @@ type PillProps = {
   icon: React.ReactNode;
   label: string;
   text: string;
-  big?: boolean;
 };
 
 // دکمه‌ی دانلود دیزی: آیکون پلتفرم + نام + آیکون دانلود
-function NeonPill({ href, external, downloadable, tint, icon, label, text, big }: PillProps) {
+function NeonPill({ href, external, downloadable, tint, icon, label, text }: PillProps) {
   return (
     <a
       href={href}
@@ -64,7 +63,7 @@ function NeonPill({ href, external, downloadable, tint, icon, label, text, big }
       download={downloadable ? "" : undefined}
       title={label}
       aria-label={label}
-      className={`btn rounded-full ${tint} ${big ? "btn-lg" : ""}`}
+      className={`btn rounded-full ${tint}`}
     >
       <span className="[&>svg]:w-5 [&>svg]:h-5">{icon}</span>
       {text}
@@ -72,6 +71,14 @@ function NeonPill({ href, external, downloadable, tint, icon, label, text, big }
     </a>
   );
 }
+
+// لیبل تمیز بدون نسخه برای گزینه‌های فرعی
+const CLEAN_LABEL: Record<string, string> = {
+  github: "گیت‌هاب",
+  web: "سایت رسمی",
+  apk: "APK",
+  fdroid: "دانلود",
+};
 
 // دکمه‌های دانلود — قرصی دیزی با رنگ هر پلتفرم
 export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
@@ -92,7 +99,6 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
           icon={platformIcon(app.platform, "")}
           label={`دانلود برای ${platformFa[app.platform] ?? app.platform}`}
           text={platformFa[app.platform] ?? app.platform}
-          big
         />
         {rest.map((o) => (
           <NeonPill
@@ -101,9 +107,8 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
             external={o.external}
             tint={BTN_TINT[o.key] ?? BTN_TINT.web}
             icon={o.icon}
-            label={o.label}
-            text={o.label}
-            big
+            label={CLEAN_LABEL[o.key] ?? "دانلود"}
+            text={CLEAN_LABEL[o.key] ?? "دانلود"}
           />
         ))}
       </div>

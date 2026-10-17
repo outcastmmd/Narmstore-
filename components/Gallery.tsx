@@ -59,10 +59,10 @@ export default function Gallery({ shots, appName }: { shots: Shot[]; appName: st
 
   return (
     <>
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none select-none" style={{ touchAction: "pan-x pan-y" }}>
+      <div className="carousel rounded-box gap-3 pb-2 select-none" style={{ touchAction: "pan-x pan-y" }}>
         {shots.map((sh, i) => (
           <button key={sh.id} onClick={() => setOpen(i)}
-            className="pressable shrink-0 rounded-xl overflow-hidden border border-border hover:border-primary/50"
+            className="carousel-item pressable rounded-xl overflow-hidden border border-border hover:border-primary/50"
             aria-label={`مشاهده تصویر ${i + 1} از ${appName}`}>
             <PxImg src={sh.url} alt={`تصویر ${appName}`} width={180} height={320}
               className="h-64 w-auto object-cover" loading="lazy" />
