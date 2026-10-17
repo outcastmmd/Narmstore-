@@ -75,13 +75,15 @@ export default async function SearchPage({ searchParams }: Props) {
       ))}
 
       {pages > 1 && (
-        <nav className="flex justify-center gap-2 mt-8" aria-label="صفحه‌بندی">
-          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
-            <Link key={p} href={`${base}${catQs}&page=${p}`} aria-current={p === page ? "page" : undefined}
-              className={`btn btn-square ${p === page ? "btn-primary btn-active" : "btn-ghost"}`}>
-              {toFaDigits(p)}
-            </Link>
-          ))}
+        <nav className="flex justify-center mt-8" aria-label="صفحه‌بندی">
+          <div className="join">
+            {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+              <Link key={p} href={`${base}${catQs}&page=${p}`} aria-current={p === page ? "page" : undefined}
+                className={`join-item btn ${p === page ? "btn-primary btn-active" : "btn-ghost"}`}>
+                {toFaDigits(p)}
+              </Link>
+            ))}
+          </div>
         </nav>
       )}
     </div>

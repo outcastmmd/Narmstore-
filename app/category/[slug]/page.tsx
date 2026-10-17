@@ -119,15 +119,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           )}
 
           {pages > 1 && (
-            <nav className="flex justify-center gap-2 mt-8" aria-label="صفحه‌بندی">
-              {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
-                <Link key={p} href={`/category/${slug}?sort=${sort}&page=${p}${platQs}`}
-                  aria-current={p === page ? "page" : undefined}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm border transition ${p === page
-                    ? "bg-primary text-primary-fg border-primary font-bold"
-                    : "bg-surface border-border hover:border-primary/50"}`}>
-                  {toFaDigits(p)}
-                </Link>
+            <nav className="flex justify-center mt-8" aria-label="صفحه‌بندی">
+              <div className="join">
+                {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+                  <Link key={p} href={`/category/${slug}?sort=${sort}&page=${p}${platQs}`}
+                    aria-current={p === page ? "page" : undefined}
+                    className={`join-item btn ${p === page ? "btn-primary btn-active" : "btn-ghost"}`}>
+                    {toFaDigits(p)}
+                  </Link>
               ))}
             </nav>
           )}
