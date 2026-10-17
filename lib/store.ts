@@ -266,20 +266,31 @@ export async function searchApps(query: string, filters: SearchFilters = {}, lim
   const q = normalizeFa(query);
   const conds = [pub, plat(filters.platform)];
 
-  // نرمال‌سازی ی/ک/ه عربی در سطح SQL تا با normalizeFa سمت کوئری هم‌خوان باشد
-  const normFa = (col: any) => sql`replace(replace(replace(${col}, 'ي', 'ی'), 'ك', 'ک'), 'ة', 'ه')`;
+  // نرمال‌سازی ی/ک/ه عربی و نیم‌فاصله در سطح SQL تا با normalizeFa سمت کوئری هم‌خوان باشد
+  const normFa = (col: any) => sql`replace(replace(replace(replace(${col}, 'ي', 'ی'), 'ك', 'ک'), 'ة', 'ه'), '\u200c', ' ')`;
   const like = `%${q}%`;
   const starts = `${q}%`;
 
+  // شرط تطبیق یک کلمه در نام فارسی/انگلیسی، نام بسته یا توضیح
+  const wordCond = (w: string) => {
+    const wl = `%${w}%`;
+    return sql`(
+      ${normFa(s.apps.nameFa)} ilike ${wl}
+      or lower(${s.apps.nameEn}) like ${wl}
+      or ${s.apps.packageName} ilike ${wl}
+      or ${normFa(s.apps.shortDesc)} ilike ${wl}
+      or ${normFa(s.apps.shortDescFa)} ilike ${wl}
+    )`;
+  };
+
   if (q) {
-    // جست‌وجو در نام فارسی/انگلیسی، نام بسته و توضیح — با نرمال‌سازی فارسی در هر دو سمت
-    conds.push(sql`(
-      ${normFa(s.apps.nameFa)} ilike ${like}
-      or lower(${s.apps.nameEn}) like ${like}
-      or ${s.apps.packageName} ilike ${like}
-      or ${normFa(s.apps.shortDesc)} ilike ${like}
-      or ${normFa(s.apps.shortDescFa)} ilike ${like}
-    )`);
+    // جست‌وجوی چندکلمه‌ای: هر کلمه باید دست‌کم در یکی از فیلدها باشد (ترتیب کلمات مهم نیست)
+    const words = q.split(" ").filter((w) => w.length > 0);
+    if (words.length > 1) {
+      for (const w of words) conds.push(wordCond(w));
+    } else {
+      conds.push(wordCond(q));
+    }
   }
   if (filters.openSource) conds.push(eq(s.apps.isOpenSource, true));
   if (filters.minSdk) conds.push(sql`${s.apps.minSdk} <= ${filters.minSdk}`);
