@@ -95,6 +95,7 @@
   --color-danger: var(--danger);
   --font-sans: var(--font-vazir), system-ui, sans-serif;
   --font-head: var(--font-vazir), system-ui, sans-serif;
+  --font-wordmark: var(--font-cinzel), "Times New Roman", serif;
 }
 
 html {
