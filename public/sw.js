@@ -1,5 +1,5 @@
 // Service Worker Vesper — کش هوشمند
-const CACHE = "vesper-v5"; // v5: ری‌برند به Vesper
+const CACHE = "vesper-v6"; // v6: هدر جدید
 const STATIC_ASSETS = ["/", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {
