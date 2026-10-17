@@ -57,10 +57,12 @@ export default function AppCard({ app, index = 0 }: { app: CardApp; index?: numb
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
             {toFaDigits(app.githubStars ?? 0)}
           </span>
-          <span className="inline-flex items-center gap-1 shrink-0">
-            <Download className="w-3.5 h-3.5" aria-hidden="true" />
-            {toFaDigits(app.downloadCount ?? 0)}
-          </span>
+          {(app.downloadCount ?? 0) > 0 && (
+            <span className="inline-flex items-center gap-1 shrink-0">
+              <Download className="w-3.5 h-3.5" aria-hidden="true" />
+              {toFaDigits(app.downloadCount ?? 0)}
+            </span>
+          )}
         </div>
       </div>
     </Link>
