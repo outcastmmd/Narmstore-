@@ -73,7 +73,9 @@ export function getDownloadOptions(app: DownloadAppInfo): Option[] {
     });
   }
 
-  // ۲) گیت‌هاب: لینک امن به صفحه‌ی ریلیزها (۴۰۴ نمی‌دهد)
+  // ۲) گیت‌هاب: اگر وب‌سایت رسمی جدا داریم (یعنی ریلیز خالی بوده)، لینک به خود ریپو نه ریلیزها
+  const sHostEarly = app.sourceUrl ? hostOf(app.sourceUrl) : "";
+  const hasSeparateWebsite = !!app.sourceUrl && sHostEarly !== "github.com" && app.sourceType !== "fdroid";
   if (app.githubRepo) {
     out.push({
       key: "github",
@@ -82,16 +84,18 @@ export function getDownloadOptions(app: DownloadAppInfo): Option[] {
         app.githubStars && app.githubStars > 0
           ? `${toFaDigits(app.githubStars)} استار · ${app.githubRepo}`
           : app.githubRepo,
-      href: `https://github.com/${app.githubRepo}/releases`,
+      href: hasSeparateWebsite
+        ? `https://github.com/${app.githubRepo}`
+        : `https://github.com/${app.githubRepo}/releases`,
       icon: <GithubIcon className="w-5 h-5" />,
-      primary: out.length === 0,
+      primary: out.length === 0 && !hasSeparateWebsite,
       external: true,
     });
   }
 
   // ۳) سایت رسمی: اگر گیت‌هاب است ولی githubRepo ست نشده، همان را نشان بده (تکراری نشود)
-  const sHost = app.sourceUrl ? hostOf(app.sourceUrl) : "";
-  const isGithubUrl = sHost === "github.com";
+  // sHostEarly از بالا
+  const isGithubUrl = sHostEarly === "github.com";
   if (
     app.sourceUrl &&
     app.sourceType !== "fdroid" &&
@@ -110,7 +114,7 @@ export function getDownloadOptions(app: DownloadAppInfo): Option[] {
     out.push({
       key: "web",
       label,
-      sub: sHost || "وب‌سایت رسمی",
+      sub: sHostEarly || "وب‌سایت رسمی",
       href,
       icon: <Globe className="w-5 h-5" aria-hidden="true" />,
       primary: out.length === 0,
