@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const platFa = app.platform === "android" ? "اندروید" : app.platform === "windows" ? "ویندوز" : "لینوکس";
   const desc = app.shortDescFa || app.shortDesc || `دانلود ${app.nameFa} برای ${platFa} با لینک مستقیم و بررسی امنیتی`;
   return {
-    title: `دانلود ${app.nameFa} برای ${platFa} | نرم‌استور`,
+    title: `دانلود ${app.nameFa} برای ${platFa}`,
     description: desc,
     alternates: { canonical: `/app/${app.slug}` },
     openGraph: {
@@ -57,6 +57,14 @@ function InfoRow({ k, v, ltr = false }: { k: string; v: React.ReactNode; ltr?: b
       <dd className="font-medium text-left break-all min-w-0" dir={ltr ? "ltr" : "rtl"}>{v}</dd>
     </div>
   );
+}
+
+// پاک‌سازی نشانه‌های مارک‌داون از توضیحات (دیتای دیتابیس دست‌نخورده می‌ماند)
+function stripMd(t: string): string {
+  return t
+    .replace(/(\*\*|__)([\s\S]*?)\1/g, "$2")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "");
 }
 
 export default async function AppPage({ params }: Props) {
@@ -227,7 +235,7 @@ export default async function AppPage({ params }: Props) {
           <div className="h-px bg-border" />
           <section className="py-6" aria-label="معرفی">
             <h2 className="font-extrabold text-[17px] px-1 mb-3">درباره‌ی این برنامه</h2>
-            <p className="text-[15px] leading-8 px-1 whitespace-pre-line text-foreground/90">{app.descriptionFa || app.description}</p>
+            <p className="text-[15px] leading-8 px-1 whitespace-pre-line text-foreground/90">{stripMd(app.descriptionFa || app.description)}</p>
           </section>
         </>
       )}
