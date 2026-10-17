@@ -4,6 +4,7 @@ const links = [
   { href: "/categories", label: "دسته‌بندی‌ها" },
   { href: "/popular", label: "محبوب‌ترین‌ها" },
   { href: "/latest", label: "تازه‌ها" },
+  { href: "/top", label: "برترین‌های هر دسته" },
   { href: "/alternatives", label: "جایگزین‌های آزاد" },
   { href: "/guides", label: "راهنمای نصب" },
   { href: "/how-we-verify", label: "چطور بررسی می‌کنیم" },

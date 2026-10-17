@@ -8,7 +8,9 @@ import Section from "@/components/Section";
 import CategoryBrowser from "@/components/CategoryBrowser";
 import DbIcon from "@/components/DbIcon";
 import WeeklyPicks from "@/components/WeeklyPicks";
+import CollectionBrowser from "@/components/CollectionBrowser";
 import TopInRail from "@/components/TopInRail";
+import { ChevronLeft } from "lucide-react";
 import {
   getRootCategories, getPopularApps,
   getLatestApps, getCategoryBySlug, getChildPreviews, getCollections, getHomeStats,
@@ -25,12 +27,17 @@ function appHref(slug: string, platform?: Platform) {
 }
 
 async function HomeSlide({ platform }: { platform?: Platform }) {
-  const [popular, latest, collections, stats, weeklyPicks, topDev, topMedia] = await Promise.all([
+  const cats = await getRootCategories(platform);
+  const topCats = cats
+    .filter((c) => (c.appCount ?? 0) >= 5)
+    .sort((a, b) => (b.appCount ?? 0) - (a.appCount ?? 0))
+    .slice(0, 4);
+
+  const [popular, latest, collections, stats, weeklyPicks, ...topRails] = await Promise.all([
     getPopularApps(8, platform),
     getLatestApps(8, platform), getCollections(platform, 6), getHomeStats(platform),
     getEditorChoice(6, platform),
-    getCategoryApps("development", 8, 0, "popular", platform).then((r) => r?.items ?? []),
-    getCategoryApps("media-player", 8, 0, "popular", platform).then((r) => r?.items ?? []),
+    ...topCats.map((c) => getCategoryApps(c.slug, 8, 0, "popular", platform).then((r) => ({ cat: c, items: r?.items ?? [] }))),
   ]);
 
   return (
@@ -38,9 +45,23 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
       {/* پیشنهادهای هفته — ۶ اپ منتخب سردبیر با آیکون کوچک */}
       <WeeklyPicks apps={weeklyPicks} platform={platform} />
 
-      {/* برترین‌های دسته‌ها */}
-      <TopInRail title="برترین توسعه‌دهندگان" categorySlug="development" apps={topDev} platform={platform} />
-      <TopInRail title="برترین مدیا" categorySlug="media-player" apps={topMedia} platform={platform} />
+      {/* برترین‌های دسته‌ها — ۴ دسته‌ی بزرگ + لینک به همه */}
+      {topRails.map(({ cat, items }) =>
+        items.length >= 3 ? (
+          <TopInRail key={cat.slug} title={`برترین ${cat.nameFa}`} categorySlug={cat.slug} apps={items} platform={platform} />
+        ) : null
+      )}
+      <div className="text-center mb-10">
+        <Link
+          href={`/top${platform && platform !== "android" ? `?platform=${platform}` : ""}`}
+          className="inline-flex items-center gap-1 text-sm text-primary font-bold hover:underline"
+        >
+          مشاهده‌ی برترین‌های همه‌ی دسته‌ها <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+        </Link>
+      </div>
+
+      {/* مجموعه‌ها — مینیمال */}
+      <CollectionBrowser collections={collections} platform={platform} />
 
       {/* نوار آمار — کارت‌های کوچک با اعداد هلویی */}
       <div className="mb-10 grid grid-cols-3 gap-3 text-center" role="status" aria-label="آمار فروشگاه">
@@ -88,24 +109,6 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
         </div>
       </Section>
 
-      {/* مجموعه‌ها — ردیف‌های متنی ساده */}
-      {collections.length > 0 && (
-        <Section title="مجموعه‌ها" href={`/collections${platform === "android" ? "" : `?platform=${platform}`}`}>
-          <div className="grid sm:grid-cols-2 gap-x-7">
-            {collections.map((c) => (
-              <Link key={c.id} href={`/collection/${c.slug}`}
-                className="flex items-center justify-between gap-3 py-3.5 border-b border-border group">
-                <div className="min-w-0">
-                  <strong className="font-bold group-hover:text-primary transition">{c.nameFa}</strong>
-                  <br />
-                  <span className="text-muted text-[13px] line-clamp-1">{c.description}</span>
-                </div>
-                <span className="text-muted text-[13px] shrink-0">{toFaDigits(c.appCount)} برنامه</span>
-              </Link>
-            ))}
-          </div>
-        </Section>
-      )}
     </>
   );
 }
