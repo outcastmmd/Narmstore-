@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { searchApps, type Platform } from "@/lib/store";
+import { searchApps, getAllCategories, type Platform } from "@/lib/store";
+import SearchCategoryFilter from "@/components/SearchCategoryFilter";
 import AppCard from "@/components/AppCard";
 import { toFaDigits } from "@/lib/fa";
 import type { Metadata } from "next";
 import { SearchX } from "lucide-react";
 
 
-type Props = { searchParams: Promise<{ q?: string; sort?: string; oss?: string; page?: string; platform?: string }> };
+type Props = { searchParams: Promise<{ q?: string; sort?: string; oss?: string; page?: string; platform?: string; cat?: string }> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const sp = await searchParams;
@@ -24,10 +25,15 @@ export default async function SearchPage({ searchParams }: Props) {
   // ایزولاسیون پلتفرم: جست‌وجو فقط در پلتفرم فعلی
   const plat: Platform = (sp.platform === "windows" || sp.platform === "linux") ? sp.platform : "android";
   const platQs = plat === "android" ? "" : `&platform=${plat}`;
+  const cat = sp.cat || "";
+  const catQs = cat ? `&cat=${encodeURIComponent(cat)}` : "";
 
-  const { items, total } = q
-    ? await searchApps(q, { sort, openSource: oss || undefined, platform: plat }, perPage, (page - 1) * perPage)
-    : { items: [], total: 0 };
+  const [{ items, total }, cats] = q
+    ? await Promise.all([
+        searchApps(q, { sort, openSource: oss || undefined, platform: plat, category: cat || undefined }, perPage, (page - 1) * perPage),
+        getAllCategories(),
+      ])
+    : [{ items: [], total: 0 }, []];
   const pages = Math.ceil(total / perPage);
   const base = `/search?q=${encodeURIComponent(q)}&sort=${sort}${oss ? "&oss=1" : ""}${platQs}`;
 
@@ -41,17 +47,18 @@ export default async function SearchPage({ searchParams }: Props) {
       {q && (
         <div className="flex flex-wrap gap-2 mb-6">
           {([["updated", "مرتبط‌ترین"], ["popular", "محبوب‌ترین"], ["newest", "جدیدترین"], ["name", "نام"]] as const).map(([k, label]) => (
-            <Link key={k} href={`/search?q=${encodeURIComponent(q)}&sort=${k}${oss ? "&oss=1" : ""}${platQs}`}
+            <Link key={k} href={`/search?q=${encodeURIComponent(q)}&sort=${k}${oss ? "&oss=1" : ""}${platQs}${catQs}`}
               className={`text-sm px-4 py-2 rounded-xl border transition ${sort === k
                 ? "bg-primary text-primary-fg border-primary font-bold" : "bg-surface border-border hover:border-primary/50"}`}>
               {label}
             </Link>
           ))}
-          <Link href={`/search?q=${encodeURIComponent(q)}&sort=${sort}${oss ? "" : "&oss=1"}${platQs}`}
+          <Link href={`/search?q=${encodeURIComponent(q)}&sort=${sort}${oss ? "" : "&oss=1"}${platQs}${catQs}`}
             className={`text-sm px-4 py-2 rounded-xl border transition ${oss
               ? "bg-primary text-primary-fg border-primary font-bold" : "bg-surface border-border hover:border-primary/50"}`}>
             فقط متن‌باز
           </Link>
+          <SearchCategoryFilter cats={cats.map((c: any) => ({ slug: c.slug, nameFa: c.nameFa }))} current={cat} base={base} />
         </div>
       )}
 
