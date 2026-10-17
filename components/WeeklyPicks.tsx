@@ -14,7 +14,7 @@ export default function WeeklyPicks({
   platform,
 }: {
   apps: CardApp[];
-  platform: Platform;
+  platform?: Platform;
 }) {
   if (!apps.length) return null;
   return (
