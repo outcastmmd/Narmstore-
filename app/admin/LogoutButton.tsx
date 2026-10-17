@@ -10,7 +10,7 @@ export default function LogoutButton() {
   };
   return (
     <button onClick={logout}
-      className="w-full text-start px-3 py-2.5 rounded-xl text-sm text-danger hover:bg-danger/10 transition">
+      className="btn btn-ghost justify-start w-full text-error">
       🚪 خروج
     </button>
   );

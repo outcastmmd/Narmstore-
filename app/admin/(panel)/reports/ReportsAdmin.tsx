@@ -39,8 +39,7 @@ export default function ReportsAdmin() {
       <div className="flex gap-2 mb-6">
         {[["open", "باز"], ["in_review", "در حال بررسی"], ["resolved", "حل‌شده"], ["dismissed", "ردشده"], ["all", "همه"]].map(([k, l]) => (
           <button key={k} onClick={() => setFilter(k)}
-            className={`text-sm px-4 py-2 rounded-xl border transition ${filter === k
-              ? "bg-primary text-primary-fg border-primary font-bold" : "bg-surface border-border"}`}>{l}</button>
+            className={`btn btn-sm ${filter === k ? "btn-primary btn-active" : "btn-ghost"}`}>{l}</button>
         ))}
       </div>
       <div className="space-y-3">
@@ -55,9 +54,9 @@ export default function ReportsAdmin() {
             </div>
             <p className="text-sm leading-7 mb-3">{r.message}</p>
             <div className="flex gap-2 text-xs">
-              {r.status === "open" && <button onClick={() => setStatus(r.id, "in_review")} className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border hover:border-primary">بررسی</button>}
-              {r.status !== "resolved" && <button onClick={() => setStatus(r.id, "resolved")} className="px-3 py-1.5 rounded-lg bg-primary-soft text-primary font-bold">حل شد</button>}
-              {r.status !== "dismissed" && <button onClick={() => setStatus(r.id, "dismissed")} className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-danger">رد</button>}
+              {r.status === "open" && <button onClick={() => setStatus(r.id, "in_review")} className="btn btn-ghost btn-sm">بررسی</button>}
+              {r.status !== "resolved" && <button onClick={() => setStatus(r.id, "resolved")} className="btn btn-primary btn-sm">حل شد</button>}
+              {r.status !== "dismissed" && <button onClick={() => setStatus(r.id, "dismissed")} className="btn btn-error btn-sm">رد</button>}
             </div>
           </div>
         ))}

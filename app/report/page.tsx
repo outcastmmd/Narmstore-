@@ -67,7 +67,7 @@ function Form() {
       </div>
       {status === "error" && <p className="text-sm text-danger">دریافت اطلاعات با خطا مواجه شد. لطفاً دوباره تلاش کنید.</p>}
       <button type="submit" disabled={status === "sending"}
-        className="w-full bg-primary text-primary-fg font-extrabold py-3.5 rounded-xl hover:opacity-90 disabled:opacity-50 transition">
+        className="btn btn-primary w-full">
         {status === "sending" ? "در حال ارسال..." : "ثبت گزارش"}
       </button>
     </form>

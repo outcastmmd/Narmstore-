@@ -133,15 +133,14 @@ export default function EditApp() {
             {cats.map((c) => (
               <button key={c.id} type="button"
                 onClick={() => setCatIds((p) => p.includes(c.id) ? p.filter((x) => x !== c.id) : [...p, c.id])}
-                className={`text-xs px-3 py-1.5 rounded-full border transition ${catIds.includes(c.id)
-                  ? "bg-primary text-primary-fg border-primary" : "bg-surface-2 border-border"}`}>
+                className={`btn btn-xs rounded-full ${catIds.includes(c.id) ? "btn-primary" : "btn-ghost"}`}>
                 {c.nameFa}
               </button>
             ))}
           </div>
         </div>
         <button onClick={save} disabled={saving}
-          className="mt-6 bg-primary text-primary-fg font-bold px-8 py-3 rounded-xl hover:opacity-90 disabled:opacity-50">
+          className="btn btn-primary mt-6">
           {saving ? "در حال ذخیره..." : "ذخیره تغییرات"}
         </button>
       </section>
@@ -162,15 +161,15 @@ export default function EditApp() {
                 <div className="flex gap-2 text-xs">
                   {v.status !== "active" && (
                     <button onClick={() => verAction(v.id, { status: "active" })}
-                      className="px-3 py-1.5 rounded-lg bg-primary-soft text-primary font-bold hover:opacity-80">تأیید و انتشار</button>
+                      className="btn btn-primary btn-sm">تأیید و انتشار</button>
                   )}
                   {v.status === "active" && !v.isCurrent && (
                     <button onClick={() => verAction(v.id, { isCurrent: true })}
-                      className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border hover:border-primary">جاری کن</button>
+                      className="btn btn-ghost btn-sm">جاری کن</button>
                   )}
                   {v.status === "pending" && (
                     <button onClick={() => verAction(v.id, { status: "rejected" })}
-                      className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border hover:border-danger text-danger">رد</button>
+                      className="btn btn-error btn-sm">رد</button>
                   )}
                   {v.status === "active" && (
                     <button onClick={() => verAction(v.id, { _delete: true })}
@@ -199,7 +198,7 @@ export default function EditApp() {
           <textarea className={input + " sm:col-span-2 h-20 py-2"} placeholder="تغییرات نسخه" value={newVer.changelog}
             onChange={(e) => setNewVer({ ...newVer, changelog: e.target.value })} />
         </div>
-        <button onClick={addVersion} className="mt-4 border border-primary text-primary font-bold px-6 py-2.5 rounded-xl hover:bg-primary-soft transition">
+        <button onClick={addVersion} className="btn btn-primary mt-4">
           ثبت نسخه (در انتظار بررسی)
         </button>
       </section>

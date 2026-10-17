@@ -66,7 +66,7 @@ export default function CategoriesAdmin() {
             <option value="">بدون والد (ریشه)</option>
             {cats.filter((c) => !c.parentId).map((c) => <option key={c.id} value={c.id}>{c.nameFa}</option>)}
           </select>
-          <button onClick={create} className="h-11 px-6 rounded-xl bg-primary text-primary-fg font-bold text-sm hover:opacity-90">ثبت</button>
+          <button onClick={create} className="btn btn-primary">ثبت</button>
         </div>
       </div>
 
@@ -80,10 +80,10 @@ export default function CategoriesAdmin() {
                   <p className="font-bold text-sm">{c.parentId ? "↳ " : ""}{c.nameFa}</p>
                   <p className="text-xs text-muted" dir="ltr" style={{ textAlign: "right" }}>{c.slug}</p>
                 </div>
-                <button onClick={() => toggle(c)} className="text-xs border border-border rounded-lg px-3 py-1.5 hover:border-primary">
+                <button onClick={() => toggle(c)} className="btn btn-ghost btn-xs">
                   {c.isActive ? "غیرفعال" : "فعال"}
                 </button>
-                <button onClick={() => remove(c)} className="text-xs text-danger hover:underline">حذف</button>
+                <button onClick={() => remove(c)} className="btn btn-error btn-xs">حذف</button>
               </li>
             ))}
           </ul>

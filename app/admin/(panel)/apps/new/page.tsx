@@ -45,7 +45,7 @@ export default function NewApp() {
         <div><label className="block text-xs font-bold mb-1.5">مجوز</label>
           <input className={input} dir="ltr" value={f.license} onChange={(e) => set("license", e.target.value)} placeholder="GPL-3.0-only" /></div>
         <button onClick={save} disabled={saving || !f.packageName || !f.nameFa || !f.nameEn}
-          className="bg-primary text-primary-fg font-bold px-8 py-3 rounded-xl hover:opacity-90 disabled:opacity-50">
+          className="btn btn-primary">
           {saving ? "در حال ثبت..." : "ثبت (پیش‌نویس)"}
         </button>
         <p className="text-xs text-muted">برنامه به‌صورت پیش‌نویس ثبت می‌شود؛ بعد از افزودن نسخه و انتشار، در سایت نمایش داده می‌شود.</p>

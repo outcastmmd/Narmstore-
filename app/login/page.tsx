@@ -45,7 +45,7 @@ export default function LoginPage() {
         </div>
         {error && <p className="text-sm text-danger bg-danger/10 rounded-xl p-3">{error}</p>}
         <button type="submit" disabled={loading}
-          className="w-full bg-primary text-primary-fg font-extrabold py-3 rounded-xl hover:opacity-90 disabled:opacity-50 transition">
+          className="btn btn-primary w-full">
           {loading ? "در حال ورود..." : "ورود"}
         </button>
         <p className="text-center text-sm text-muted">

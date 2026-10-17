@@ -66,7 +66,7 @@ export default function CompareClient() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <p className="text-sm text-muted">{fa(apps.length)} برنامه در حال مقایسه</p>
-        <button onClick={clear} className="text-sm text-danger font-bold">پاک کردن همه</button>
+        <button onClick={clear} className="btn btn-error btn-sm">پاک کردن همه</button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] border-collapse">
@@ -78,7 +78,7 @@ export default function CompareClient() {
                   <div className="bg-surface border border-border rounded-3xl p-4">
                     {a.iconUrl && <PxImg src={px(a.iconUrl) || ""} alt={a.nameFa} width={64} height={64} className="w-16 h-16 rounded-2xl mx-auto mb-2 object-cover" />}
                     <Link href={`/app/${a.slug}`} className="font-extrabold text-sm hover:text-primary block mb-2">{a.nameFa}</Link>
-                    <button onClick={() => remove(a.slug)} className="text-xs text-muted hover:text-danger">حذف ✕</button>
+                    <button onClick={() => remove(a.slug)} className="btn btn-ghost btn-xs">حذف ✕</button>
                   </div>
                 </th>
               ))}

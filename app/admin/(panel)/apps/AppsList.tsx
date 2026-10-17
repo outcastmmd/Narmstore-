@@ -67,7 +67,7 @@ export default function AppsList() {
                   className="text-sm text-primary font-bold hover:underline shrink-0">ویرایش</Link>
                 {a.isPublished && (
                   <button onClick={() => unpublish(a.id)}
-                    className="text-sm text-danger hover:underline shrink-0">لغو انتشار</button>
+                    className="btn btn-error btn-sm shrink-0">لغو انتشار</button>
                 )}
               </li>
             ))}

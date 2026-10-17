@@ -40,7 +40,7 @@ export default function NotificationsPage() {
           <Bell className="w-6 h-6 text-primary" aria-hidden="true" /> اعلان‌ها
         </h1>
         {items.some((x) => !x.isRead) && (
-          <button onClick={markAll} className="text-sm text-primary font-bold hover:underline">
+          <button onClick={markAll} className="btn btn-ghost btn-sm">
             همه را خوانده‌شده کن
           </button>
         )}
@@ -67,7 +67,7 @@ export default function NotificationsPage() {
                       className="text-xs text-primary font-bold hover:underline">مشاهده برنامه ←</Link>
                   )}
                   {!n.isRead && (
-                    <button onClick={() => markOne(n.id)} className="text-xs text-muted hover:text-fg">خوانده شد</button>
+                    <button onClick={() => markOne(n.id)} className="btn btn-ghost btn-xs">خوانده شد</button>
                   )}
                 </div>
               </div>

@@ -49,8 +49,7 @@ export default function ErrorsAdmin() {
       <div className="flex gap-2 mb-6">
         {[["open", "باز"], ["resolved", "حل‌شده"], ["all", "همه"]].map(([k, l]) => (
           <button key={k} onClick={() => setFilter(k)}
-            className={`text-sm px-4 py-2 rounded-xl border transition ${filter === k
-              ? "bg-primary text-primary-fg border-primary font-bold" : "bg-surface border-border"}`}>{l}</button>
+            className={`btn btn-sm ${filter === k ? "btn-primary btn-active" : "btn-ghost"}`}>{l}</button>
         ))}
       </div>
 
@@ -78,7 +77,7 @@ export default function ErrorsAdmin() {
               {e.stack && (
                 <button
                   onClick={() => setExpanded(expanded === e.id ? null : e.id)}
-                  className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border hover:border-primary"
+                  className="btn btn-ghost btn-sm"
                 >
                   {expanded === e.id ? "بستن stack" : "نمایش stack"}
                 </button>
@@ -86,21 +85,21 @@ export default function ErrorsAdmin() {
               {e.status === "open" ? (
                 <button
                   onClick={() => act(e.id, "PATCH", { status: "resolved" })}
-                  className="px-3 py-1.5 rounded-lg bg-primary-soft text-primary font-bold"
+                  className="btn btn-primary btn-sm"
                 >
                   حل شد
                 </button>
               ) : (
                 <button
                   onClick={() => act(e.id, "PATCH", { status: "open" })}
-                  className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border"
+                  className="btn btn-ghost btn-sm"
                 >
                   بازگشایی
                 </button>
               )}
               <button
                 onClick={() => { if (confirm("حذف شود؟")) act(e.id, "DELETE"); }}
-                className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border text-danger"
+                className="btn btn-error btn-sm"
               >
                 حذف
               </button>

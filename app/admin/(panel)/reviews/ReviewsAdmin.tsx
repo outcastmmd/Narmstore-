@@ -33,8 +33,7 @@ export default function ReviewsAdmin() {
       <div className="flex gap-2 mb-6">
         {[["pending", "در انتظار"], ["approved", "تأییدشده"], ["rejected", "ردشده"], ["all", "همه"]].map(([k, l]) => (
           <button key={k} onClick={() => setFilter(k)}
-            className={`text-sm px-4 py-2 rounded-xl border transition ${filter === k
-              ? "bg-primary text-primary-fg border-primary font-bold" : "bg-surface border-border"}`}>{l}</button>
+            className={`btn btn-sm ${filter === k ? "btn-primary btn-active" : "btn-ghost"}`}>{l}</button>
         ))}
       </div>
       <div className="space-y-3">
@@ -51,14 +50,14 @@ export default function ReviewsAdmin() {
             <div className="flex gap-2 text-xs">
               {r.status !== "approved" && (
                 <button onClick={() => act(r.id, "PATCH", { status: "approved" })}
-                  className="px-3 py-1.5 rounded-lg bg-primary-soft text-primary font-bold">تأیید</button>
+                  className="btn btn-primary btn-sm">تأیید</button>
               )}
               {r.status !== "rejected" && (
                 <button onClick={() => act(r.id, "PATCH", { status: "rejected" })}
-                  className="px-3 py-1.5 rounded-lg bg-surface-2 border border-border">رد</button>
+                  className="btn btn-ghost btn-sm">رد</button>
               )}
               <button onClick={() => { if (confirm("حذف شود؟")) act(r.id, "DELETE"); }}
-                className="px-3 py-1.5 rounded-lg text-danger hover:underline">حذف</button>
+                className="btn btn-error btn-sm">حذف</button>
             </div>
           </div>
         ))}
