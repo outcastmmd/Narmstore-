@@ -15,8 +15,8 @@ const vazir = Vazirmatn({
 
 
 export const metadata: Metadata = {
-  title: { default: "Vesper | فروشگاه فارسی نرم‌افزار اندروید", template: "%s | Vesper" },
-  description: "Vesper — فروشگاه فارسی نرم‌افزار برای اندروید، ویندوز و لینوکس؛ معرفی و دانلود امن با لینک مستقیم",
+  title: { default: "Vesper | فروشگاه اپ‌های آزاد", template: "%s | Vesper" },
+  description: "Vesper — فروشگاه اپ‌های آزاد؛ معرفی و دانلود امن نرم‌افزار برای اندروید، ویندوز و لینوکس با لینک مستقیم",
   metadataBase: new URL(siteUrl()),
   openGraph: { locale: "fa_IR", type: "website", siteName: "Vesper" },
   robots: { index: true, follow: true },
