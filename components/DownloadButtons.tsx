@@ -64,7 +64,7 @@ function NeonPill({ href, external, downloadable, color, icon, label, big }: Pil
       title={label}
       aria-label={label}
       className={`flex items-center rounded-full border-2 transition active:scale-95 hover:brightness-125 ${
-        big ? "gap-5 px-8 py-4" : "gap-3.5 px-5 py-2.5"
+        big ? "gap-4 px-6 py-3" : "gap-3.5 px-5 py-2.5"
       }`}
       style={{
         borderColor: color,
@@ -73,13 +73,13 @@ function NeonPill({ href, external, downloadable, color, icon, label, big }: Pil
         boxShadow: `0 0 28px -8px ${color}`,
       }}
     >
-      <span className={big ? "[&>svg]:w-8 [&>svg]:h-8" : "[&>svg]:w-6 [&>svg]:h-6"}>{icon}</span>
+      <span className={big ? "[&>svg]:w-7 [&>svg]:h-7" : "[&>svg]:w-6 [&>svg]:h-6"}>{icon}</span>
       <span
         aria-hidden="true"
-        className={big ? "w-px h-9" : "w-px h-6"}
+        className={big ? "w-px h-8" : "w-px h-6"}
         style={{ background: color, opacity: 0.45 }}
       />
-      <Download className={big ? "w-8 h-8" : "w-6 h-6"} aria-hidden="true" />
+      <Download className={big ? "w-7 h-7" : "w-6 h-6"} aria-hidden="true" />
     </a>
   );
 }
