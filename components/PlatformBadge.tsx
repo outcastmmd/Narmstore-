@@ -3,17 +3,17 @@ import { Smartphone, AppWindow, Terminal, type LucideIcon } from "lucide-react";
 // بج تخصصی پلتفرم — هر پلتفرم آیکون و رنگ مخصوص خودش رو داره
 const PLATFORMS: Record<string, { label: string; Icon: LucideIcon; pill: string }> = {
   android: {
-    label: "نسخه اندروید",
+    label: "اندروید",
     Icon: Smartphone,
     pill: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30",
   },
   windows: {
-    label: "نسخه ویندوز",
+    label: "ویندوز",
     Icon: AppWindow,
     pill: "bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/30",
   },
   linux: {
-    label: "نسخه لینوکس",
+    label: "لینوکس",
     Icon: Terminal,
     pill: "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30",
   },
