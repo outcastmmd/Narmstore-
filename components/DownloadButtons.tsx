@@ -61,7 +61,7 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
           <span className="relative [&>svg]:w-10 [&>svg]:h-10">
             {platformIcon(app.platform, "")}
             <span
-              className="absolute -bottom-2 -end-2 grid place-items-center w-7 h-7 rounded-full text-white shadow-md ring-2 ring-white/25"
+              className="absolute -bottom-1 -end-1 grid place-items-center w-7 h-7 rounded-full text-white shadow-md ring-2 ring-white/25"
               style={{ background: "rgba(0,0,0,0.6)" }}
             >
               <Download className="w-4 h-4" aria-hidden="true" />
