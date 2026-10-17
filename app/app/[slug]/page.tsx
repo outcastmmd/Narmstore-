@@ -25,7 +25,7 @@ import ReportButton from "@/components/ReportButton";
 import Alternatives from "@/components/Alternatives";
 import { findAlternatives } from "@/data/alternatives";
 import {
-  User, Star, Download, Clock, RefreshCw,
+  User, Star, Download, Clock, RefreshCw, Sparkles,
   AppWindow, Terminal, BadgeCheck, TriangleAlert, Lightbulb, ExternalLink,
 } from "lucide-react";
 import { siteUrl } from "@/lib/site-url";
@@ -146,6 +146,15 @@ export default async function AppPage({ params }: Props) {
                 <span className="inline-flex items-center gap-1"><Download className="w-4 h-4" aria-hidden="true" /> {toFaDigits(app.downloadCount)} دانلود</span>
               )}
               {v && <span className="inline-flex items-center gap-1"><Clock className="w-4 h-4" aria-hidden="true" /> به‌روزرسانی: {timeAgo(v.publishedAt || v.createdAt)}</span>}
+              {v && (() => {
+                const pub = v.publishedAt || v.createdAt;
+                const days = pub ? (Date.now() - new Date(pub).getTime()) / 86400000 : 99;
+                return days <= 7 ? (
+                  <span className="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-full px-2.5 py-1">
+                    <Sparkles className="w-3.5 h-3.5" aria-hidden="true" /> نسخه‌ی جدید
+                  </span>
+                ) : null;
+              })()}
             </div>
             {/* برچسب‌های هوشمند */}
             {tags.length > 0 && (
