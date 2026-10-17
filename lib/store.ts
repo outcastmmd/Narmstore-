@@ -266,15 +266,19 @@ export async function searchApps(query: string, filters: SearchFilters = {}, lim
   const q = normalizeFa(query);
   const conds = [pub, plat(filters.platform)];
 
+  // نرمال‌سازی ی/ک/ه عربی در سطح SQL تا با normalizeFa سمت کوئری هم‌خوان باشد
+  const normFa = (col: any) => sql`replace(replace(replace(${col}, 'ي', 'ی'), 'ك', 'ک'), 'ة', 'ه')`;
+  const like = `%${q}%`;
+  const starts = `${q}%`;
+
   if (q) {
-    // جست‌وجو در نام فارسی/انگلیسی، نام بسته، توسعه‌دهنده و توضیح — با نرمال‌سازی فارسی
-    const like = `%${q}%`;
+    // جست‌وجو در نام فارسی/انگلیسی، نام بسته و توضیح — با نرمال‌سازی فارسی در هر دو سمت
     conds.push(sql`(
-      ${s.apps.nameFa} ilike ${like}
-      or ${s.apps.nameEn} ilike ${like}
+      ${normFa(s.apps.nameFa)} ilike ${like}
+      or lower(${s.apps.nameEn}) like ${like}
       or ${s.apps.packageName} ilike ${like}
-      or ${s.apps.shortDesc} ilike ${like}
-      or ${s.apps.shortDescFa} ilike ${like}
+      or ${normFa(s.apps.shortDesc)} ilike ${like}
+      or ${normFa(s.apps.shortDescFa)} ilike ${like}
     )`);
   }
   if (filters.openSource) conds.push(eq(s.apps.isOpenSource, true));
@@ -292,13 +296,21 @@ export async function searchApps(query: string, filters: SearchFilters = {}, lim
     }
   }
 
-  const orderBy = filters.sort === "newest" ? desc(s.apps.createdAt)
-    : filters.sort === "name" ? s.apps.nameFa
-    : filters.sort === "popular" ? desc(sql`COALESCE(${s.apps.githubStars}, 0) + ${dlCount} * 10`)
-    : desc(s.apps.updatedAt);
+  // امتیاز ارتباط: تطبیق دقیق نام > شروع‌شونده با نام > شامل‌شونده در نام > نام بسته > توضیح
+  const rank = q ? sql<number>`(case
+    when ${normFa(s.apps.nameFa)} = ${q} or lower(${s.apps.nameEn}) = ${q} then 100
+    when ${normFa(s.apps.nameFa)} ilike ${starts} or lower(${s.apps.nameEn}) like ${starts} then 50
+    when ${normFa(s.apps.nameFa)} ilike ${like} or lower(${s.apps.nameEn}) like ${like} then 30
+    when ${s.apps.packageName} ilike ${like} then 20
+    else 10 end)` : sql<number>`0`;
+
+  const orderBys = filters.sort === "newest" ? [desc(s.apps.createdAt)]
+    : filters.sort === "name" ? [s.apps.nameFa]
+    : filters.sort === "popular" ? [desc(sql`COALESCE(${s.apps.githubStars}, 0) + ${dlCount} * 10`)]
+    : [desc(rank), desc(s.apps.updatedAt)]; // «مرتبط‌ترین»: اول ارتباط، بعد تازگی
 
   const [items, total] = await Promise.all([
-    db.select(cardCols).from(s.apps).where(and(...conds)).orderBy(orderBy).limit(limit).offset(offset),
+    db.select(cardCols).from(s.apps).where(and(...conds)).orderBy(...orderBys).limit(limit).offset(offset),
     db.select({ c: sql<number>`count(*)` }).from(s.apps).where(and(...conds)),
   ]);
   return { items, total: Number(total[0]?.c ?? 0) };
