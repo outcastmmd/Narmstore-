@@ -7,6 +7,7 @@ export default function PxImg({
 }) {
   return (
     <img
+      draggable={false}
       src={src}
       alt={alt}
       width={width}
