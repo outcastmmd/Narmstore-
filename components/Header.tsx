@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import SearchBox from "./SearchBox";
 import ThemeToggle from "./ThemeToggle";
 import NotifBell from "./NotifBell";
@@ -19,11 +18,6 @@ export default function Header() {
           <div className="flex items-center gap-1 shrink-0">
             <NotifBell />
             <ThemeToggle />
-            <Link href="/" aria-label="Vesper - صفحه‌ی اصلی" className="shrink-0">
-              <span className="block w-10 h-10 rounded-full overflow-hidden ring-2 ring-primary/60 ring-offset-2 ring-offset-surface">
-                <img src="/icons/icon-192.png" alt="Vesper" width={40} height={40} className="w-full h-full object-cover" />
-              </span>
-            </Link>
           </div>
         </div>
       </header>
