@@ -22,6 +22,7 @@ export default function Footer() {
             <img src="/icons/icon-192.png" alt="لوگوی Vesper" width={36} height={36} className="w-9 h-9 rounded-xl object-cover" />
             <span className="font-extrabold text-lg">Vesper</span>
           </div>
+          <p className="text-xs text-muted">فروشگاه اپ‌های آزاد</p>
           <nav aria-label="پیوندها" className="flex flex-wrap justify-center gap-x-7 gap-y-3 text-sm text-muted">
             {links.map((l) => (
               <Link key={l.href} href={l.href} className="hover:text-primary transition-colors">
