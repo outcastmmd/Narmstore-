@@ -18,7 +18,7 @@ const AppBody = z.object({
   featured: z.boolean().optional(),
   editorChoice: z.boolean().optional(),
   isPublished: z.boolean().optional(),
-  sourceUrl: z.string().max(2000).optional().nullable(),
+  sourceUrl: z.string().url("آدرس معتبر نیست").max(2000).optional().nullable().or(z.literal("")),
   categoryIds: z.array(z.string()).optional(),
 });
 
