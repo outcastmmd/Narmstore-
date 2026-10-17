@@ -137,7 +137,28 @@ export default async function AppPage({ params }: Props) {
                 <FavoriteButton appId={app.id} appName={app.slug} />
               </span>
             </div>
-            <p className="text-muted text-sm mb-2" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
+            <p className="text-muted text-sm mb-4" dir="ltr" style={{ textAlign: "right" }}>{app.nameEn}</p>
+            {/* ردیف اطلاعات — نسخه / حجم / پلتفرم */}
+            <div className="flex items-stretch text-center mb-2" role="list" aria-label="مشخصات برنامه">
+              {v?.versionName && (
+                <div role="listitem" className="flex-1 px-2">
+                  <div dir="ltr" className="font-extrabold text-[15px]">{v.versionName}</div>
+                  <div className="text-[11px] text-muted mt-0.5">نسخه</div>
+                </div>
+              )}
+              {v?.fileSize ? (
+                <div role="listitem" className="flex-1 px-2 border-s border-border">
+                  <div dir="ltr" className="font-extrabold text-[15px]">{formatBytes(v.fileSize)}</div>
+                  <div className="text-[11px] text-muted mt-0.5">حجم</div>
+                </div>
+              ) : null}
+              <div role="listitem" className="flex-1 px-2 border-s border-border">
+                <div className="font-extrabold text-[15px]">
+                  {app.platform === "android" ? "اندروید" : app.platform === "windows" ? "ویندوز" : "لینوکس"}
+                </div>
+                <div className="text-[11px] text-muted mt-0.5">پلتفرم</div>
+              </div>
+            </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
               {app.developerName && <span className="inline-flex items-center gap-1"><User className="w-4 h-4" aria-hidden="true" /> {app.developerName}</span>}
               {app.githubStars ? (
