@@ -1,28 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f4effb;
-  --surface: #ffffff;
-  --surface-2: #ece5f7;
-  --fg: #2b2440;
-  --muted: #6f6488;
-  --border: #e2d9f2;
-  --primary: #b06a2e;
-  --primary-soft: rgba(176, 106, 46, 0.12);
-  --primary-fg: #ffffff;
-  --accent: #7c5cd6;
-  --danger: #c2410c;
-  --radius: 0.75rem;
-  /* کارت هلویی هیرو — گرادیان + متن و دکمه‌ی روی آن */
-  --peach-1: #f9e3c4;
-  --peach-2: #f2c491;
-  --peach-ink: #5a3a1e;
-  --peach-cta: #2e2440;
-  --peach-cta-fg: #ffffff;
-}
-
-/* تیره — بنفش عمیق با لهجه‌ی هلویی (حس نمونه‌ی بنفش-هلویی) */
-[data-theme="dark"] {
   --bg: #1a1428;
   --surface: #241d38;
   --surface-2: #2e2547;
@@ -34,51 +12,13 @@
   --primary-fg: #3a2410;
   --accent: #b39ddb;
   --danger: #fb7185;
+  --radius: 0.75rem;
+  /* کارت هلویی هیرو — گرادیان + متن و دکمه‌ی روی آن */
   --peach-1: #f7d9b8;
   --peach-2: #f0bd85;
   --peach-ink: #4a3220;
   --peach-cta: #2b2945;
   --peach-cta-fg: #ffffff;
-}
-
-/* گرم — قهوه‌ای سوخته با لهجه‌ی طلایی-هلویی */
-[data-theme="warm"] {
-  --bg: #211712;
-  --surface: #2c2018;
-  --surface-2: #3a2b1f;
-  --fg: #f7efe4;
-  --muted: #b39a80;
-  --border: rgba(255, 255, 255, 0.08);
-  --primary: #e8b04b;
-  --primary-soft: rgba(232, 176, 75, 0.13);
-  --primary-fg: #2a1a08;
-  --accent: #d98e5f;
-  --danger: #f87171;
-  --peach-1: #f6d68a;
-  --peach-2: #e8a94b;
-  --peach-ink: #4a2e10;
-  --peach-cta: #2a1e12;
-  --peach-cta-fg: #ffe9c4;
-}
-
-/* امولد — مشکی خالص با نئون فیروزه‌ای و سرخابی */
-[data-theme="amoled"] {
-  --bg: #000000;
-  --surface: #0b0b10;
-  --surface-2: #14141c;
-  --fg: #f2f5ff;
-  --muted: #8e93a8;
-  --border: rgba(255, 255, 255, 0.09);
-  --primary: #2dd4bf;
-  --primary-soft: rgba(45, 212, 191, 0.14);
-  --primary-fg: #002e28;
-  --accent: #e879f9;
-  --danger: #fb7185;
-  --peach-1: #0e2a26;
-  --peach-2: #155e54;
-  --peach-ink: #a7f3d0;
-  --peach-cta: #2dd4bf;
-  --peach-cta-fg: #002e28;
 }
 
 @theme inline {
@@ -174,36 +114,19 @@ body {
 .bg-glows .g1 { width: 480px; height: 480px; background: #b39ddb; top: -160px; right: -140px; }
 .bg-glows .g2 { width: 380px; height: 380px; background: #e8a94b; bottom: 8%; left: -160px; opacity: 0.12; }
 .bg-glows .g3 { display: none; }
-[data-theme="light"] .bg-glows { display: none; }
-[data-theme="warm"] .bg-glows .g1 { background: #8a5a2b; opacity: 0.16; }
-[data-theme="warm"] .bg-glows .g2 { background: #e8b04b; opacity: 0.12; }
-[data-theme="amoled"] .bg-glows .g1 { background: #0d9488; opacity: 0.22; }
-[data-theme="amoled"] .bg-glows .g2 { background: #a21caf; opacity: 0.18; }
 
 /* بوردر گرادیانی ظریف — فقط برای تأکید، نه همه‌جا */
 .grad-border { position: relative; }
 .grad-border::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
-  background: linear-gradient(140deg, rgba(176,106,46,.4), transparent 45%, transparent 55%, rgba(124,92,214,.3));
+  background: linear-gradient(140deg, rgba(245,201,155,.4), transparent 45%, transparent 55%, rgba(179,157,219,.3));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
   pointer-events: none;
 }
-[data-theme="dark"] .grad-border::before {
-  background: linear-gradient(140deg, rgba(245,201,155,.4), transparent 45%, transparent 55%, rgba(179,157,219,.3));
-}
-[data-theme="warm"] .grad-border::before {
-  background: linear-gradient(140deg, rgba(232,176,75,.4), transparent 45%, transparent 55%, rgba(217,142,95,.3));
-}
-[data-theme="amoled"] .grad-border::before {
-  background: linear-gradient(140deg, rgba(45,212,191,.45), transparent 45%, transparent 55%, rgba(232,121,249,.35));
-}
 
 /* درخشش متن هیرو — ملایم */
-.hero-glow { text-shadow: 0 0 28px rgba(176,106,46,.3); }
-[data-theme="dark"] .hero-glow { text-shadow: 0 0 28px rgba(245,201,155,.35); }
-[data-theme="warm"] .hero-glow { text-shadow: 0 0 28px rgba(232,176,75,.35); }
-[data-theme="amoled"] .hero-glow { text-shadow: 0 0 32px rgba(45,212,191,.45); }
+.hero-glow { text-shadow: 0 0 28px rgba(245,201,155,.35); }
 
 /* کارت هلویی هیرو — امضای طراحی بنفش-هلویی */
 .hero-peach {
@@ -234,10 +157,9 @@ body {
 /* اعداد رتبه‌بندی — تایپوگرافی تمیز */
 .rank-num {
   font-family: var(--font-vazir), system-ui, sans-serif;
-  font-size: 1.65rem; line-height: 1; color: var(--muted); font-weight: 700;
+  font-size: 1.65rem; line-height: 1; color: var(--primary); opacity: 0.85; font-weight: 700;
   min-width: 2rem; text-align: center; flex: none;
 }
-[data-theme="dark"] .rank-num, [data-theme="warm"] .rank-num, [data-theme="amoled"] .rank-num { color: var(--primary); opacity: 0.85; }
 
 /* مخفی کردن اسکرول‌بار افقی اسلایدرها */
 .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }

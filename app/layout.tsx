@@ -35,24 +35,15 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4effb" },
-    { media: "(prefers-color-scheme: dark)", color: "#1a1428" },
-  ],
+  themeColor: "#1a1428",
 };
 
 // فروشگاه دیتامحور است: رندر سمت سرور برای هر درخواست (بدون prerender استاتیک)
 export const instant = false;
 
-// تم پیش‌فرض: تیره‌ی بنفش-هلویی
-const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('narm-theme');if(t!=='light'&&t!=='dark'&&t!=='warm'&&t!=='amoled'){t='dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-      </head>
+    <html lang="fa" dir="rtl">
       <body className={`${vazir.variable} ${cinzel.variable} min-h-full flex flex-col`}>
         <SWRegister />
         <ErrorReporter />
