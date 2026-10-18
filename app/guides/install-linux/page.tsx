@@ -7,14 +7,16 @@ export const metadata: Metadata = {
   description: "آموزش نصب برنامه در لینوکس: از مخزن رسمی، فلت‌هاب، یا فایل دانلودشده.",
 };
 
-const steps = [
+const steps: { title: string; text: string; code?: string[] }[] = [
   {
     title: "۱. اول از مخزن رسمی توزیع خودتان بگیرید",
     text: "راحت‌ترین راه: با مدیر بسته‌ی توزیع خودتان (مثل apt در اوبونتو یا dnf در فدورا) برنامه را نصب کنید. این امن‌ترین روش است چون بسته‌ها امضای رسمی دارند.",
+    code: ["sudo apt install vlc", "sudo dnf install vlc"],
   },
   {
     title: "۲. فلت‌هاب برای برنامه‌های جدیدتر",
     text: "اگر نسخه‌ی مخزن قدیمی بود، فلت‌هاب (Flathub) نسخه‌های به‌روز را با یک کلیک نصب می‌کند. خیلی از برنامه‌های Vesper لینک فلت‌هاب دارند.",
+    code: ["flatpak install flathub org.videolan.VLC"],
   },
   {
     title: "۳. نصب از گیت‌هاب",
@@ -35,9 +37,18 @@ export default function InstallLinuxGuide() {
       </div>
       <div className="space-y-4">
         {steps.map((s) => (
-          <section key={s.title} className="bg-surface border border-border rounded-3xl p-6">
-            <h2 className="font-extrabold mb-2">{s.title}</h2>
-            <p className="text-sm text-muted leading-7">{s.text}</p>
+          <section key={s.title} className="card bg-base-200 shadow-sm">
+            <div className="card-body p-6">
+              <h2 className="font-extrabold mb-2">{s.title}</h2>
+              <p className="text-sm opacity-70 leading-7">{s.text}</p>
+              {s.code && (
+                <div className="mockup-code mt-4 text-sm" dir="ltr">
+                  {s.code.map((c) => (
+                    <pre key={c} data-prefix="$"><code>{c}</code></pre>
+                  ))}
+                </div>
+              )}
+            </div>
           </section>
         ))}
       </div>
