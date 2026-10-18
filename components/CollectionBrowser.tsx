@@ -51,9 +51,9 @@ export default function CollectionBrowser({
               href={`/collection/${c.slug}`}
               title={c.nameFa}
               aria-label={c.nameFa}
-              className="snap-start shrink-0 w-16 h-16 rounded-2xl bg-base-200 grid place-items-center text-primary hover:scale-105 transition shadow-sm"
+              className="snap-start shrink-0 w-20 h-20 rounded-2xl bg-base-200 border border-base-300/60 grid place-items-center text-primary hover:scale-105 hover:border-primary/40 hover:-translate-y-0.5 transition"
             >
-              <Icon className="w-7 h-7" aria-hidden="true" />
+              <Icon className="w-8 h-8" aria-hidden="true" />
             </Link>
           );
         })}

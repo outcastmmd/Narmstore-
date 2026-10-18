@@ -47,13 +47,13 @@ export default function CategoryCards({ cats }: { cats: Cat[] }) {
               title={c.nameFa}
               aria-label={c.nameFa}
               aria-current={isActive ? "true" : undefined}
-              className={`w-16 h-16 rounded-2xl grid place-items-center transition-all shrink-0 ${
+              className={`w-20 h-20 rounded-2xl grid place-items-center transition-all shrink-0 border ${
                 isActive
-                  ? "bg-primary text-primary-content shadow"
-                  : "bg-base-200 text-primary hover:scale-105"
+                  ? "bg-primary text-primary-content border-primary shadow"
+                  : "bg-base-200 text-primary border-base-300/60 hover:scale-105 hover:border-primary/40 hover:-translate-y-0.5"
               } ${pending ? "opacity-70" : ""}`}
             >
-              <DbIcon icon={c.icon} className="w-7 h-7" />
+              <DbIcon icon={c.icon} className="w-8 h-8" />
             </button>
           );
         })}
