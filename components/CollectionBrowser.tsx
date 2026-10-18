@@ -34,7 +34,7 @@ export default function CollectionBrowser({
             href={`/collection/${c.slug}`}
             className="snap-start shrink-0 flex flex-col items-center gap-2 w-[72px] group"
           >
-            <span className="w-14 h-14 rounded-2xl bg-surface border border-border grid place-items-center text-primary group-hover:border-primary/50 group-hover:scale-105 transition">
+            <span className="w-14 h-14 rounded-2xl bg-base-200 grid place-items-center text-primary group-hover:scale-105 transition shadow-sm">
               <FolderOpen className="w-6 h-6" aria-hidden="true" />
             </span>
             <span className="text-[11px] font-bold leading-4 text-center line-clamp-2">
