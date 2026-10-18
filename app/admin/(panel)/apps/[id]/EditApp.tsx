@@ -119,10 +119,10 @@ export default function EditApp() {
             <input className={input} dir="ltr" value={form.license || ""} onChange={(e) => set("license", e.target.value)} /></div>
           <div><label className="block text-xs font-bold mb-1.5">منبع رسمی</label>
             <input className={input} dir="ltr" value={form.sourceUrl || ""} onChange={(e) => set("sourceUrl", e.target.value)} /></div>
-          <div className="flex flex-wrap gap-4 pt-6 text-sm">
+          <div className="flex flex-wrap gap-x-6 gap-y-3 pt-6 text-sm">
             {[["isPublished", "منتشرشده"], ["featured", "منتخب"], ["editorChoice", "منتخب سردبیر"], ["isOpenSource", "متن‌باز"]].map(([k, l]) => (
               <label key={k} className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={!!form[k]} onChange={(e) => set(k, e.target.checked)} className="w-4 h-4 accent-emerald-600" />{l}
+                <input type="checkbox" checked={!!form[k]} onChange={(e) => set(k, e.target.checked)} className="toggle toggle-primary toggle-sm" />{l}
               </label>
             ))}
           </div>
