@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { toFaDigits } from "@/lib/fa";
 import {
   MessageCircle, Gamepad2, Zap, Clapperboard, ShieldCheck,
   Sparkles, Code2, FolderOpen, type LucideIcon,
@@ -21,7 +22,7 @@ function colIcon(nameFa: string): LucideIcon {
   return FolderOpen;
 }
 
-// مرور مینیمال مجموعه‌ها — آیکونی بدون اسم
+// مجموعه‌ها — کارت‌های مربعی با اسم
 export default function CollectionBrowser({
   collections,
   platform,
@@ -49,11 +50,13 @@ export default function CollectionBrowser({
             <Link
               key={c.id}
               href={`/collection/${c.slug}`}
-              title={c.nameFa}
-              aria-label={c.nameFa}
-              className="snap-start shrink-0 w-20 h-20 rounded-2xl bg-base-200 border border-base-300/60 grid place-items-center text-primary hover:scale-105 hover:border-primary/40 hover:-translate-y-0.5 transition"
+              className="snap-start shrink-0 w-28 rounded-2xl bg-base-200 border border-base-300/60 p-3 flex flex-col items-center gap-2 text-center hover:border-primary/40 hover:-translate-y-0.5 transition"
             >
-              <Icon className="w-8 h-8" aria-hidden="true" />
+              <span className="w-12 h-12 rounded-xl bg-primary/10 text-primary grid place-items-center shrink-0">
+                <Icon className="w-6 h-6" aria-hidden="true" />
+              </span>
+              <span className="text-[11px] font-bold leading-4 line-clamp-2">{c.nameFa}</span>
+              <span className="text-[10px] opacity-50 -mt-1">{toFaDigits(c.appCount ?? 0)} اپ</span>
             </Link>
           );
         })}
