@@ -17,6 +17,7 @@ export type CardApp = {
   downloadCount: number;
   githubStars: number | null;
   platform?: string | null;
+  isOpenSource?: boolean | null;
 };
 
 function Initial({ name }: { name: string }) {
@@ -42,6 +43,15 @@ function Icon({ app }: { app: CardApp }) {
     />
   ) : (
     <Initial name={app.nameFa} />
+  );
+}
+
+function LicenseBadge({ app }: { app: CardApp }) {
+  const open = !!app.isOpenSource;
+  return (
+    <span className={`badge badge-sm ${open ? "badge-success badge-soft" : "badge-info badge-soft"}`}>
+      {open ? "متن‌باز" : "رایگان"}
+    </span>
   );
 }
 
@@ -97,6 +107,7 @@ export default function AppCard({
           </h3>
           <div className="flex items-center gap-2 mt-1.5">
             <PlatformBadge platform={app.platform} />
+            <LicenseBadge app={app} />
             <Stats app={app} />
           </div>
         </div>
@@ -122,6 +133,7 @@ export default function AppCard({
         </div>
         <div className="card-actions items-center mt-3">
           <PlatformBadge platform={app.platform} />
+          <LicenseBadge app={app} />
           <span className="flex-1" />
           <Stats app={app} />
         </div>
