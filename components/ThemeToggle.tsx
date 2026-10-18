@@ -58,7 +58,7 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const t = localStorage.getItem("vesper-theme");
-    if ((THEMES as readonly string[]).includes(t)) setTheme(t as Theme);
+    if (t && (THEMES as readonly string[]).includes(t)) setTheme(t as Theme);
   }, []);
 
   const cycle = () => {
