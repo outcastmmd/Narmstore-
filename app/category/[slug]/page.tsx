@@ -127,7 +127,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                     className={`join-item btn ${p === page ? "btn-primary btn-active" : "btn-ghost"}`}>
                     {toFaDigits(p)}
                   </Link>
-              ))}
+                ))}
+              </div>
             </nav>
           )}
         </>
