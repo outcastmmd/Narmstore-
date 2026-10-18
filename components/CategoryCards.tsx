@@ -8,7 +8,7 @@ import DbIcon from "./DbIcon";
 
 type Cat = { id: string; slug: string; nameFa: string; icon?: string | null; appCount?: number };
 
-// دکمه‌های آیکونی دسته‌بندی — بدون اسم، کوچک و مینیمال
+// کارت‌های دسته‌بندی — آیکون + اسم کوچک
 export default function CategoryCards({ cats }: { cats: Cat[] }) {
   const sp = useSearchParams();
   const router = useRouter();
@@ -44,16 +44,16 @@ export default function CategoryCards({ cats }: { cats: Cat[] }) {
             <button
               key={c.id}
               onClick={() => go(c.slug)}
-              title={c.nameFa}
               aria-label={c.nameFa}
               aria-current={isActive ? "true" : undefined}
-              className={`w-20 h-20 rounded-2xl grid place-items-center transition-all shrink-0 border ${
+              className={`w-[76px] rounded-2xl p-2.5 flex flex-col items-center gap-1.5 text-center transition-all shrink-0 border ${
                 isActive
                   ? "bg-primary text-primary-content border-primary shadow"
-                  : "bg-base-200 text-primary border-base-300/60 hover:scale-105 hover:border-primary/40 hover:-translate-y-0.5"
+                  : "bg-base-200 text-primary border-base-300/60 hover:border-primary/40 hover:-translate-y-0.5"
               } ${pending ? "opacity-70" : ""}`}
             >
-              <DbIcon icon={c.icon} className="w-8 h-8" />
+              <DbIcon icon={c.icon} className="w-7 h-7 shrink-0" />
+              <span className="text-[10px] font-bold leading-3.5 line-clamp-2 text-base-content">{c.nameFa}</span>
             </button>
           );
         })}
