@@ -1,8 +1,6 @@
 import Link from "next/link";
 import PxImg from "@/components/PxImg";
-import NewBadge from "@/components/NewBadge";
 import { px } from "@/lib/img";
-import { formatBytes } from "@/lib/fa";
 
 export type PopularApp = {
   id: string; slug: string; nameFa: string; nameEn: string;
@@ -11,36 +9,34 @@ export type PopularApp = {
   createdAt?: Date | string | null;
 };
 
-// ردیف «پرطرفدارها» — تمیز و تحریریه‌ای: رتبه، آیکون، نام، بج لایسنس
+// کارت فشرده «پرطرفدارها» — فقط رتبه + آیکون، بدون اسم
 export default function PopularRow({ app, platform, index = 0 }: { app: PopularApp; platform?: string; index?: number }) {
   const href = platform && platform !== "android" ? `/app/${app.slug}?platform=${platform}` : `/app/${app.slug}`;
-  const desc = app.shortDescFa || app.shortDesc;
+  const rank = (index + 1).toLocaleString("fa-IR");
+  const top3 = index < 3;
   return (
-    <div className="flex items-center gap-3.5 py-3.5 border-b border-border last:border-b-0 group">
-      <span className="rank-num" aria-hidden="true">{(index + 1).toLocaleString("fa-IR")}</span>
-      <Link href={href} className="shrink-0" aria-hidden="true" tabIndex={-1}>
+    <Link
+      href={href}
+      title={app.nameFa}
+      aria-label={`${rank} — ${app.nameFa}`}
+      className="card bg-base-200 transition-all hover:scale-[1.03]"
+    >
+      <div className="card-body p-3 flex flex-row items-center gap-2.5">
+        <span
+          className={`font-extrabold text-lg shrink-0 w-6 text-center ${top3 ? "text-warning" : "opacity-40"}`}
+          aria-hidden="true"
+        >
+          {rank}
+        </span>
         {app.iconUrl ? (
-          <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt="" width={52} height={52}
-            className="w-[52px] h-[52px] rounded-xl object-cover bg-surface-2 border border-border" />
+          <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt="" width={44} height={44}
+            className="w-11 h-11 rounded-xl object-cover" />
         ) : (
-          <span className="w-[52px] h-[52px] rounded-xl bg-surface-2 border border-border grid place-items-center text-xl font-bold text-muted" dir="ltr">
+          <span className="w-11 h-11 rounded-xl bg-base-300 grid place-items-center text-lg font-bold opacity-60" dir="ltr">
             {app.nameEn.charAt(0)}
           </span>
         )}
-      </Link>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <Link href={href} className="block font-bold leading-6 group-hover:text-primary transition-colors truncate min-w-0">
-            {app.nameFa}{" "}
-            <span className="text-muted font-normal text-[13px]" dir="ltr" style={{ unicodeBidi: "isolate" }}>{app.nameEn}</span>
-          </Link>
-          <NewBadge createdAt={app.createdAt} className="shrink-0" />
-        </div>
-        {desc && <span className="block text-muted text-[13px] truncate mt-0.5">{desc}</span>}
       </div>
-      <span className={`badge badge-sm badge-soft shrink-0 ${app.isOpenSource ? "badge-success" : "badge-info"}`}>
-        {app.isOpenSource ? "متن‌باز" : "رایگان"}
-      </span>
-    </div>
+    </Link>
   );
 }

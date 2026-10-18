@@ -115,9 +115,9 @@ async function HomeSlide({ platform }: { platform?: Platform }) {
         </div>
       </Section>
 
-      {/* پرطرفدارها — لیست فشرده */}
+      {/* پرطرفدارها — گرید فشرده بدون اسکرول */}
       <Section title="پرطرفدارها" href={platform ? `/popular?platform=${platform}` : "/popular"} empty="هنوز آماری ثبت نشده است.">
-        <div className="border-t border-border">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {popular.map((a, i) => <PopularRow key={a.id} app={a} platform={platform} index={i} />)}
         </div>
       </Section>
