@@ -9,12 +9,11 @@ import * as s from "@/db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { toFaDigits, formatBytes, formatDate, timeAgo, androidVersion } from "@/lib/fa";
 import AppTile from "@/components/AppTile";
-import PlatformBadge from "@/components/PlatformBadge";
 import FavoriteButton from "@/components/FavoriteButton";
 import FollowButton from "@/components/FollowButton";
 import ShareButton from "@/components/ShareButton";
 import VersionsDrawer from "@/components/VersionsDrawer";
-import DownloadButtons from "@/components/DownloadButtons";
+import DownloadButtons, { platformIcon } from "@/components/DownloadButtons";
 import Gallery from "@/components/Gallery";
 import { computeTags } from "@/lib/tags";
 import { px } from "@/lib/img";
@@ -23,7 +22,7 @@ import ReportButton from "@/components/ReportButton";
 import Alternatives from "@/components/Alternatives";
 import { findAlternatives } from "@/data/alternatives";
 import {
-  RefreshCw,
+  RefreshCw, Download, Star,
   BadgeCheck, TriangleAlert,
 } from "lucide-react";
 import { siteUrl } from "@/lib/site-url";
@@ -121,81 +120,74 @@ export default async function AppPage({ params }: Props) {
 
   return (
     <div className="animate-fade-up max-w-3xl mx-auto">
-      {/* سربرگ یکپارچه: معرفی + مشخصات + دانلود */}
-      <div className="bg-surface border border-border rounded-3xl p-5 sm:p-6">
-        <div className="flex gap-3 items-start">
-          {app.iconUrl ? (
-            <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={88} height={88}
-              className="w-[76px] h-[76px] rounded-[24%] object-cover shadow-md shrink-0" />
-          ) : (
-            <span className="w-[76px] h-[76px] rounded-[24%] bg-primary-soft text-primary flex items-center justify-center text-3xl font-bold shrink-0">
-              {app.nameFa.charAt(0)}
-            </span>
-          )}
-          <div className="flex-1 min-w-0 pt-1">
-            <h1 title={app.nameFa} className="text-[19px] font-extrabold leading-7 break-words line-clamp-2">{app.nameFa}</h1>
-            {app.developerName && (
-              <p className="text-primary text-[15px] mt-0.5">{app.developerName}</p>
-            )}
-            <div className="flex flex-wrap items-center gap-1.5 mt-2">
-              <PlatformBadge platform={app.platform} />
-              {tags.map((t) => (
-                <span key={t.slug} className="text-[11px] text-muted font-bold">{t.label}</span>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-row gap-2 shrink-0 pt-1">
-            <FavoriteButton appId={app.id} appName={app.slug} />
-            <FollowButton appId={app.id} />
-            <ShareButton appName={app.nameFa} slug={app.slug} />
-          </div>
-        </div>
-
-        {/* ردیف اطلاعات iOS — نسخه / حجم / پلتفرم */}
-        <div className="flex mt-5 pt-5 border-t border-border" role="list" aria-label="مشخصات برنامه">
-          {v?.versionName && (
-            <div role="listitem" className="flex-1 text-center px-2">
-              <div dir="ltr" className="font-bold text-[17px]">{v.versionName}</div>
-              <div className="text-[12px] text-muted mt-1">نسخه</div>
-            </div>
-          )}
-          <div role="listitem" className="flex-1 text-center px-2 border-s border-border">
-            <div dir="ltr" className="font-bold text-[17px]">{v?.fileSize ? formatBytes(v.fileSize) : "varies"}</div>
-            <div className="text-[12px] text-muted mt-1">حجم</div>
-          </div>
-          <div role="listitem" className="flex-1 text-center px-2 border-s border-border">
-            <div className="font-bold text-[17px]">
-              {app.platform === "android" ? "اندروید" : app.platform === "windows" ? "ویندوز" : "لینوکس"}
-            </div>
-            <div className="text-[12px] text-muted mt-1">پلتفرم</div>
-          </div>
-          {(app.githubStars ?? 0) > 0 && (
-            <div role="listitem" className="flex-1 text-center px-2 border-s border-border">
-              <div className="font-bold text-[17px]">{toFaDigits(app.githubStars ?? 0)}</div>
-              <div className="text-[12px] text-muted mt-1">استار</div>
-            </div>
-          )}
-        </div>
-
-        {/* بنر آپدیت */}
-        {hasUpdate && v && (
-          <div className="alert alert-success mt-4" role="status">
-            <RefreshCw className="w-5 h-5 shrink-0" aria-hidden="true" />
-            <p className="text-sm">
-              <b>نسخه‌ی جدید موجوده!</b>{" "}
-              <span className="opacity-80">
-                {downloadedVersion ? (
-                  <>از <span dir="ltr">{downloadedVersion}</span> به <span dir="ltr">{v.versionName}</span></>
-                ) : (
-                  <>نسخه‌ی <span dir="ltr">{v.versionName}</span> منتشر شده</>
-                )}
+      {/* دانلودسنتر به سبک iOS */}
+      <div className="card bg-base-200 shadow-sm">
+        <div className="card-body p-5 sm:p-6">
+          <div className="flex gap-4 items-start">
+            {app.iconUrl ? (
+              <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt={`آیکون ${app.nameFa}`} width={88} height={88}
+                className="w-[76px] h-[76px] rounded-[24%] object-cover shadow-md shrink-0" />
+            ) : (
+              <span className="w-[76px] h-[76px] rounded-[24%] bg-primary/10 text-primary flex items-center justify-center text-3xl font-bold shrink-0">
+                {app.nameFa.charAt(0)}
               </span>
-            </p>
+            )}
+            <div className="flex-1 min-w-0 pt-1">
+              <h1 title={app.nameFa} className="text-[19px] font-extrabold leading-7 break-words line-clamp-2">{app.nameFa}</h1>
+              {app.developerName && (
+                <p className="text-[13px] opacity-60 mt-0.5">{app.developerName}</p>
+              )}
+              <p className="text-[12px] mt-1.5 flex items-center gap-1.5 opacity-60">
+                {platformIcon(app.platform, "w-4 h-4")}
+                {v?.versionName && <span dir="ltr">{v.versionName}</span>}
+              </p>
+            </div>
+            <div className="flex flex-row gap-2 shrink-0 pt-1">
+              <FavoriteButton appId={app.id} appName={app.slug} />
+              <FollowButton appId={app.id} />
+              <ShareButton appName={app.nameFa} slug={app.slug} />
+            </div>
           </div>
-        )}
 
-        {/* دانلود */}
-        <div className="mt-5">
+          {/* قرص‌های اطلاعات — متقارن */}
+          <div className="flex flex-wrap justify-center gap-2 mt-4">
+            {v?.fileSize ? (
+              <span className="badge badge-lg gap-1.5">
+                <Download className="w-4 h-4" aria-hidden="true" /> {formatBytes(v.fileSize)}
+              </span>
+            ) : null}
+            {(app.githubStars ?? 0) > 0 && (
+              <span className="badge badge-lg gap-1.5">
+                <Star className="w-4 h-4" aria-hidden="true" /> {toFaDigits(app.githubStars ?? 0)}
+              </span>
+            )}
+            {v?.verifiedAt && (
+              <span className="badge badge-lg badge-success gap-1.5">
+                <BadgeCheck className="w-4 h-4" aria-hidden="true" /> تأیید شده
+              </span>
+            )}
+          </div>
+
+          {/* بنر آپدیت */}
+          {hasUpdate && v && (
+            <div className="alert alert-success mt-4" role="status">
+              <RefreshCw className="w-5 h-5 shrink-0" aria-hidden="true" />
+              <p className="text-sm">
+                <b>نسخه‌ی جدید موجوده!</b>{" "}
+                <span className="opacity-80">
+                  {downloadedVersion ? (
+                    <>از <span dir="ltr">{downloadedVersion}</span> به <span dir="ltr">{v.versionName}</span></>
+                  ) : (
+                    <>نسخه‌ی <span dir="ltr">{v.versionName}</span> منتشر شده</>
+                  )}
+                </span>
+              </p>
+            </div>
+          )}
+
+          <div className="divider my-4" />
+
+          {/* دانلود */}
           <DownloadButtons
             app={{
               platform: app.platform,

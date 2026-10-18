@@ -22,7 +22,7 @@ const WindowsIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-function platformIcon(platform: string, className: string) {
+export function platformIcon(platform: string, className: string) {
   if (platform === "linux") return <TuxIcon className={className} />;
   if (platform === "windows") return <WindowsIcon className={className} />;
   return <AndroidIcon className={className} />;
@@ -89,8 +89,8 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
   const rest = opts.filter((o) => o !== primary);
 
   return (
-    <section aria-label="دانلود" className="mt-6">
-      <div className="flex flex-wrap items-center gap-3">
+    <section aria-label="دانلود">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         <NeonPill
           href={primary.href}
           external={primary.external}
@@ -98,7 +98,7 @@ export default function DownloadButtons({ app }: { app: DownloadAppInfo }) {
           tint={BTN_TINT[app.platform] ?? BTN_TINT.android}
           icon={platformIcon(app.platform, "")}
           label={`دانلود برای ${platformFa[app.platform] ?? app.platform}`}
-          text={platformFa[app.platform] ?? app.platform}
+          text="دانلود"
         />
         {rest.map((o) => (
           <NeonPill
