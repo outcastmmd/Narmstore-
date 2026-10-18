@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: dim --default, dracula, halloween;
+  themes: dim --default, dracula, halloween, luxury, forest;
 }
 
 :root {

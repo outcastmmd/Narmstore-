@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MoonStar } from "lucide-react";
+import { MoonStar, Crown, TreePine } from "lucide-react";
 
-const THEMES = ["dim", "dracula", "halloween"] as const;
+const THEMES = ["dim", "dracula", "halloween", "luxury", "forest"] as const;
 type Theme = (typeof THEMES)[number];
 const LABELS: Record<Theme, string> = {
   dim: "دیم",
   dracula: "دراکولا",
   halloween: "هالووین",
+  luxury: "لوکس",
+  forest: "جنگل",
 };
 
 // خفاش — آیکون تم دراکولا
@@ -46,6 +48,8 @@ function ThemeIcon({ theme }: { theme: Theme }) {
     );
   }
   if (theme === "halloween") return <PumpkinIcon />;
+  if (theme === "luxury") return <Crown className="h-5 w-5" aria-hidden="true" />;
+  if (theme === "forest") return <TreePine className="h-5 w-5" aria-hidden="true" />;
   return <MoonStar className="h-5 w-5" aria-hidden="true" />;
 }
 
@@ -54,7 +58,7 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const t = localStorage.getItem("vesper-theme");
-    if (t === "dim" || t === "dracula" || t === "halloween") setTheme(t);
+    if ((THEMES as readonly string[]).includes(t)) setTheme(t as Theme);
   }, []);
 
   const cycle = () => {
