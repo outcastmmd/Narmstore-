@@ -9,11 +9,13 @@ export type PopularApp = {
   createdAt?: Date | string | null;
 };
 
-// کارت فشرده «پرطرفدارها» — فقط رتبه + آیکون، بدون اسم
+// کارت فشرده «پرطرفدارها» — رتبه + آیکون + اسم (سایز تطبیقی)
 export default function PopularRow({ app, platform, index = 0 }: { app: PopularApp; platform?: string; index?: number }) {
   const href = platform && platform !== "android" ? `/app/${app.slug}?platform=${platform}` : `/app/${app.slug}`;
   const rank = (index + 1).toLocaleString("fa-IR");
   const top3 = index < 3;
+  const nameLen = app.nameFa.length;
+  const nameSize = nameLen > 22 ? "text-[11px]" : nameLen > 14 ? "text-[12px]" : "text-[13px]";
   return (
     <Link
       href={href}
@@ -30,12 +32,15 @@ export default function PopularRow({ app, platform, index = 0 }: { app: PopularA
         </span>
         {app.iconUrl ? (
           <PxImg src={px(app.iconUrl) || "/icons/icon-192.png"} alt="" width={44} height={44}
-            className="w-11 h-11 rounded-xl object-cover" />
+            className="w-11 h-11 rounded-xl object-cover shrink-0" />
         ) : (
-          <span className="w-11 h-11 rounded-xl bg-base-300 grid place-items-center text-lg font-bold opacity-60" dir="ltr">
+          <span className="w-11 h-11 rounded-xl bg-base-300 grid place-items-center text-lg font-bold opacity-60 shrink-0" dir="ltr">
             {app.nameEn.charAt(0)}
           </span>
         )}
+        <span className={`flex-1 min-w-0 font-bold leading-5 line-clamp-2 ${nameSize}`}>
+          {app.nameFa}
+        </span>
       </div>
     </Link>
   );
