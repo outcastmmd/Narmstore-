@@ -103,6 +103,7 @@ export const appVersions = pgTable("app_versions", {
   fileUrl: text("file_url").notNull(),
   fileSize: bigint("file_size", { mode: "number" }),
   sha256: varchar("sha256", { length: 128 }),
+  signerSha256: varchar("signer_sha256", { length: 128 }),
   minSdk: integer("min_sdk"),
   fileType: varchar("file_type", { length: 16 }).notNull().default("apk"),
   changelog: text("changelog"),
